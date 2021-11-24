@@ -7,9 +7,17 @@
     <title>Untitled</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
+<?php
+
+ include("audioConexao.php");
+ $consultaAudio = "SELECT * FROM chataudio";
+ $conAudio = $conn->query($consultaAudio) or die($conn->error);
+
+?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script
         src='https://code.jquery.com/jquery-3.2.1.slim.js'
@@ -20,14 +28,22 @@
     <div class="row">
         <div class="col-md-10">
             <button type="button" id="btnStart">Gravar</button>
-            <button type="button" id="btn">Postar</button>
               
-                <form name="form1" method="POST" action="shopeeEnvio.php">
-            <p>Nome do produto:</p>
-            <input name="nome" type="text" id="teste"></p>
+                <form name="form1" method="POST" action="audioEnvio.php">
+            <input name="audio" type="text" id="teste" style="display:none"></p>
 
             <input type="submit" value="confirmar"/>
         </form>
+        <p>LISTA</p>
+        <?php 
+                while($dado = $conAudio->fetch_array() ){
+                ?>
+                
+                <div id="postAudio"class="row">
+                    <audio src="<?php echo $dado["audio"] ?>" controls=""></audio>
+                </div>
+
+        <?php }?>
         </div>
         <div class="row"></div>
         <div class="col"></div>
@@ -76,27 +92,25 @@
    
 
             }
-            mediaRecorder.start()
-    
-            setTimeout(() => mediaRecorder.stop(), 3000);
+            $('#btnStart').click(function(){
+         
+         if($(this).text() === 'Gravar'){
+          
+             mediaRecorder.start()
+             $(this).text('Gravando')
+         }else{
+
+
+             mediaRecorder.stop() 
+             $(this).text('Gravar') 
+         }
+     })
 
           },
           (err) => {
             $('body').append('<p>Você deve permitir o áudio</p>')
           })
-          $('#btnStart').click(function(){
          
-              if($(this).text() === 'Gravar'){
-               
-                  mediaRecorder.start()
-                  $(this).text('Gravando')
-              }else{
-
- 
-                  mediaRecorder.stop() 
-                  $(this).text('Gravar') 
-              }
-          })
         })
       </script>
         <script>
