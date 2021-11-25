@@ -17,6 +17,9 @@
  $consultaAudio = "SELECT * FROM chataudio";
  $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
+ $consultaAudioStory = "SELECT * FROM chataudiostory";
+ $conAudioStory = $conn->query($consultaAudioStory) or die($conn->error);
+
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script
@@ -24,39 +27,44 @@
         integrity='sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg='
         crossorigin='anonymous'
     ></script>
-    <div class="row"></div>
+    <div class="row">
+        <button type="button" id="btnStory">Gravar Story</button>
+        <form name="form1" method="POST" action="audioEnvioStory.php">
+            <input name="audio" type="text" id="teste" style="display:none"></p>
+            <input type="submit" value="confirmar"/>
+        </form>
+        <?php 
+            while($dado = $conAudioStory->fetch_array() ){
+            ?>      
+            <div id="postAudioStory"class="row">
+                <audio id="audiostory" src="<?php echo $dado["audio"] ?>" controls=""></audio>
+            </div>
+        <?php }?>
+    </div>
+    <hr/>
     <div class="row">
         <div class="col-md-10">
             <button type="button" id="btnStart">Gravar</button>
-              
                 <form name="form1" method="POST" action="audioEnvio.php">
-            <input name="audio" type="text" id="teste" style="display:none"></p>
+                    <input name="audio" type="text" id="teste" style="display:none"></p>
 
-            <input type="submit" value="confirmar"/>
-        </form>
-        <p>LISTA</p>
-        <?php 
+                    <input type="submit" value="confirmar"/>
+                </form>
+            <p>LISTA</p>
+            <?php 
                 while($dado = $conAudio->fetch_array() ){
-                ?>
-                
-                <div id="postAudio"class="row">
-                    <audio src="<?php echo $dado["audio"] ?>" controls=""></audio>
-                </div>
-
-        <?php }?>
+            ?>      
+            <div id="postAudio"class="row">
+                <audio src="<?php echo $dado["audio"] ?>" controls=""></audio>
+            </div>
+            <?php }?>
         </div>
         <div class="row"></div>
-        <div class="col"></div>
-
-        
+        <div class="col"></div>  
     </div>
-
-
-
 
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
-
         $(function(){
             let mediaRecorder
 
@@ -81,57 +89,35 @@
             document.querySelector("#teste").value = date_today;
             }
             open_popup($teste);
-    
-
-    
-    
-    
-     
   }
-
-   
 
             }
             $('#btnStart').click(function(){
          
-         if($(this).text() === 'Gravar'){
-          
+         if($(this).text() === 'Gravar'){       
              mediaRecorder.start()
              $(this).text('Gravando')
          }else{
-
-
              mediaRecorder.stop() 
              $(this).text('Gravar') 
          }
      })
-
+     $('#btnStory').click(function(){
+         
+         if($(this).text() === 'Gravar Story'){       
+             mediaRecorder.start()
+             $(this).text('Gravando')
+         }else{
+             mediaRecorder.stop() 
+             $(this).text('Gravar Story') 
+         }
+     })
           },
           (err) => {
             $('body').append('<p>Você deve permitir o áudio</p>')
-          })
-         
+          })       
         })
       </script>
-        <script>
-
-
-</script>
-<script>
-
-</script>
-    <?php
-
-
-$variavelphp = "<script>document.write(teste2)</script>";
-echo "</br>";
-echo "$variavelphp";
-
-
-
-
-
-?>
 
 
 </body>

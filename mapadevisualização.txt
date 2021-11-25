@@ -1,4 +1,5 @@
 1 - Pagina (parte de posts, story) OK
 2 - post OK
-3 - story 24hrs
+3 - story 24hrs 
+    - Events e Triggers
 4 - trendings top
