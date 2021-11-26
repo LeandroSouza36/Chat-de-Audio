@@ -115,7 +115,8 @@
           },
           (err) => {
             $('body').append('<p>Você deve permitir o áudio</p>')
-          })       
+          })   
+              
         })
       </script>
 
