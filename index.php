@@ -28,6 +28,8 @@
         crossorigin='anonymous'
     ></script>
     <div class="row">
+
+
         <button type="button" id="btnStory">Gravar Story</button>
         <form name="form1" method="POST" action="audioEnvioStory.php">
             <input name="audio" type="text" id="teste" style="display:none"></p>
@@ -37,7 +39,7 @@
             while($dado = $conAudioStory->fetch_array() ){
             ?>      
             <div id="postAudioStory"class="row">
-                <audio id="audiostory" src="<?php echo $dado["audio"] ?>" controls=""></audio>
+                <audio id="audiostory" class="<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls=""></audio>
             </div>
         <?php }?>
     </div>
@@ -55,7 +57,16 @@
                 while($dado = $conAudio->fetch_array() ){
             ?>      
             <div id="postAudio"class="row">
-                <audio src="<?php echo $dado["audio"] ?>" controls=""></audio>
+                <script>
+                //Quando se clica no player, toca o áudio.
+                    function play<?php echo $dado["id"] ?>(){
+                        var audio = document.querySelector(".a<?php echo $dado["id"] ?>");;
+                        audio.play();
+                    }
+                </script>
+                <!-- IMAGEM DE PLAYER-->
+                <img src="img/play.png" style="width: 100px;"onclick="play<?php echo $dado['id'] ?>()">
+                <audio class="a<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls="" style="display:none"></audio>
             </div>
             <?php }?>
         </div>
