@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="padding: 20px;">
 <?php
 
  include("audioConexao.php");
@@ -27,7 +28,7 @@
         integrity='sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg='
         crossorigin='anonymous'
     ></script>
-    <div class="row">
+    <div class="row" >
 
 
         <button type="button" id="btnStory">Gravar Story</button>
@@ -53,21 +54,30 @@
                     <input type="submit" value="confirmar"/>
                 </form>
             <p>LISTA</p>
-            <?php 
-                while($dado = $conAudio->fetch_array() ){
-            ?>      
-            <div id="postAudio"class="row">
-                <script>
-                //Quando se clica no player, toca o áudio.
-                    function play<?php echo $dado["id"] ?>(){
-                        var audio = document.querySelector(".a<?php echo $dado["id"] ?>");;
-                        audio.play();
-                    }
-                </script>
-                <!-- IMAGEM DE PLAYER-->
-                <img src="img/play.png" style="width: 100px;"onclick="play<?php echo $dado['id'] ?>()">
-                <audio class="a<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls="" style="display:none"></audio>
-            </div>
+      
+                <?php 
+                    while($dado = $conAudio->fetch_array() ){
+                ?>
+                    <div id="postAudio" class="row border">
+                        <script>
+                        //Quando se clica no player, toca o áudio.
+                            function play<?php echo $dado["id"] ?>(){
+                                var audio = document.querySelector(".a<?php echo $dado["id"] ?>");;
+                                audio.play();
+                            }
+                        </script>
+                        <div class="row" style="padding-left:20px;">
+                            <p id="conteudoPostAudio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur facilis deleniti atque maiores </p>
+                            
+                        </div>
+                        
+                        <div class="row">
+                        <!-- IMAGEM DE PLAYER-->
+                            <img src="img/play.png" style="width: 100px;"onclick="play<?php echo $dado['id'] ?>()">
+                            <audio class="a<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls="" style="display:none"></audio>
+                        </div>
+
+                    </div>
             <?php }?>
         </div>
         <div class="row"></div>

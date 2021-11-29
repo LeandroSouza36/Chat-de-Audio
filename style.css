@@ -1,4 +1,9 @@
-
+#postAudio{
+    width: 400px; 
+    min-width: 400px;
+    height: 150px;
+    min-height: 150px
+}
 
 audio:hover, audio:focus, audio:active
 {
@@ -23,3 +28,10 @@ box-shadow: 2px 2px 4px 0px #006773;
 -webkit-border-radius:7px 7px 7px 7px ;
 border-radius:7px 7px 7px 7px ;
 }
+
+#conteudoPostAudio{
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
