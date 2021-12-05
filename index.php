@@ -81,7 +81,8 @@
             <?php }?>
         </div>
         <div class="row"></div>
-        <div class="col">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos qui sed modi deleniti beatae at repellendus cum, repellat architecto, tempora iste nostrum, corrupti suscipit! Dolor at earum sunt accusantium nihil!</div>  
+        <div class="col">
+        <div id="nameLogin" class="row">lo</div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos qui sed modi deleniti beatae at repellendus cum, repellat architecto, tempora iste nostrum, corrupti suscipit! Dolor at earum sunt accusantium nihil!</div>  
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
