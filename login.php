@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('conexao.php');
+include('audioConexao.php');
 if(empty($_POST['usuario']) || empty($_POST['senha']) ){
     header('Location: index.php');
     exit();
