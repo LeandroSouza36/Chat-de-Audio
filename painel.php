@@ -71,7 +71,7 @@ include('verifica_login.php');
                                 audio.play();
                             }
                         </script>
-                        <div class="row" style="padding-left:20px;">
+                        <div class="row" id="conteudoPostAudioPainel" style="padding-left:20px;">
                             <p id="conteudoPostAudio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur facilis deleniti atque maiores </p>
                             
                         </div>
