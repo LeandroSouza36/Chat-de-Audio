@@ -13,6 +13,7 @@ session_start();
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/bulma.min.css" />
     <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
 <body>
@@ -49,6 +50,9 @@ session_start();
                             <button type="submit" class="button is-block is-link is-large is-fullwidth">Entrar</button>
                         </form>
                     </div>
+                    <a href="criarConta.php">
+                        <button type="button" class=" btn-success button is-large is-fullwidth">Criar nova conta</button>
+                    </a>
                 </div>
             </div>
         </div>
