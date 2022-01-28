@@ -92,7 +92,7 @@ include('verifica_login.php');
                 <!-- MENU-->
                  <h2><a href="logout.php">Sair</a></h2>
                  <h2><a href="404.php">Lista de Amigos</a></h2>
-                 <h2><a href="404.php">Adiconar Pessoas</a></h2>
+                 <h2><a href="AdicionarAmigos.php">Adiconar Pessoas</a></h2>
                 <!--FIM MENU-->
             </div>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos qui sed modi deleniti beatae at repellendus cum, repellat architecto, tempora iste nostrum, corrupti suscipit! Dolor at earum sunt accusantium nihil!
