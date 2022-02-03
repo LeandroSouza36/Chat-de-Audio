@@ -7,8 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-                <form name="form1" method="POST" action="audioEnvio.php">
-                    <input type="text" id="User" name="Name" />   
+                <form name="form1" method="POST" action="AdicionarAmigosEnvio.php">
+                    <input name="AdicionarAmigos" type="text" id="User" name="Name" />   
                     <input type="submit" value="confirmar"/>
                 </form>
 </body>
