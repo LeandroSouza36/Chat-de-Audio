@@ -87,17 +87,17 @@ include('verifica_login.php');
         </div>
         <div class="row"></div>
         <div class="col border">
-             <div id="nameLogin" class="border">
-                <h2>Olá, <?php echo $_SESSION['usuario'];?></h2>
-                <!-- MENU-->
-                 <h2><a href="logout.php">Sair</a></h2>
-                 <h2><a href="404.php">Lista de Amigos</a></h2>
-                 <h2><a href="AdicionarAmigos.php">Adiconar Pessoas</a></h2>
-                <!--FIM MENU-->
-            </div>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos qui sed modi deleniti beatae at repellendus cum, repellat architecto, tempora iste nostrum, corrupti suscipit! Dolor at earum sunt accusantium nihil!
+                <div id="nameLogin" class="border">
+                    <h2>Olá, <?php echo $_SESSION['usuario'];?></h2>
+                    <!-- MENU-->
+                    <h2><a href="logout.php">Sair</a></h2>
+                    <h2><a href="404.php">Lista de Amigos</a></h2>
+                    <h2><a href="AdicionarAmigos.php">Adiconar Pessoas</a></h2>
+                    <!--FIM MENU-->
+                </div>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos qui sed modi deleniti beatae at repellendus cum, repellat architecto, tempora iste nostrum, corrupti suscipit! Dolor at earum sunt accusantium nihil!
         </div>  
-        </div>
+    </div>
   
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
