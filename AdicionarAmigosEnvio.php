@@ -39,12 +39,18 @@ include('verifica_login.php');
         <!-- LISTA DE USUARIOS DE ACORDO COM A BUSCA -->
             <div class="list-group">
                 <?php while($dado = $conAudio->fetch_array() ){ ?>
-                      <a href="#" class="list-group-item list-group-item-action">
-                          <div class="d-flex w-100 justify-content-between">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1"><?php echo $dado['usuario'] ?></h5>
-                            <button type="button" class="btn btn-primary btn-lg">Adicionar Amigo</button>
-                          </div>
-                      </a>
+                            <!-- BOTAO ADICIONAR AMIGO -->
+                            <form name="formAmigos" method="POST" action="AdicionarAmigosConfirmar.php">
+                                <input id="nomeAmigo" type="text" name="adicionarAmigo" placeholder="<?php echo $dado['usuario'] ?>"><br>
+
+                                <input type= "submit" value="Adicionar Amigo">
+                            </form>
+                            <!-- #################### -->
+                        </div>
+                    </a>
                 <?php } ?>
             </div>
         <!-- ######################################################## -->
@@ -61,6 +67,19 @@ include('verifica_login.php');
         </div>
     </div>
 
+    <!-- TESTE -->
+
+    <!-- ##### -->
+
 </body>
+<script>
+    var nomeAmigo = document.getElementById("nomeAmigo");
+
+    function NomeAmigo(){
+    nomeAmigo.value = nomeAmigo.placeholder
+    }
+    NomeAmigo()
+
+</script>
 </html>
  
