@@ -4,21 +4,12 @@ include('verifica_login.php');
 ?>
 
 <?php
-
   include_once("audioConexao.php");
-  //VARIAVEL DE BUSCA
-  $AdicionarAmigos = $_POST["AdicionarAmigos"];
-  ///////////////////
-
+  $usuario = $_SESSION['usuario'];
   //CONSULTA DE USUARIOS DE ACORDO COM A VARIAVEL DE BUSCA
-  $consultaAudio = "SELECT * FROM usuario WHERE usuario = '$AdicionarAmigos'";
-  $conAudio = $conn->query($consultaAudio) or die($conn->error);
+  $consultaAmigo = "SELECT * FROM amigos WHERE usuario = '$usuario'";
+  $conAmigo = $conn->query($consultaAmigo) or die($conn->error);
   ////////////////////////////////////////////////////////
-
-  
-
-  //$result_audio = "INSERT INTO chataudio  (audio) VALUES ('$audio')";
-  //$resultado_audio = mysqli_query($conn, $result_audio);
 
 ?>
 
@@ -38,10 +29,10 @@ include('verifica_login.php');
         <div class="col-md-10">
         <!-- LISTA DE USUARIOS DE ACORDO COM A BUSCA -->
             <div class="list-group">
-                <?php while($dado = $conAudio->fetch_array() ){ ?>
+                <?php while($dado = $conAmigo->fetch_array() ){ ?>
                     <a href="#" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1"><?php echo $dado['usuario'] ?></h5>
+                            <h5 class="mb-1"><?php echo $dado['amigo'] ?></h5>
                             <!-- BOTAO ADICIONAR AMIGO -->
                             <form name="formAmigos" method="POST" action="AdicionarAmigosConfirmar.php">
                                 <input style="display:none" id="nomeAmigo" type="text" name="adicionarAmigo" placeholder="<?php echo $dado['usuario'] ?>"><br>
