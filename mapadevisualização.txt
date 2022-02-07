@@ -8,3 +8,14 @@
 6 - Pesquisar Pessoas
 7 - Estrela (tipo o amei do instagram)
 8 - Texto para o post(64 caracteres)
+#######################################################
+
+cor do site :
+   -Cor 1: #fcd6f9
+   -Cor 2: #ffb7ff
+   -Cor 3: #b66ee8
+
+fontes: 
+  -Letras Grandes : Cambria
+  -Letras Medias  : Calibri
+  -Letras Pequenas: Garamond

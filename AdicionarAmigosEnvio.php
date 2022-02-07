@@ -24,6 +24,10 @@ include('verifica_login.php');
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- ### -->
   <!-- BOOTSTRAP -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <!-- ######### -->
@@ -52,16 +56,7 @@ include('verifica_login.php');
         <!-- ######################################################## -->
         </div>
         <div class="col-md-2">
-            <div id="nameLogin" class="border">
-                <h2>Olá, <?php echo $_SESSION['usuario'];?></h2>
-                <!-- MENU-->
-                <h2><a href="painel.php">Inicio</a></h2>
-                <h2><a href="perfil.php">Perfil</a></h2>
-                <h2><a href="listaDeAmigos.php">Lista de Amigos</a></h2>
-                <h2><a href="AdicionarAmigos.php">Adiconar Pessoas</a></h2>
-                <h2><a href="logout.php">Sair</a></h2>
-                <!--FIM MENU-->
-            </div>
+                <?php include('partes/menu.php'); ?>
         </div>
     </div>
 
