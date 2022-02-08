@@ -31,7 +31,7 @@ include('verifica_login.php');
     <!-- ######### -->
     <title>Document</title>
 </head>
-<body>
+<body id="body">
         <div class="row">
                 <div class="col-md-10">
                         <div class="row">
