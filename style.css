@@ -43,14 +43,23 @@ border-radius:7px 7px 7px 7px ;
 
 #nameLogin{
     text-decoration: none;
-    background-color: #ffb7ff;
+    background-color: #fcd6f9;
     font-size: 17px;
-    color: black;
+    color: black;;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-style: inherit;
     
 
 
+}
+a:link{
+   text-decoration: none;
+   color: #b66ee8;
+   
+}
+a:hover{
+   text-decoration: none;
+   color: black;
 }
 
 #conteudoPostAudioPainel{

@@ -1,4 +1,4 @@
-<div id="nameLogin" class="border">
+<div id="nameLogin" class="border" >
                 <h2>Olá, <?php echo $_SESSION['usuario'];?></h2>
                 <!-- MENU-->
                 <h2><a href="painel.php">Inicio</a></h2>
