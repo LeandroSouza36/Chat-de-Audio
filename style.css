@@ -77,7 +77,37 @@ cores{
 
 #nomePainelAudio{
     color: #b66ee8;
+    font-weight: bold;
+    font-size: 130%;
+    -webkit-text-stroke-width: 0.15px; /* largura da borda */
+    -webkit-text-stroke-color: black;
+    
+
 }
 
+#bloco1PainelAudio{
+    background-color:#fcd6f9;
+}
 
+#imagemPainelAudio{
+    max-width: 50px;
+    max-height:50px;
+    margin-left:10px;
+    margin-top:10px;
+    margin-right:10px;
+}
 
+#linha-horizontal{
+    width: 400px;
+    margin: auto;
+    height:100px;
+}
+
+#bloco2PainelAudio{
+    margin-left: 10px;
+}
+
+#postPainelAudio{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 95%;
+}
