@@ -1,12 +1,11 @@
 #postAudio{
-    width: 300px; 
-    min-width: 300px;
-    height: 200px;
-    min-height: 200px;
-    background-color: #b66ee8;;
+    width: 400px; 
+    min-width: 400px;
+    height: 50px;
+    min-height: 50px;
+    background-color: #ffb7ff;;
     border-radius: 10px;
-    margin: 15px;
-    
+    margin: 15px;  
 }
 
 audio:hover, audio:focus, audio:active
@@ -97,14 +96,11 @@ cores{
     margin-right:10px;
 }
 
-#linha-horizontal{
-    width: 400px;
-    margin: auto;
-    height:100px;
-}
 
 #bloco2PainelAudio{
     margin-left: 10px;
+    min-height: 130px;
+    
 }
 
 #postPainelAudio{

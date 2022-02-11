@@ -1,28 +1,21 @@
-         <!--  PAINEL DO AUDIO -->
-         <?php 
-                                        while($dado = $conAudio->fetch_array() ){
-                                ?>
-                                    <div class="col-md-4">
-                                            <div id="postAudio" class="row border">
-                                                <script>
-                                                //Quando se clica no player, toca o áudio.
-                                                    function play<?php echo $dado["id"] ?>(){
-                                                        var audio = document.querySelector(".a<?php echo $dado["id"] ?>");;
-                                                        audio.play();
-                                                    }
-                                                </script>
-                                                <div class="row" id="conteudoPostAudioPainel" style="padding-left:20px;">
-                                                    <p id="conteudoPostAudio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur facilis deleniti atque maiores </p>
-                                                    
-                                                </div>
-                                                
-                                                <div class="row">
-                                                <!-- IMAGEM DE PLAYER-->
-                                                    <img src="img/play.png" style="width: 100px;"onclick="play<?php echo $dado['id'] ?>()">
-                                                    <audio class="a<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls="" style="display:none"></audio>
-                                                </div>
-
-                                            </div>
-                                </div>
-                                <?php }?>
-                                    <!-- ################################# -->  
+<div class="border " style="width:450px; height:300px; margin: 100px">
+        <!-- BLOCO 1 : IMAGEM E NOME -->
+        <div id="bloco1PainelAudio">
+        <img id="imagemPainelAudio" class="border rounded-circle border-dark" src="img/play.png" style="">
+        <span id="nomePainelAudio">Lawliet36</span>
+        <hr>
+        </div>
+        <!-- ####################### -->
+        <!-- BLOCO 1 : POST TEXTO -->
+        <div id="bloco2PainelAudio">
+            
+            <span id="postPainelAudio">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure sit suscipit esse </span>
+            <div id="linha-horizontal"></div>
+   
+        </div>
+        <!-- #################### -->
+        <!-- POST AUDIO -->
+        <?php include('partes/postAudio.php'); ?>
+        <!-- ######### -->
+            
+    </div>
