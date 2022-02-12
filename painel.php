@@ -41,13 +41,16 @@ include('verifica_login.php');
             <input name="audio" type="text" id="teste" style="display:none"></p>
             <input type="submit" value="confirmar"/>
         </form>
-        <?php 
-            while($dado = $conAudioStory->fetch_array() ){
-            ?>      
-            <div id="postAudioStory"class="row">
-                <audio id="audiostory" class="<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls=""></audio>
-            </div>
-        <?php }?>
+
+        <div id="painelStory" class="border" style="width:900px;height:100px;margin: 30px; padding : 1px;background-color: #fcd6f9;">
+            <?php 
+                while($dado = $conAudioStory->fetch_array() ){
+            ?>
+            <!-- PAINEL STORY -->
+            <?php include('partes/painelStory.php'); ?>
+            <!-- ########### -->
+            <?php }?>
+        </div>
     </div>
     <hr/>
     <div class="row">

@@ -10,6 +10,21 @@
   <title>Document</title>
 </head>
 <body>
-        <?php include('partes/painelAudio.php'); ?>
+
+        <script>
+            //Quando se clica no player, toca o áudio.
+            function play<?php echo $dado["id"] ?>(){
+            var audio = document.querySelector(".a<?php echo $dado["id"] ?>");;
+            audio.play();
+            }
+        </script>
+
+        <div class="border" style="width:900px;height:100px;margin: 30px; padding : 5px">
+            <img src="img/play.png" class="border rounded-circle" style="width: 90px;"onclick="play<?php echo $dado['id'] ?>()">
+            <!-- AUDIO -->
+            <audio id="audiostory" style="display:none" class="<?php echo $dado["id"] ?>" src="<?php echo $dado["audio"] ?>" controls=""></audio>
+            <!-- #### -->
+        </div>
+
 </body>
 </html>
