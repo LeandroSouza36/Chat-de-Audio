@@ -35,8 +35,9 @@ include('verifica_login.php');
     ></script>
     <div class="row" >
 
-
-        <button type="button" id="btnStory">Gravar Story</button>
+        <!-- BOTÃO GRAVAR STORY -->
+        <?php include('partes/botaoGravarStory.php'); ?>
+        <!-- #################  -->
         <form name="form1" method="POST" action="audioEnvioStory.php">
             <input name="audio" type="text" id="teste" style="display:none"></p>
             <input type="submit" value="confirmar"/>
