@@ -2,7 +2,7 @@
         <!-- BLOCO 1 : IMAGEM E NOME -->
         <div id="bloco1PainelAudio">
         <img id="imagemPainelAudio" class="border rounded-circle border-dark" src="img/play.png" style="">
-        <span id="nomePainelAudio">Lawliet36</span>
+        <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
         <hr>
         </div>
         <!-- ####################### -->

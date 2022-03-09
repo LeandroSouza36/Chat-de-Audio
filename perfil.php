@@ -11,8 +11,8 @@ include('verifica_login.php');
   $conUsuario = $conn->query($consultaUsuario) or die($conn->error);
   ////////////////////////////////////////////////////////
 
-  $consultaAudio = "SELECT * FROM chataudio";
- $conAudio = $conn->query($consultaAudio) or die($conn->error);
+  $consultaAudio = "SELECT * FROM chataudio WHERE usuario = '$usuario'";
+  $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
 ?>
 
@@ -41,7 +41,11 @@ include('verifica_login.php');
                         </div>
 
                         <div class="row">   
-                                <?php include('partes/painelAudio.php') ?>
+                                <?php 
+                                  while($dado = $conAudio->fetch_array() ){
+                                ?>
+                                        <?php include('partes/painelAudio.php') ?>
+                                <?php }?>
                         </div>
                 </div>
                 <div class="col-md-2 border">

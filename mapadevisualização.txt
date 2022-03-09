@@ -7,6 +7,7 @@
 5.2 - MENU (lista de amigos, adicionar pessoas, meu perfil)
 6 - Pesquisar Pessoas
 7 - Estrela (tipo o amei do instagram)
+7.2 - Barulho (Compartilhar)
 8 - Texto para o post(64 caracteres)
 #######################################################
 
