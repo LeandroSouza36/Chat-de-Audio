@@ -6,14 +6,19 @@ include('verifica_login.php');
 <?php
 
   include_once("audioConexao.php");
-  //VARIAVEL DE BUSCA
+  //VARIAVEL DE BUSCA E USUARIO PRINCIPAL
   $AdicionarAmigos = $_POST["AdicionarAmigos"];
+  $usuario = $_SESSION['usuario'];
   ///////////////////
 
   //CONSULTA DE USUARIOS DE ACORDO COM A VARIAVEL DE BUSCA
-  $consultaAudio = "SELECT * FROM usuario WHERE usuario = '$AdicionarAmigos'";
+  $consultaAudio = "SELECT usuario.usuario FROM usuario WHERE usuario.usuario = '$AdicionarAmigos' AND '$AdicionarAmigos' not in (select amigo from amigos where usuario = '$usuario')";
   $conAudio = $conn->query($consultaAudio) or die($conn->error);
   ////////////////////////////////////////////////////////
+
+  //FILTRAGEM PARA VERIFICAR SE O USUARIO PESQUISADO NÃO ESTÁ NA LISTA DE AMIGOS
+  
+  //////////////////////////////////////////////////////////////
 
 
 ?>

@@ -3,7 +3,6 @@ session_start();
 include('verifica_login.php');
 ?>
 <?php
-
   include_once("audioConexao.php");
   $adicionarAmigo = $_POST["adicionarAmigo"];
   $usuario = $_SESSION['usuario'];
