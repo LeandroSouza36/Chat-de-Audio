@@ -39,7 +39,7 @@ include('verifica_login.php');
         <?php include('partes/botaoGravarStory.php'); ?>
         <!-- #################  -->
         <form name="form1" method="POST" action="audioEnvioStory.php">
-            <input name="audio" type="text" id="teste" style="display:none"></p>
+            <input name="audio" type="text" id="testeStory" style-"display:none"></p>
             <input type="submit" value="confirmar"/>
         </form>
 
@@ -58,7 +58,7 @@ include('verifica_login.php');
         <div class="col-md-10">
             <button type="button" id="btnStart">Gravar</button>
                 <form name="form1" method="POST" action="audioEnvio.php">
-                    <input name="audio" type="text" id="teste" style="display:none"></p>
+                    <input name="audio" type="text" id="testeGravar" style-"display:none"></p>
 
                     <input type="submit" value="confirmar"/>
                 </form>
@@ -98,14 +98,17 @@ include('verifica_login.php');
     audio.src = reader.result
     audio.controls = true
     $('body').append(audio)
-    $teste = reader.result;
+    $testeGravar = reader.result;
             function open_popup(date_today) {
-            document.querySelector("#teste").value = date_today;
+            document.querySelector("#testeGravar").value = date_today;
             }
-            open_popup($teste);
+            open_popup($testeGravar);
+
+
   }
 
             }
+            
             $('#btnStart').click(function(){
          
          if($(this).text() === 'Gravar'){       
