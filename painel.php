@@ -33,11 +33,12 @@ include('verifica_login.php');
         integrity='sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg='
         crossorigin='anonymous'
     ></script>
+    <!-- STORYS DESATIVADO TEMPORARIAMENTE
     <div class="row" >
 
-        <!-- BOTÃO GRAVAR STORY -->
-        <?php include('partes/botaoGravarStory.php'); ?>
-        <!-- #################  -->
+        
+        <?php // include('partes/botaoGravarStory.php'); ?>
+       
         <form name="form1" method="POST" action="audioEnvioStory.php">
             <input name="audio" type="text" id="testeStory" style-"display:none"></p>
             <input type="submit" value="confirmar"/>
@@ -45,20 +46,21 @@ include('verifica_login.php');
 
         <div id="painelStory" class="border" style="width:900px;height:100px;margin: 30px; padding : 1px;background-color: #fcd6f9;">
             <?php 
-                while($dado = $conAudioStory->fetch_array() ){
+               // while($dado = $conAudioStory->fetch_array() ){
             ?>
-            <!-- PAINEL STORY -->
-            <?php include('partes/painelStory.php'); ?>
-            <!-- ########### -->
-            <?php }?>
+            
+            <?php // include('partes/painelStory.php'); ?>
+             
+            <?php // }?>
         </div>
     </div>
+    -->
     <hr/>
     <div class="row">
         <div class="col-md-10">
             <button type="button" id="btnStart">Gravar</button>
                 <form name="form1" method="POST" action="audioEnvio.php">
-                    <input name="audio" type="text" id="testeGravar" style-"display:none"></p>
+                    <input name="audio" type="text" id="testeGravar" style="display:none"></p>
 
                     <input type="submit" value="confirmar"/>
                 </form>
