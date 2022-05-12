@@ -9,7 +9,7 @@
 
 	 move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio.$novo_nome);
 
-	 $sql_code = "INSERT INTO arquivo (codigo, arquivo, data) VALUES(null, '$novo_nome', NOW())";
+	 $sql_code = "INSERT INTO usuario (arquivo, data) VALUES('$novo_nome', NOW())";
 	 if($conn->query($sql_code)){
 	    $msg = "Arquivo Enviado com Sucesso!";}
 	 else{
@@ -22,4 +22,19 @@
 <form action="upload.php" method="POST" enctype="multipart/form-data">
 	<input type="file" name="arquivo">
 	<input type="submit" value="Salvar">
+</form>
+
+<form action="audioCriarConta.php" method="POST">
+        <div class="field">
+            <div class="control">
+                    <input name="usuario" name="text" class="input is-large" placeholder="Seu usuário" autofocus="">
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                     <input name="senha" class="input is-large" type="password" placeholder="Sua senha">
+            </div>
+        </div>
+        <button type="submit" class="button is-block is-link is-large is-fullwidth">Criar Conta</button>
 </form>

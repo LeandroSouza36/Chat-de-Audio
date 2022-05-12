@@ -1,4 +1,7 @@
+
 <form action="audioCriarConta.php" method="POST">
+    <input type="file" name="arquivo">
+
         <div class="field">
             <div class="control">
                     <input name="usuario" name="text" class="input is-large" placeholder="Seu usuário" autofocus="">

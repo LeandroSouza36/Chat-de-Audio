@@ -6,7 +6,7 @@ $usuario = "root";
 
 $senha = "";
 
-$bdname = "imagens_devmedia";
+$bdname = "chataudiobd";
 
 //criar conexao 
 
