@@ -1,14 +1,31 @@
-1 - Pagina (parte de posts, story) OK
-2 - post OK
-3 - story 24hrs 
-    - Events e Triggers
-4 - trendings top EM BREVE
-5 - Painel de Login OK
-5.2 - MENU (lista de amigos, adicionar pessoas, meu perfil)
-6 - Pesquisar Pessoas
-7 - Estrela (tipo o amei do instagram)
-7.2 - Barulho (Compartilhar)
-8 - Texto para o post(64 caracteres)
+CONCLUIDOS------------------------
+ - Pagina (parte de posts, story) OK
+ - post OK
+ - Painel de Login OK
+ - Pesquisar Pessoas OK
+ - MENU (lista de amigos, adicionar pessoas, meu perfil) OK
+  - centralizar painel de posts. OK
+FAZER-----------------------------
+ - story 24hrs PARALIZADO
+ - Events e Triggers
+ - trendings top 
+ - Estrela (tipo o amei do instagram)
+ - Barulho (Compartilhar)
+ - Texto para o post(64 caracteres)
+ - logo
+ - menu superior.
+ - MENU 2 (O DA ESQUERDA)
+ - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
+ - customizar botão gravar.
+ - customizar botão confirmar.
+
+TAREFA ATUAL----------------------
+- data nos posts. (data será vista nos posts)
+
+PROBLEMAS-------------------------
+- FOTO DE PERFIL ESTÁ EM POSTS DE OUTROS PERFIS.
+
+
 #######################################################
 
 cor do site :

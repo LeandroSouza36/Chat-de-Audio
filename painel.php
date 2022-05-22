@@ -57,7 +57,13 @@ include('verifica_login.php');
     -->
     <hr/>
     <div class="row">
-        <div class="col-md-10">
+    <!-- MENU 2 (O DA ESQUERDA ) -->
+    <div class="row-md-2"></div>
+    <div class="col border">
+        <?php include('partes/menu.php'); ?>
+    </div> 
+    <!-- MENU 2 (O DA ESQUERDA ) FIM -->
+        <div class="col-md-8">
             <button type="button" id="btnStart">Gravar</button>
                 <form name="form1" method="POST" action="audioEnvio.php">
                     <input name="audio" type="text" id="testeGravar" style="display:none"></p>
@@ -73,7 +79,7 @@ include('verifica_login.php');
             <?php }?>
             <!-- ################################# -->
         </div>
-        <div class="row"></div>
+        <div class="row-md-2"></div>
         <div class="col border">
             <?php include('partes/menu.php'); ?>
         </div>  
