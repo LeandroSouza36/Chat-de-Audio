@@ -4,12 +4,12 @@ CONCLUIDOS------------------------
  - Painel de Login OK
  - Pesquisar Pessoas OK
  - MENU (lista de amigos, adicionar pessoas, meu perfil) OK
-  - centralizar painel de posts. OK
+ - centralizar painel de posts. OK
+ - data nos posts. (data será vista nos posts) OK
 FAZER-----------------------------
  - story 24hrs PARALIZADO
  - Events e Triggers
  - trendings top 
- - Estrela (tipo o amei do instagram)
  - Barulho (Compartilhar)
  - Texto para o post(64 caracteres)
  - logo
@@ -20,7 +20,8 @@ FAZER-----------------------------
  - customizar botão confirmar.
 
 TAREFA ATUAL----------------------
-- data nos posts. (data será vista nos posts)
+ - Estrela (tipo o amei do instagram)
+
 
 PROBLEMAS-------------------------
 - FOTO DE PERFIL ESTÁ EM POSTS DE OUTROS PERFIS.
