@@ -7,7 +7,7 @@ include('verifica_login.php');
   $audio = $_POST["audio"];
   $testeaudio = strlen($audio);
 
-  $result_audio = "INSERT INTO chataudio  (audio,usuario) VALUES ('$audio','$usuario')";
+  $result_audio = "INSERT INTO chataudio  (audio,usuario,data) VALUES ('$audio','$usuario', NOW())";
   $resultado_audio = mysqli_query($conn, $result_audio);
 
   echo "PRODUTOS CADASTRADOS !";

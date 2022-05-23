@@ -13,11 +13,15 @@
             
             <span id="postPainelAudio">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure sit suscipit esse </span>
             <div id="linha-horizontal"></div>
-   
         </div>
         <!-- #################### -->
         <!-- POST AUDIO -->
         <?php include('partes/postAudio.php'); ?>
         <!-- ######### -->
-            
+        <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium">
+            <?php echo $dado["data"] ?>
+        </div>
+      
     </div>
+
+
