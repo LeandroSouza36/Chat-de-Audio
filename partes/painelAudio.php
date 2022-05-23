@@ -1,4 +1,4 @@
-<div class="border " style="width:450px; height:300px; margin: 100px">
+<div class="border " style="width:450px; height:390px; margin: 100px">
         <!-- BLOCO 1 : IMAGEM E NOME -->
         <div id="bloco1PainelAudio">
             
@@ -18,9 +18,23 @@
         <!-- POST AUDIO -->
         <?php include('partes/postAudio.php'); ?>
         <!-- ######### -->
+        <hr/>
+        <div class="row">
+            <div class="col-md-6  " style="width:220px; height:64px;">
+                <img src="img/star.png">
+            </div>
+
+            <div class="col-md-6  " style="width:220px; height:64px">
+            <img src="img/star.png">
+            </div>
+        </div>
+
+
+        <!-- POST DATA -->
         <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium">
             <?php echo $dado["data"] ?>
         </div>
+        <!-- ######### -->
       
     </div>
 

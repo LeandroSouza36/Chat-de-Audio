@@ -18,6 +18,9 @@ FAZER-----------------------------
  - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
  - customizar botão gravar.
  - customizar botão confirmar.
+ - mudar cor da estrela quando passar o mouse (obtida no site favicon).
+ - mudar cor da estrela quando clicada.
+ - melhorar página de criar conta.
 
 TAREFA ATUAL----------------------
  - Estrela (tipo o amei do instagram)
