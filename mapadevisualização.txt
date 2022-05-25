@@ -6,10 +6,11 @@ CONCLUIDOS------------------------
  - MENU (lista de amigos, adicionar pessoas, meu perfil) OK
  - centralizar painel de posts. OK
  - data nos posts. (data será vista nos posts) OK
+ - Estrela (tipo o amei do instagram) OK 
 FAZER-----------------------------
  - story 24hrs PARALIZADO
- - Events e Triggers
- - trendings top 
+ - Events e Triggers PARALIZADO
+ - trendings top (os mais curtidos do dia)
  - Barulho (Compartilhar)
  - Texto para o post(64 caracteres)
  - logo
@@ -21,13 +22,13 @@ FAZER-----------------------------
  - mudar cor da estrela quando passar o mouse (obtida no site favicon).
  - mudar cor da estrela quando clicada.
  - melhorar página de criar conta.
- - mostrar quantidade de estrelas no post.
  - mostrar quantidade de ecos
  - colocar bordas com cor na foto do post
  - proxima pagina para uma quantidade especifica de posts
 
 TAREFA ATUAL----------------------
- - Estrela (tipo o amei do instagram)
+- mostrar quantidade de estrelas no post.
+
 
 
 PROBLEMAS-------------------------

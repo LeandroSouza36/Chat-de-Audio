@@ -24,7 +24,7 @@
 
                 <!-- FORMULARIO BOTÃO ESTRELA -->
                 <form name="formEstrela" method="POST" action="estrelaEnvio.php">
-                    <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>"></p>
+                    <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
 
                     <?php  include('partes/botaoEstrela.php'); ?>
                     <!-- SCRIPT BOTÃO ESTRELA (COLOCA O VALOR DO ID NO CAMPO INVISIVEL DO FORMULARIO BOTÃO ESTRELA PARA ENVIO) -->
