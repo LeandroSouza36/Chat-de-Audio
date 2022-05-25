@@ -20,8 +20,21 @@
         <!-- ######### -->
         <hr/>
         <div class="row">
-            <div class="col-md-6  " style="width:220px; height:64px;">
-                <img src="img/star.png">
+            <div  class="col-md-6  " style="width:220px; height:64px;">
+        <!-- FORMULARIO BOTÃO ESTRELA -->
+                <form name="formEstrela" method="POST" action="estrelaEnvio.php">
+                    <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>"  style="display:none"></p>
+
+                    <input onmouseover="Estrela<?php echo $dado['id'] ?>()" type="submit" value="estrela"/>
+            <!-- SCRIPT BOTÃO ESTRELA (COLOCA O VALOR DO ID NO CAMPO INVISIVEL DO FORMULARIO BOTÃO ESTRELA PARA ENVIO) -->
+                    <script>
+                        function Estrela<?php echo $dado["id"] ?>(){
+                        document.querySelector("#estrela<?php echo $dado["id"] ?>").value = "<?php echo $dado["id"] ?>";
+                        }
+                    </script>
+            <!-- FIM SCRIPT BOTÃO ESTRELA -->
+                </form>
+            <!-- FIM FORMULARIO BOTÃO ESTRELA -->
             </div>
 
             <div class="col-md-6  " style="width:220px; height:64px">

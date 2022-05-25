@@ -21,6 +21,10 @@ FAZER-----------------------------
  - mudar cor da estrela quando passar o mouse (obtida no site favicon).
  - mudar cor da estrela quando clicada.
  - melhorar página de criar conta.
+ - mostrar quantidade de estrelas no post.
+ - mostrar quantidade de ecos
+ - colocar bordas com cor na foto do post
+ - proxima pagina para uma quantidade especifica de posts
 
 TAREFA ATUAL----------------------
  - Estrela (tipo o amei do instagram)
