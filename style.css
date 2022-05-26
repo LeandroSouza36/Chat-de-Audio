@@ -111,3 +111,11 @@ cores{
 #painelStory{
     background-color:#fcd6f9;
 }
+
+.quantidadeEstrela{
+    font-size:xx-large;
+    color: #9500ff;
+    font-family: Calibri;
+    font-weight: bold;
+    
+}
