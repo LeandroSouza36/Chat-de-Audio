@@ -27,7 +27,7 @@ FAZER-----------------------------
  - proxima pagina para uma quantidade especifica de posts
 
 TAREFA ATUAL----------------------
- - mudar cor da estrela quando passar o mouse (obtida no site favicon).
+ - mudar cor da estrela quando passar o mouse (obtida no site flaticon).
 
 
 PROBLEMAS-------------------------

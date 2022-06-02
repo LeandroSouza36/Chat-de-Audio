@@ -16,5 +16,9 @@
         console.log("clicou na imagem")
         btn<?php echo $dado['id'] ?>.click()
                 }
+
+        function EstrelaHover<?php echo $dado['id'] ?>(){
+                img.src = "starHover.png"
+        }
 </script>
 <!-- FIM SCRIPT -->

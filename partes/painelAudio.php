@@ -33,8 +33,9 @@
                                 function Estrela<?php echo $dado["id"] ?>(){
                                 document.querySelector("#estrela<?php echo $dado["id"] ?>").value = "<?php echo $dado["id"] ?>";
                                 }
+
                             </script>
-                        <!-- FIM SCRIPT BOTÃO ESTRELA -->
+                            <!-- FIM SCRIPT BOTÃO ESTRELA -->
                         </form>
                         <!-- FIM FORMULARIO BOTÃO ESTRELA -->
                     </div>
