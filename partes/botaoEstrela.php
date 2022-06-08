@@ -1,6 +1,4 @@
-<!-- IMAGEM BOTÃO ESTRELA -->
-<img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png">
-<!-- FIM IMAGEM BOTÃO ESTRELA -->
+
 
 <!-- BOTÃO ESTRELA -->
 <input id="inputEstrela<?php echo $dado['id'] ?>"  type="submit" value="estrela" style="display: none"/>

@@ -94,6 +94,9 @@ cores{
     margin-left:10px;
     margin-top:10px;
     margin-right:10px;
+    border-color: #b66ee8;
+    border-width: 3px;
+    border-style: solid;
 }
 
 

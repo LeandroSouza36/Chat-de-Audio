@@ -8,30 +8,31 @@ CONCLUIDOS------------------------
  - data nos posts. (data será vista nos posts) OK
  - Estrela (tipo o amei do instagram) OK 
  - mostrar quantidade de estrelas no post. OK
+ - colocar bordas com cor na foto do post OK
+ - logo OK
 FAZER-----------------------------
  - story 24hrs PARALIZADO
  - Events e Triggers PARALIZADO
  - trendings top (os mais curtidos do dia)
  - Barulho (Compartilhar)
  - Texto para o post(64 caracteres)
- - logo
- - menu superior.
+ - menu superior. (feedback, criar conta, sair, sobre)
  - MENU 2 (O DA ESQUERDA)
  - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
- - customizar botão gravar.
  - customizar botão confirmar.
  - mudar cor da estrela quando clicada.
  - melhorar página de criar conta.
  - mostrar quantidade de ecos
- - colocar bordas com cor na foto do post
  - proxima pagina para uma quantidade especifica de posts
 
 TAREFA ATUAL----------------------
- - mudar cor da estrela quando passar o mouse (obtida no site flaticon).
+- customizar botão gravar.
+
 
 
 PROBLEMAS-------------------------
 - FOTO DE PERFIL ESTÁ EM POSTS DE OUTROS PERFIS.
+ - mudar cor da estrela quando passar o mouse (obtida no site flaticon). RE: Não dá pra fazer isso.
 
 
 #######################################################

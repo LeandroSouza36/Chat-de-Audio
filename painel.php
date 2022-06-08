@@ -16,7 +16,7 @@ include('verifica_login.php');
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
-<body style="padding: 20px;">
+<body style="padding: 20px; background-color: #fefbff">
 <?php
 
  include("audioConexao.php");
@@ -55,6 +55,7 @@ include('verifica_login.php');
         </div>
     </div>
     -->
+    <div><img src="img/retroway.png"></div>
     <hr/>
     <div class="row">
     <!-- MENU 2 (O DA ESQUERDA ) -->
