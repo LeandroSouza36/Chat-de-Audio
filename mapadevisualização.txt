@@ -10,6 +10,7 @@ CONCLUIDOS------------------------
  - mostrar quantidade de estrelas no post. OK
  - colocar bordas com cor na foto do post OK
  - logo OK
+ - customizar botão gravar. OK
 FAZER-----------------------------
  - story 24hrs PARALIZADO
  - Events e Triggers PARALIZADO
@@ -18,15 +19,18 @@ FAZER-----------------------------
  - Texto para o post(64 caracteres)
  - menu superior. (feedback, criar conta, sair, sobre)
  - MENU 2 (O DA ESQUERDA)
- - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
- - customizar botão confirmar.
  - mudar cor da estrela quando clicada.
  - melhorar página de criar conta.
  - mostrar quantidade de ecos
  - proxima pagina para uma quantidade especifica de posts
 
 TAREFA ATUAL----------------------
-- customizar botão gravar.
+ - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
+   - criar popup quando acabar o audio
+   - escutar o audio no popup
+   -escrever texto de 32 caracteres e sem espaços (assunto do audio)
+   - confirmar envio
+   - apagar texto
 
 
 
@@ -41,6 +45,7 @@ cor do site :
    -Cor 1: #fcd6f9
    -Cor 2: #ffb7ff
    -Cor 3: #b66ee8
+   -Cor Microphone : #9600FF
 
 fontes: 
   -Letras Grandes : Cambria

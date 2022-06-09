@@ -65,12 +65,15 @@ include('verifica_login.php');
     </div> 
     <!-- MENU 2 (O DA ESQUERDA ) FIM -->
         <div class="col-md-8">
-            <button type="button" id="btnStart">Gravar</button>
+            <div class="row border">
+                <?php include('partes/botaoGravarAudio.php'); ?>
+            </div>
                 <form name="form1" method="POST" action="audioEnvio.php">
                     <input name="audio" type="text" id="testeGravar" style="display:none"></p>
 
                     <input type="submit" value="confirmar"/>
                 </form>
+</script>
             <p>LISTA</p>
                <!--  PAINEL DO AUDIO -->
                 <?php 

@@ -99,6 +99,12 @@ cores{
     border-style: solid;
 }
 
+#imgMicrofone{
+    border-color: #9600FF;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 10px
+}
 
 #bloco2PainelAudio{
     margin-left: 10px;
