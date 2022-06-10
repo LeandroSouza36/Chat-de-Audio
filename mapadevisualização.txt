@@ -23,6 +23,7 @@ FAZER-----------------------------
  - melhorar página de criar conta.
  - mostrar quantidade de ecos
  - proxima pagina para uma quantidade especifica de posts
+ -trocar cores das fontes com a mesma cor da imagem do microfone
 
 TAREFA ATUAL----------------------
  - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
