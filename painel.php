@@ -68,11 +68,14 @@ include('verifica_login.php');
             <div class="row border">
                 <?php include('partes/botaoGravarAudio.php'); ?>
             </div>
+
                 <form name="form1" method="POST" action="audioEnvio.php">
                     <input name="audio" type="text" id="testeGravar" style="display:none"></p>
 
                     <input type="submit" value="confirmar"/>
                 </form>
+
+                
 </script>
             <p>LISTA</p>
                <!--  PAINEL DO AUDIO -->
@@ -90,7 +93,7 @@ include('verifica_login.php');
     </div>
   
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script>
+<script>
         $(function(){
             let mediaRecorder
 

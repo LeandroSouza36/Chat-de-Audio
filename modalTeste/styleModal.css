@@ -18,10 +18,11 @@ body{
 	transition: visibility 0.25s ease-in-out, transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
 }
 .modal-content{
-	background-color: white;
+	background-color:  #ffb7ff;
 	padding: 16px 24px;
 	width: 384px;
 	border-radius: 0.5rem;
+	color: #9600FF;
 }
 #spanModal{
 	float: right;

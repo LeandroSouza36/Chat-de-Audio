@@ -17,9 +17,13 @@
 		var element = document.getElementById("modal");
 		element.classList.remove("show-modal");
 	}
+	showModal();
+
 </script>
 <body>
+<!-- modal -->
 	<div>
+
 		<button onclick="showModal()">Hello World</button>
 		<div class="modal" id="modal">
 			<div class="modal-content">
@@ -28,5 +32,6 @@
 			</div>
 		</div>
 	</div>
+<!-- fim modal-->
 </body>
 </html>
