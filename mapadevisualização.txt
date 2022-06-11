@@ -26,18 +26,19 @@ FAZER-----------------------------
  -trocar cores das fontes com a mesma cor da imagem do microfone
 
 TAREFA ATUAL----------------------
- - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
-   - criar popup quando acabar o audio
-   - escutar o audio no popup
+ - Area para visualizar o ultimo audio pra saber se iremos apagar ou enviar
+   - criar  o audio para visualizar OK
+   - escutar o audio na div OK
    -escrever texto de 32 caracteres e sem espaços (assunto do audio)
-   - confirmar envio
-   - apagar texto
+   - confirmar envio OK
+   - apagar audio.
 
 
 
 PROBLEMAS-------------------------
 - FOTO DE PERFIL ESTÁ EM POSTS DE OUTROS PERFIS.
- - mudar cor da estrela quando passar o mouse (obtida no site flaticon). RE: Não dá pra fazer isso.
+- mudar cor da estrela quando passar o mouse (obtida no site flaticon). RE: Não dá pra fazer isso.
+- Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
 
 
 #######################################################

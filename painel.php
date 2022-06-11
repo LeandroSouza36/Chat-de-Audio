@@ -67,12 +67,13 @@ include('verifica_login.php');
         <div class="col-md-8">
             <div class="row border">
                 <?php include('partes/botaoGravarAudio.php'); ?>
+                <?php include('partes/audioAmostra.php'); ?>
             </div>
 
                 <form name="form1" method="POST" action="audioEnvio.php">
                     <input name="audio" type="text" id="testeGravar" style="display:none"></p>
 
-                    <input type="submit" value="confirmar"/>
+                    <input id="inputConfirmarAudio" type="submit" value="confirmar"/>
                 </form>
 
                 
@@ -116,7 +117,14 @@ include('verifica_login.php');
     $testeGravar = reader.result;
             function open_popup(date_today) {
             document.querySelector("#testeGravar").value = date_today;
+            //Nessa Função abaixo eu criei uma variavel chamada 'amostraAudio' que chama uma div sem conteudo, depois eu modifiquei o conteudo da div colocando o audio que foi gravado.
+            let amostraAudio = document.getElementById("amostraAudio")
+            amostraAudio.innerHTML ="<audio src='"+date_today+"' controls=''></audio>";
+            console.log(amostraAudio.innerText)
+            ////////////////////////
+
             }
+
             open_popup($testeGravar);
 
 
@@ -131,7 +139,7 @@ include('verifica_login.php');
              $(this).text('Gravando')
          }else{
              mediaRecorder.stop() 
-             $(this).text('Gravar') 
+             $(this).text('Gravar')
          }
      })
      $('#btnStory').click(function(){
