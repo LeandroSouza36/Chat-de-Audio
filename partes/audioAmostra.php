@@ -1,4 +1,4 @@
-<div style="height: 128px">
+<div id="painelSuperAmostraAudio"style="height: 128px">
 	<div id="painelAmostraAudio"class="row border" style="height: 64px">
 		<div id="amostraAudio"></div>
 	</div>
@@ -6,7 +6,10 @@
 		<!-- BOTÃO ENVIAR COM ONCLICK PARA CLICAR NO BOTÃO CONFIRMAR-->
 		<button onclick="clicouButtonEnviarAudio()" id="buttonEnviarAudio" style="margin: 10px; width: 128px">Enviar</button>
 		<!-- /////////////////////////////////////// -->
-		<button style="margin: 10px; width: 128px">Excluir</button>
+		<!-- Função que exclui o AudioAmostra-->
+		<?php include('partes/funcaoAudioExcluir.php'); ?>
+		<!-- FIM Função que exclui o AudioAmostra-->
+		<button onclick="AudioExcluir()" style="margin: 10px; width: 128px">Excluir</button>
 	</div>
 	
 </div>

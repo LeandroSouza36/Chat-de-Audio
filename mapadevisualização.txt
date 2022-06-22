@@ -36,9 +36,9 @@ TAREFA ATUAL----------------------
  - Area para visualizar o ultimo audio pra saber se iremos apagar ou enviar
    - criar  o audio para visualizar OK
    - escutar o audio na div OK
-   -escrever texto de 32 caracteres e sem espaços (assunto do audio)
+   -escrever texto de 16 caracteres e sem espaços (assunto do audio)
    - confirmar envio OK
-   - apagar audio.
+   - apagar audio. OK
 
 
 
