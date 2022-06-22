@@ -123,7 +123,7 @@ include('verifica_login.php');
                                 document.querySelector("#testeGravar").value = date_today;
                                 //Nessa Função abaixo eu criei uma variavel chamada 'amostraAudio' que chama uma div sem conteudo, depois eu modifiquei o conteudo da div colocando o audio que foi gravado.
                                 let amostraAudio = document.getElementById("amostraAudio")
-                                amostraAudio.innerHTML = "<audio src='" + date_today + "' controls=''></audio>";
+                                amostraAudio.innerHTML = "<img src='img/play.png' style='width: 50px;'onclick='playAudioAmostra()'><audio class='audioAmostra' src='" + date_today + "' controls='' style='display:none'></audio>";
                                 console.log(amostraAudio.innerText)
                                 ////////////////////////
 

@@ -29,6 +29,8 @@ FAZER-----------------------------
  -customizar botão confirmar
  -customizar botão excluir
  -novo item no menu: Notificação
+ - ocultar painel de amostraAudio enquanto não tem nenhuma amostra de audio (incluindo os botões)
+ - som de entrada para o painel de amostraAudio.
 
 TAREFA ATUAL----------------------
  - Area para visualizar o ultimo audio pra saber se iremos apagar ou enviar

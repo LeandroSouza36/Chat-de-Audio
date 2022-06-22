@@ -1,32 +1,30 @@
-<img onmouseover="EstrelaHover()" onmouseout="EstrelaOut()" id="imgEstrela" src="img/star.png">
-
-<script>
- var img = document.querySelector("#imgEstrela");
-//Função que faz com que a estrela mude quando passado o mouse sobre a imagem
- function EstrelaHover(){
-	img.src = "img/starHover.png";
- }
- /////////////////////////////////////////////////////////////
- //Função que faz com que a estrela mude quando o mouse sai da imagem
- function EstrelaOut(){
-	img.src = "img/star.png";
- }
- /////////////////////////////////////////////////////////////
 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+	
 
 
- //Função que faz com que a estrela mude quando passado o mouse sobre a imagem
-function EstrelaHover<?php echo $dado['id'] ?>(){
-	img<?php echo $dado['id'] ?>.src = "img/starHover.png";
- }
- /////////////////////////////////////////////////////////////
- //Função que faz com que a estrela mude quando o mouse sai da imagem
- function EstrelaOut<?php echo $dado['id'] ?>(){
-	img<?php echo $dado['id'] ?>.src = "img/star.png";
- }
- /////////////////////////////////////////////////////////////
-</script>
+        <!-- POST AUDIO -->
+        <?php include('partes/postAudio.php'); ?>
+        <!-- ######### -->
+      
 
 
 
+
+
+</body>
+</html>

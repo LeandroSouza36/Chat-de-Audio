@@ -1,6 +1,6 @@
 <div style="height: 128px">
-	<div class="row border" style="height: 64px">
-		<div id="amostraAudio">lll</div>
+	<div id="painelAmostraAudio"class="row border" style="height: 64px">
+		<div id="amostraAudio"></div>
 	</div>
 	<div class="row border" style="height: 64px; ">
 		<!-- BOTÃO ENVIAR COM ONCLICK PARA CLICAR NO BOTÃO CONFIRMAR-->
@@ -19,5 +19,11 @@
 			
 			btnConfirmar.click();
         }
-		///////////////////////////////////////q
+		///////////////////////////////////////
+		//Quando se clica no player, toca o áudio.
+		function playAudioAmostra(){
+            var audio = document.querySelector(".audioAmostra");;
+            audio.play();
+        }
 </script>
+                
