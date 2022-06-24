@@ -1,22 +1,10 @@
-CONCLUIDOS------------------------
- - Pagina (parte de posts, story) OK
- - post OK
- - Painel de Login OK
- - Pesquisar Pessoas OK
- - MENU (lista de amigos, adicionar pessoas, meu perfil) OK
- - centralizar painel de posts. OK
- - data nos posts. (data será vista nos posts) OK
- - Estrela (tipo o amei do instagram) OK 
- - mostrar quantidade de estrelas no post. OK
- - colocar bordas com cor na foto do post OK
- - logo OK
- - customizar botão gravar. OK
-FAZER-----------------------------
+PARALIZADO------------------------
  - story 24hrs PARALIZADO
  - Events e Triggers PARALIZADO
+FAZER-----------------------------
+
  - trendings top (os mais curtidos do dia)
  - Barulho (Compartilhar)
- - Texto para o post(64 caracteres)
  - menu superior. (feedback, criar conta, sair, sobre)
  - MENU 2 (O DA ESQUERDA)
  - mudar cor da estrela quando clicada.
@@ -29,16 +17,13 @@ FAZER-----------------------------
  -customizar botão confirmar
  -customizar botão excluir
  -novo item no menu: Notificação
- - ocultar painel de amostraAudio enquanto não tem nenhuma amostra de audio (incluindo os botões)
  - som de entrada para o painel de amostraAudio.
+ - texto com 16 caracteres
+ - fontes customisadas.
+ -enquanto rolar a tela os paineis dos menus ainda estarão visiveis.
 
 TAREFA ATUAL----------------------
- - Area para visualizar o ultimo audio pra saber se iremos apagar ou enviar
-   - criar  o audio para visualizar OK
-   - escutar o audio na div OK
-   -escrever texto de 16 caracteres e sem espaços (assunto do audio)
-   - confirmar envio OK
-   - apagar audio. OK
+ - ocultar painel de amostraAudio enquanto não tem nenhuma amostra de audio (incluindo os botões e o assunto)
 
 
 

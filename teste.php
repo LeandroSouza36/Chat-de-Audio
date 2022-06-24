@@ -1,30 +1,18 @@
+<input id="textoAssuntoBeta"  type="text">
+<form name="form1" method="POST" action="audioEnvio.php">
+                <input id="textoAssunto" name="textoAssunto" type="text">
 
+                <input id="inputConfirmarAudio" type="submit" value="confirmar" />
+</form>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+<button onclick="TextoAssunto()" id="botao">HELLO</button>
 
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-</head>
-<body>
-	
+<script>
+    var texto = document.getElementById("textoAssunto");
+    var textoBeta = document.getElementById("textoAssuntoBeta");
+    var botao = document.getElementById("botao");
 
-
-        <!-- POST AUDIO -->
-        <?php include('partes/postAudio.php'); ?>
-        <!-- ######### -->
-      
-
-
-
-
-
-</body>
-</html>
+    function TextoAssunto(){
+        texto.value = textoBeta.value;
+    }
+</script>

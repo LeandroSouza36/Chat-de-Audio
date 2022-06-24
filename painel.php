@@ -54,7 +54,7 @@ include('verifica_login.php');
         </div>
     </div>
     -->
-    <div><img src="img/retroway.png"></div>
+    <div><img id="logoInicio"src="img/retroway.png"></div>
     <hr />
     <div class="row">
         <!-- MENU 2 (O DA ESQUERDA ) -->
@@ -70,14 +70,13 @@ include('verifica_login.php');
             </div>
 
             <form name="form1" method="POST" action="audioEnvio.php">
-                <input name="audio" type="text" id="testeGravar" style="display:none"></p>
-
-                <input id="inputConfirmarAudio" type="submit" value="confirmar" />
+                <input name="audio" type="text" id="testeGravar"  style="display:none"></p>
+                <input id="textoAssunto" name="textoAssunto" type="text"  style="display:none">
+                <input id="inputConfirmarAudio" type="submit" value="confirmar" style="display:none" />
             </form>
 
 
             </script>
-            <p>LISTA</p>
             <!--  PAINEL DO AUDIO -->
             <?php
             while ($dado = $conAudio->fetch_array()) {

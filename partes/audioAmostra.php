@@ -11,7 +11,7 @@
 		<!-- FIM Função que exclui o AudioAmostra-->
 		<button onclick="AudioExcluir()" style="margin: 10px; width: 128px">Excluir</button>
 	</div>
-	
+	<input id="textoAssuntoBeta"  type="text">
 </div>
 
 <script>
@@ -19,7 +19,11 @@
         function clicouButtonEnviarAudio(){
 			let buttonEnviarAudio = document.getElementById("buttonEnviarAudio")
         	let btnConfirmar = document.querySelector("#inputConfirmarAudio")
-			
+			//pega o valor do input "textoAssuntoBeta" e coloca no input principal do assunto
+			var texto = document.getElementById("textoAssunto");
+    		var textoBeta = document.getElementById("textoAssuntoBeta");
+			texto.value = textoBeta.value;
+			// ------------------------------------------
 			btnConfirmar.click();
         }
 		///////////////////////////////////////

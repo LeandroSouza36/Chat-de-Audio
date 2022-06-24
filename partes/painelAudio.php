@@ -11,7 +11,7 @@
         <!-- BLOCO 1 : POST TEXTO -->
         <div id="bloco2PainelAudio">
             
-            <span id="postPainelAudio">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure sit suscipit esse </span>
+            <span id="postPainelAudio"> <?php echo $dado["assunto"] ?> </span>
             <div id="linha-horizontal"></div>
         </div>
         <!-- #################### -->
