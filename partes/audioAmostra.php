@@ -1,4 +1,4 @@
-<div id="painelSuperAmostraAudio"style="height: 128px">
+<div id="painelSuperAmostraAudio"style="height: 128px;">
 	<div id="painelAmostraAudio"class="row border" style="height: 64px">
 		<div id="amostraAudio"></div>
 	</div>
