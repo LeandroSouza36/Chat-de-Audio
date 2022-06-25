@@ -7,7 +7,6 @@
         console.log(btn)
 
         function clicouImgMicrofone(){
-
           console.log("clicou na imagem");
           btnGravar.click();
         }

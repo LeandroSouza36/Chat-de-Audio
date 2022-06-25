@@ -17,13 +17,12 @@ FAZER-----------------------------
  -customizar botão confirmar
  -customizar botão excluir
  -novo item no menu: Notificação
- - som de entrada para o painel de amostraAudio.
  - texto com 16 caracteres
  - fontes customisadas.
  -enquanto rolar a tela os paineis dos menus ainda estarão visiveis.
 
 TAREFA ATUAL----------------------
- - ocultar painel de amostraAudio enquanto não tem nenhuma amostra de audio (incluindo os botões e o assunto)
+- som de entrada para o painel de amostraAudio.
 
 
 

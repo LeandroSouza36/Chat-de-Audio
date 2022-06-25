@@ -143,6 +143,9 @@ include('verifica_login.php');
                         } else {
                             mediaRecorder.stop()
                             $(this).text('Gravar')
+                            //abrir funcaoAbrirPainelAmostraAudio.php
+                            AbrirPainelAmostraAudio();
+                            ///////
                         }
                     })
                     $('#btnStory').click(function() {
@@ -150,6 +153,7 @@ include('verifica_login.php');
                         if ($(this).text() === 'Gravar Story') {
                             mediaRecorder.start()
                             $(this).text('Gravando')
+
                         } else {
                             mediaRecorder.stop()
                             $(this).text('Gravar Story')
@@ -161,6 +165,10 @@ include('verifica_login.php');
                 })
 
         })
+
+        //FUNÇÕES
+        <?php include('partes/funcaoAbrirPainelAmostraAudio.php'); ?>
+        /////////
     </script>
 
 
