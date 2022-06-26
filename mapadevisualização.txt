@@ -17,12 +17,16 @@ FAZER-----------------------------
  -customizar botão confirmar
  -customizar botão excluir
  -novo item no menu: Notificação
- - texto com 16 caracteres
  - fontes customisadas.
  -enquanto rolar a tela os paineis dos menus ainda estarão visiveis.
+ -som de excluido
+ -som de enviar
+ -som de gravar audio
+ -usuario que já deu like em um post não pode dá mais likes, só deslikes
+- texto com 16 caracteres e sem espaços.
 
 TAREFA ATUAL----------------------
-- som de entrada para o painel de amostraAudio.
+-som de estrela
 
 
 
