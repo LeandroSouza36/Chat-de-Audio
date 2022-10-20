@@ -36,7 +36,7 @@ include('verifica_login.php');
                 <div class="col-md-10">
                         <div class="row">
                                 <div class="col-md-12 border">
-                                        <?php echo $usuario ?>
+                                       PERFIL DE <?php echo $usuario ?>
                                 </div>
                         </div>
 

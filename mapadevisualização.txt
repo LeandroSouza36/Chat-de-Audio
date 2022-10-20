@@ -24,9 +24,12 @@ FAZER-----------------------------
  -som de gravar audio
  -usuario que já deu like em um post não pode dá mais likes, só deslikes
 - texto com 16 caracteres e sem espaços.
+- quando clicado na estrela, retornar para a pagina inicial
+-som de estrela
+-tirar segunda estrela
 
 TAREFA ATUAL----------------------
--som de estrela
+
 
 
 

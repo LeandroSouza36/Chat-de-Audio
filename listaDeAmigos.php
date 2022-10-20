@@ -40,8 +40,6 @@ include('verifica_login.php');
                             <!-- BOTAO ADICIONAR AMIGO -->
                             <form name="formAmigos" method="POST" action="AdicionarAmigosConfirmar.php">
                                 <input style="display:none" id="nomeAmigo" type="text" name="adicionarAmigo" placeholder="<?php echo $dado['usuario'] ?>"><br>
-
-                                <input type= "submit" value="Adicionar Amigo">
                             </form>
                             <!-- #################### -->
                         </div>
