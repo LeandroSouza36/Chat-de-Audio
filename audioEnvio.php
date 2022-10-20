@@ -11,5 +11,5 @@ include('verifica_login.php');
   $result_audio = "INSERT INTO chataudio  (audio,usuario,assunto,data) VALUES ('$audio','$usuario','$textoAssunto', NOW())";
   $resultado_audio = mysqli_query($conn, $result_audio);
 
-  echo "PRODUTOS CADASTRADOS !";
-  
+?>
+<body onload='window.history.back();'>

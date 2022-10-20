@@ -20,4 +20,6 @@ $novaEstrela = $estrela + 1;
   $result_estrela = "UPDATE chataudio SET estrela=$novaEstrela WHERE id=$id;";
   $resultado_estrela = mysqli_query($conn, $result_estrela);
 
-  echo "PRODUTOS CADASTRADOS ! $id";
+  ?>
+
+<body onload='window.history.back();'>
