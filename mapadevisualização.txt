@@ -12,7 +12,6 @@ FAZER-----------------------------
  - mostrar quantidade de ecos
  - proxima pagina para uma quantidade especifica de posts
  -trocar cores das fontes com a mesma cor da imagem do microfone
- -Voltar para a pagina inicial quando enviar o audio.
  -customizar audio amostra
  -customizar botão confirmar
  -customizar botão excluir

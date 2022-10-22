@@ -2,7 +2,7 @@
         <!-- BLOCO 1 : IMAGEM E NOME -->
         <div id="bloco1PainelAudio">
             
-        <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/402b016c739fe59f63fbfbe77cd4f449.jpg" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
+        <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["usuario "] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
 
         <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
         <hr>
