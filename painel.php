@@ -20,7 +20,7 @@ include('verifica_login.php');
     <?php
 
     include("audioConexao.php");
-    $consultaAudio = "SELECT * FROM chataudio";
+    $consultaAudio = "SELECT c.usuario, c.assunto,c.estrela, c.id, c.audio, c.data, u.arquivo FROM chataudio c INNER JOIN usuario u ON c.usuario = u.usuario";
     $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
     $consultaAudioStory = "SELECT * FROM chataudiostory";

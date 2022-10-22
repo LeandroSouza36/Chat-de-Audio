@@ -11,7 +11,8 @@ include('verifica_login.php');
   $conUsuario = $conn->query($consultaUsuario) or die($conn->error);
   ////////////////////////////////////////////////////////
 
-  $consultaAudio = "SELECT * FROM chataudio WHERE usuario = '$usuario'";
+  $consultaAudio = "SELECT c.usuario, c.assunto,c.estrela, c.id, c.audio, c.data, u.arquivo FROM chataudio c, usuario u WHERE c.usuario = '$usuario' AND c.usuario = u.usuario";
+
   $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
 ?>
