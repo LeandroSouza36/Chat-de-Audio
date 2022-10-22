@@ -51,6 +51,11 @@ border-radius:7px 7px 7px 7px ;
 
 
 }
+
+#painelMenu{
+    background-color: #f968ae;
+}
+
 a:link{
    text-decoration: none;
    color: #b66ee8;

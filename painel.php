@@ -54,12 +54,13 @@ include('verifica_login.php');
         </div>
     </div>
     -->
-    <div><img id="logoInicio"src="img/retroway.png"></div>
-    <hr />
+    <div id="painelHead">
+        <div ><img id="logoInicio"src="img/retroway.png"></div>
+    </div>
     <div class="row">
         <!-- MENU 2 (O DA ESQUERDA ) -->
         <div class="row-md-2"></div>
-        <div class="col border">
+        <div id="painelMenu" class="col border">
             <?php include('partes/menu.php'); ?>
         </div>
         <!-- MENU 2 (O DA ESQUERDA ) FIM -->
@@ -86,7 +87,7 @@ include('verifica_login.php');
             <!-- ################################# -->
         </div>
         <div class="row-md-2"></div>
-        <div class="col border">
+        <div id="painelMenu" class="col border">
             <?php include('partes/menu.php'); ?>
         </div>
     </div>

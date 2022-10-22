@@ -27,13 +27,19 @@ FAZER-----------------------------
 -som de estrela
 -tirar segunda estrela
 -usuarios cadastrados
+-na pagina inicial terá o audio apenas do usuario e dos amigos
 TAREFA ATUAL----------------------
+-NOTIFICAÇÕES
+   -CRIAR MENU DE Notificação X
+   - EM NOTIFICAÇÕES TERÁ (SOLICITAÇÕES DE AMIZADES, ESTRELAS, ECOS)
+   -CRIAR TABELA DE Notificação
+   -INCLUIR NO SITE
 
-
+STATUS: JÁ CRIEI A PAGINA DE NOTIFICAÇÕES
 
 
 PROBLEMAS-------------------------
-- FOTO DE PERFIL ESTÁ EM POSTS DE OUTROS PERFIS.
+
 - mudar cor da estrela quando passar o mouse (obtida no site flaticon). RE: Não dá pra fazer isso.
 - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
 
