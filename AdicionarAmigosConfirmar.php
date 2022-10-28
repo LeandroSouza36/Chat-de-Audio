@@ -7,7 +7,7 @@ include('verifica_login.php');
   $adicionarAmigo = $_POST["adicionarAmigo"];
   $usuario = $_SESSION['usuario'];
 
-  $result_audioStory = "INSERT INTO amigos  (usuario, amigo) VALUES ('$usuario','$adicionarAmigo')";
+  $result_audioStory = "INSERT INTO amigos  (usuario, amigo, status) VALUES ('$usuario','$adicionarAmigo', 'solicitado')";
   $resultado_audioStory = mysqli_query($conn, $result_audioStory);
 
 

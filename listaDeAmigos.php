@@ -7,7 +7,7 @@ include('verifica_login.php');
   include_once("audioConexao.php");
   $usuario = $_SESSION['usuario'];
   //CONSULTA DE USUARIOS DE ACORDO COM A VARIAVEL DE BUSCA
-  $consultaAmigo = "SELECT * FROM amigos WHERE usuario = '$usuario'";
+  $consultaAmigo = "SELECT * FROM amigos WHERE usuario = '$usuario' AND status = 'amigo'";
   $conAmigo = $conn->query($consultaAmigo) or die($conn->error);
   ////////////////////////////////////////////////////////
 

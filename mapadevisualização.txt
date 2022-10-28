@@ -35,7 +35,8 @@ TAREFA ATUAL----------------------
    -CRIAR TABELA DE Notificação
    -INCLUIR NO SITE
 
-STATUS: JÁ CRIEI A PAGINA DE NOTIFICAÇÕES
+STATUS: - Notificações de AMIZADES
+        - Solicitações tem que estar no outro perfil
 
 
 PROBLEMAS-------------------------
