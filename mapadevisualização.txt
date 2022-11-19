@@ -35,8 +35,11 @@ TAREFA ATUAL----------------------
    -CRIAR TABELA DE Notificação
    -INCLUIR NO SITE
 
-STATUS: - Notificações de AMIZADES
-        - Solicitações tem que estar no outro perfil
+STATUS:  
+ 
+- Depois de clicar em adicionar amigo, retornar a pagina anterior
+- Adicionar foto
+- Colocar numero em Notificações
 
 
 PROBLEMAS-------------------------

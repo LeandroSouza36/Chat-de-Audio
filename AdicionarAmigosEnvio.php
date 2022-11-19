@@ -12,7 +12,7 @@ include('verifica_login.php');
   ///////////////////
 
   //CONSULTA DE USUARIOS DE ACORDO COM A VARIAVEL DE BUSCA
-  $consultaAudio = "SELECT usuario.usuario FROM usuario WHERE usuario.usuario = '$AdicionarAmigos' AND '$AdicionarAmigos' not in (select amigo from amigos where usuario = '$usuario')";
+  $consultaAudio = "SELECT usuario.usuario FROM usuario WHERE usuario.usuario = '$AdicionarAmigos' AND usuario.usuario != '$usuario' AND '$AdicionarAmigos' not in (select amigo from amigos where usuario = '$usuario')";
   $conAudio = $conn->query($consultaAudio) or die($conn->error);
   ////////////////////////////////////////////////////////
 

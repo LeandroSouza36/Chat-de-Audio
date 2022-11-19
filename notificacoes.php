@@ -21,7 +21,7 @@ include('verifica_login.php');
 		include_once("audioConexao.php");
 		$usuario = $_SESSION['usuario'];
 		//CONSULTA DE USUARIOS DE ACORDO COM A VARIAVEL DE BUSCA
-		$consultaAmigo = "SELECT * FROM amigos WHERE usuario = '$usuario' AND status = 'solicitado'";
+		$consultaAmigo = "SELECT * FROM amigos WHERE amigo = '$usuario' AND status = 'solicitado'";
 		$conAmigo = $conn->query($consultaAmigo) or die($conn->error);
 		////////////////////////////////////////////////////////
 	?>
@@ -51,7 +51,7 @@ include('verifica_login.php');
 						</tr>
 						<tr>
 							<th>foto</th>
-							<th><?php echo $dado['amigo'] ?>	</th>
+							<th><?php echo $dado['usuario'] ?>	</th>
 							<th><button>VER PERFIL</button></th>
 							<th><button>ADICIONAR</button></th>
 							<th><button>EXCLUIR</button></th>
