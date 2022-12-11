@@ -32,6 +32,14 @@ TAREFA ATUAL----------------------
 -NOTIFICAÇÕES
    -CRIAR MENU DE Notificação X
    - EM NOTIFICAÇÕES TERÁ (SOLICITAÇÕES DE AMIZADES, ESTRELAS, ECOS)
+
+         PRIMEIRAMENTE TENHO QUE CRIAR UMA TABELA DE ESTRELAS
+         TABELA: ESTRELA{
+            AMIGO QUE DEU A ESTRELA
+            AMIGO QUE RECEBEU A ESTRELA
+            STATUS(ENVIADO, CONFIRMADO)
+            ID DO VIDEO
+         }
    -CRIAR TABELA DE Notificação
    -INCLUIR NO SITE
 
@@ -43,6 +51,9 @@ STATUS:
 
 
 PROBLEMAS-------------------------
+
+WARNING: ID DE AUDIO NÃO ESTÁ AUTO INCREMENT
+
 
 - mudar cor da estrela quando passar o mouse (obtida no site flaticon). RE: Não dá pra fazer isso.
 - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
