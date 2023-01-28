@@ -51,8 +51,13 @@ include('verifica_login.php');
 						</tr>
 						<tr>
 							<th>foto</th>
-							<th><?php echo $dado['usuario'] ?>	</th>
-							<th><button>VER PERFIL</button></th>
+							<th><?php echo $dado['usuario'] ?></th>
+							<th>
+                                <form action="notificacoesVerPerfil.php" method="POST">
+                                    <input name="verperfil"type="text" value="<?php echo $dado['usuario'] ?>">
+                                    <input type="submit" value="VER PERFIL">
+                                </form>
+                            </th>
 							<th><button>ADICIONAR</button></th>
 							<th><button>EXCLUIR</button></th>
 						</tr>
