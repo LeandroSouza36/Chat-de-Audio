@@ -54,7 +54,7 @@ include('verifica_login.php');
 							<th><?php echo $dado['usuario'] ?></th>
 							<th>
                                 <form action="notificacoesVerPerfil.php" method="POST">
-                                    <input name="verperfil"type="text" value="<?php echo $dado['usuario'] ?>">
+                                    <input name="verperfil"type="text" value="<?php echo $dado['usuario'] ?>" style="display:none">
                                     <input type="submit" value="VER PERFIL">
                                 </form>
                             </th>
