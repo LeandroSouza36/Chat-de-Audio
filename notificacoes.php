@@ -58,7 +58,12 @@ include('verifica_login.php');
                                     <input type="submit" value="VER PERFIL">
                                 </form>
                             </th>
-							<th><button>ADICIONAR</button></th>
+							<th>
+                                <form action="notificacoesAdicionar.php" method="POST">
+                                    <input name="adicionar"type="text" value="<?php echo $dado['usuario'] ?>" style="display:none">
+                                    <input type="submit" value="ADICIONAR">
+                                </form>
+                            </th>
 							<th><button>EXCLUIR</button></th>
 						</tr>
 					</table>	

@@ -10,5 +10,8 @@ include('verifica_login.php');
   $result_audioStory = "INSERT INTO amigos  (usuario, amigo, status) VALUES ('$usuario','$adicionarAmigo', 'solicitado')";
   $resultado_audioStory = mysqli_query($conn, $result_audioStory);
 
+  $result_audioStory2 = "INSERT INTO amigos  (usuario, amigo, status) VALUES ('$adicionarAmigo','$usuario', 'aguardando')";
+  $resultado_audioStory2 = mysqli_query($conn, $result_audioStory2);
+
 
   echo "AMIGO ADICIONADO";
