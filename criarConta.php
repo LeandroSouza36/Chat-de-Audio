@@ -20,22 +20,35 @@
  }
 ?>
 
-<h1>Upload de Arquivos</h1>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<h1>C</h1>
 <?php if($msg != false) echo "<p> $msg </p>";?>
-<form action="criarConta.php" method="POST" enctype="multipart/form-data">
-<div class="field">
-            <div class="control">
-                    <input name="usuario" name="text" class="input is-large" placeholder="Seu usuário" autofocus="">
-            </div>
-        </div>
+<body style="background: linear-gradient(90deg, rgba(252,214,249,1) 0%, rgba(255,183,255,1) 50%, rgba(182,110,232,1) 120%);">
+	<div class="row">
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4" style="margin-top: 100px">
+			<form action="criarConta.php" method="POST" enctype="multipart/form-data">
+				<div class="field">
+					<div class="control">
+						<input name="usuario" name="text"  placeholder="Seu usuário" autofocus="" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" style="font-family: Tahoma; font-size: 50px">
+					</div>
+				</div>
 
-        <div class="field">
-            <div class="control">
-                     <input name="senha" class="input is-large" type="password" placeholder="Sua senha">
-            </div>
-        </div>
-	<input type="file" name="arquivo">
-	<input type="submit" value="Salvar">
-</form>
+				<div class="field">
+					<div class="control">
+						<input name="senha" class="input is-large form-control" type="password" placeholder="Sua senha" aria-label="Large" aria-describedby="inputGroup-sizing-sm" style="font-family: Tahoma; font-size: 50px; margin-top: 20px">
+					</div>
+				</div>
+
+				<input type="file" name="arquivo">
+				<input type="submit" value="Salvar">
+			</form>
+		</div>
+		<div class="col-md-4">
+		</div>
+	</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
 

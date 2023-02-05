@@ -18,11 +18,10 @@ session_start();
 
 <body>
     <section class="hero is-success is-fullheight">
-        <div class="hero-body">
+        <div class="hero-body" style="background: linear-gradient(90deg, rgba(252,214,249,1) 0%, rgba(255,183,255,1) 50%, rgba(182,110,232,1) 120%);">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
-                    <h3 class="title has-text-grey">Retroway</h3>
-                    <h3 class="title has-text-grey"><a href="https://youtube.com/canaltioficial" target="_blank">Canal TI</a></h3>
+                    <div><img id="logoInicio"src="img/retroway.png"></div>
                     <?php
                       if(isset($_SESSION['nao_autentificado']))
                           echo "<div class='notification is-danger'>

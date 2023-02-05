@@ -119,8 +119,8 @@ cores{
 }
 
 #postPainelAudio{
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 95%;
+    font-family: Tahoma;
+    font-size: 40px;
 }
 
 #painelStory{
