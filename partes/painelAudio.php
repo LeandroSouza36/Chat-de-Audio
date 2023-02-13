@@ -1,4 +1,4 @@
-<div class="border " style="width:450px; height:390px; margin: 100px">
+<div class="border " style="width:450px; height:390px; margin: 100px;">
         <!-- BLOCO 1 : IMAGEM E NOME -->
         <div id="bloco1PainelAudio">
             
@@ -61,7 +61,7 @@
 
 
         <!-- POST DATA -->
-        <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium">
+        <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium; background-color: white">
             <?php echo $dado["data"] ?>
         </div>
         <!-- ######### -->

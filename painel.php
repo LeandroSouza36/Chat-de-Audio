@@ -16,7 +16,7 @@ include('verifica_login.php');
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
-<body style="padding: 20px; background-color: #fefbff">
+<body>
     <?php
 
     include("audioConexao.php");
@@ -65,7 +65,7 @@ include('verifica_login.php');
         </div>
         <!-- MENU 2 (O DA ESQUERDA ) FIM -->
         <div class="col-md-8">
-            <div class="row border">
+            <div class="row border" >
                 <?php include('partes/botaoGravarAudio.php'); ?>
                 <?php include('partes/audioAmostra.php'); ?>
             </div>

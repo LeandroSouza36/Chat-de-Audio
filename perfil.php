@@ -33,12 +33,19 @@ include('verifica_login.php');
     <title>Document</title>
 </head>
 <body id="body">
+
+<div id="painelHead">
+        <div >
+                <img id="logoInicio"src="img/retroway.png">
+        </div>
+</div>
         <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-2 border">
+                        <?php include('partes/menu.php'); ?>
+                </div>
+                <div class="col-md-8">
                         <div class="row">
-                                <div class="col-md-12 border">
-                                       PERFIL DE <?php echo $usuario ?>
-                                </div>
+                                <div class="border" style="border-radius: 5px; font-size: 25px; padding: 25px">PERFIL DE <?php echo $usuario ?></div>
                         </div>
 
                         <div class="row">   
