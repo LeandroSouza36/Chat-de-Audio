@@ -1,12 +1,12 @@
 <?php
 
-$servidor = "localhost";
+$servidor = "fdb28.awardspace.net";
 
-$usuario = "root";
+$usuario = "3774678_lawliet6374";
 
-$senha = "";
+$senha = "Bgjq+?,J0hGK*lfJ";
 
-$bdname = "chataudiobd";
+$bdname = "3774678_lawliet6374";
 
 //criar conexao 
 
