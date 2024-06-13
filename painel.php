@@ -23,8 +23,8 @@ include('verifica_login.php');
     $consultaAudio = "SELECT c.usuario, c.assunto,c.estrela, c.id, c.audio, c.data, u.arquivo FROM chataudio c INNER JOIN usuario u ON c.usuario = u.usuario";
     $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
-    $consultaAudioStory = "SELECT * FROM chataudiostory";
-    $conAudioStory = $conn->query($consultaAudioStory) or die($conn->error);
+    #$consultaAudioStory = "SELECT * FROM chataudiostory";
+    #$conAudioStory = $conn->query($consultaAudioStory) or die($conn->error);
 
     ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
