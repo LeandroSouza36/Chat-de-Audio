@@ -18,8 +18,8 @@
  $consultaAudio = "SELECT * FROM chataudio";
  $conAudio = $conn->query($consultaAudio) or die($conn->error);
 
- $consultaAudioStory = "SELECT * FROM chataudiostory";
- $conAudioStory = $conn->query($consultaAudioStory) or die($conn->error);
+ #$consultaAudioStory = "SELECT * FROM chataudiostory";
+ #$conAudioStory = $conn->query($consultaAudioStory) or die($conn->error);
 
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
