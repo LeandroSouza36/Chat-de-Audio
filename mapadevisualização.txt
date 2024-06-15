@@ -45,9 +45,10 @@ TAREFA ATUAL----------------------
 
 STATUS:  
  
-- Depois de clicar em adicionar amigo, retornar a pagina anterior
-- Adicionar foto
 - Colocar numero em Notificações
+{
+   - criar numeraçao visual
+}
 
 
 PROBLEMAS-------------------------

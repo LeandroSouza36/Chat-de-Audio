@@ -15,3 +15,6 @@ include('verifica_login.php');
 
 
   echo "AMIGO ADICIONADO";
+
+  header('Location: AdicionarAmigos.php');
+  exit();
