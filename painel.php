@@ -171,7 +171,7 @@ include('verifica_login.php');
         /////////
     </script>
 
-
+<script src="audio-player.js"></script>
 </body>
 
 </html>
