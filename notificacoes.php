@@ -40,7 +40,8 @@ include('verifica_login.php');
         <!-- MENU 2 (O DA ESQUERDA ) FIM -->
         <div class="col-md-8">
 			<div class="list-group">
-    			<?php while($dado = $conAmigo->fetch_array() ){ ?>
+    			<?php while($dado = $conAmigo->fetch_array() ){ 
+                ?>
 					<table class="table border">
 						<tr>
 							<th>
