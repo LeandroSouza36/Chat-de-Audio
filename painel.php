@@ -8,7 +8,7 @@ include('verifica_login.php');
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Untitled</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -58,8 +58,7 @@ include('verifica_login.php');
     </div>
     <div class="row">
         <!-- MENU 2 (O DA ESQUERDA ) -->
-        <div class="row-md-2"></div>
-        <div id="painelMenu" class="col border">
+        <div id="painelMenu" class="col-xs-12 col-md-2 border">
             <?php include('partes/menu.php'); ?>
         </div>
         <!-- MENU 2 (O DA ESQUERDA ) FIM -->
@@ -85,8 +84,8 @@ include('verifica_login.php');
             <?php } ?>
             <!-- ################################# -->
         </div>
-        <div class="row-md-2"></div>
-        <div id="painelMenu" class="col border">
+
+        <div id="painelMenu" class="col-md-2 border">
             <?php include('partes/menu.php'); ?>
         </div>
     </div>
