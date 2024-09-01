@@ -7,8 +7,8 @@ include('verifica_login.php');
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"  charset="utf-8">
     <title>Untitled</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -28,31 +28,7 @@ include('verifica_login.php');
     ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src='https://code.jquery.com/jquery-3.2.1.slim.js' integrity='sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg=' crossorigin='anonymous'></script>
-    <!-- STORYS DESATIVADO TEMPORARIAMENTE
-    <div class="row" >
 
-        
-        <?php // include('partes/botaoGravarStory.php'); 
-        ?>
-       
-        <form name="form1" method="POST" action="audioEnvioStory.php">
-            <input name="audio" type="text" id="testeStory" style-"display:none"></p>
-            <input type="submit" value="confirmar"/>
-        </form>
-
-        <div id="painelStory" class="border" style="width:900px;height:100px;margin: 30px; padding : 1px;background-color: #fcd6f9;">
-            <?php
-            // while($dado = $conAudioStory->fetch_array() ){
-            ?>
-            
-            <?php // include('partes/painelStory.php'); 
-            ?>
-             
-            <?php // }
-            ?>
-        </div>
-    </div>
-    -->
     <div id="painelHead">
         <div ><img id="logoInicio"src="img/retroway.png"></div>
     </div>
@@ -63,7 +39,7 @@ include('verifica_login.php');
         </div>
         <!-- MENU 2 (O DA ESQUERDA ) FIM -->
         <div class="col-md-8">
-            <div class="row border" >
+            <div class="PainelGravarAudio row border" >
                 <?php include('partes/botaoGravarAudio.php'); ?>
                 <?php include('partes/audioAmostra.php'); ?>
             </div>

@@ -1,4 +1,4 @@
-<div class="border " style="width:450px; height:390px; margin: 100px;">
+<div class="PainelAudio border">
         <!-- BLOCO 1 : IMAGEM E NOME -->
         <div id="bloco1PainelAudio">
             
@@ -26,7 +26,12 @@
                 <div class="row">
                     <div  class="col-md-6">
                         <!-- IMAGEM BOTÃO ESTRELA -->
-                        <img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png">
+                        <img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png" style="width:30px; margin-left:10px;">
+                            <!-- QUANTIDADE DE ESTRELAS -->
+                            <span class="quantidadeEstrela">
+                                <?php echo $dado["estrela"] ?>
+                            </span>
+                        <!-- FIM QUANTIDADE DE ESTRELAS -->
                         <!-- FIM IMAGEM BOTÃO ESTRELA -->
                         <!-- FORMULARIO BOTÃO ESTRELA -->
                         <form name="formEstrela" method="POST" action="estrelaEnvio.php">
@@ -45,17 +50,9 @@
                         <!-- FIM FORMULARIO BOTÃO ESTRELA -->
                     </div>
                     <div  class="col-md-6">
-                        <!-- QUANTIDADE DE ESTRELAS -->
-                        <span class="quantidadeEstrela">
-                            <?php echo $dado["estrela"] ?>
-                        </span>
-                        <!-- FIM QUANTIDADE DE ESTRELAS -->
+
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-6  " style="width:220px; height:64px">
-                <img src="img/star.png">
             </div>
         </div>
 
@@ -66,6 +63,6 @@
         </div>
         <!-- ######### -->
       
-    </div>
+</div>
 
 

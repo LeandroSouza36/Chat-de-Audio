@@ -1,7 +1,7 @@
 
 
 <!-- BOTÃO ESTRELA -->
-<input id="inputEstrela<?php echo $dado['id'] ?>"  type="submit" value="estrela" style="display: none"/>
+<input id="inputEstrela<?php echo $dado['id'] ?>"  type="submit" value="estrela" style="display: none;"/>
 <!-- FIM BOTÃO ESTRELA -->
 
 
