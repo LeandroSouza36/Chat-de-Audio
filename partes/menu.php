@@ -1,11 +1,10 @@
-<div id="nameLogin">
-                <h2>Olá, <?php echo $_SESSION['usuario'];?></h2>
+<div id="nameLogin" style="border: 2px solid #333; ">
                 <!-- MENU-->
-                <h2><a href="painel.php">Inicio</a></h2>
-                <h2><a href="perfil.php">Perfil</a></h2>
-                <h2><a href="notificacoes.php">Notificações  </a> <?php include('partes/numeroDeNotificações.php'); ?></h2>
-                <h2><a href="listaDeAmigos.php">Lista de Amigos</a></h2>
-                <h2><a href="AdicionarAmigos.php">Adiconar Pessoas</a></h2>
-                <h2><a href="logout.php">Sair</a></h2>
+                <a href="painel.php">Inicio</a>
+                <a href="perfil.php">Perfil</a>
+                <a href="notificacoes.php">Notificações  </a> <?php include('partes/numeroDeNotificações.php'); ?>
+                <a href="listaDeAmigos.php">Lista de Amigos</a>
+                <a href="AdicionarAmigos.php">Adiconar Pessoas</a>
+                <a href="logout.php">Sair</a>
                 <!--FIM MENU-->
 </div>

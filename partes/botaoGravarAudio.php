@@ -10,4 +10,7 @@
           console.log("clicou na imagem");
           btnGravar.click();
         }
+
+
+        
 </script>

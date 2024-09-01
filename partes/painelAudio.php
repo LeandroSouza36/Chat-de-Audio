@@ -1,26 +1,17 @@
 <div class="PainelAudio border">
         <!-- BLOCO 1 : IMAGEM E NOME -->
-        <div id="bloco1PainelAudio">
-            
-        <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["arquivo"] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
-
-        <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
-        <hr>
+        <div id="bloco1PainelAudio">       
+            <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["arquivo"] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
+            <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
+            <hr>
         </div>
         <!-- ####################### -->
-        <!-- BLOCO 1 : POST TEXTO -->
-        <div id="bloco2PainelAudio">
-            
-            <span id="postPainelAudio"> <?php echo $dado["assunto"] ?> </span>
-            <div id="linha-horizontal"></div>
-        </div>
-        <!-- #################### -->
         <!-- POST AUDIO -->
         <?php include('partes/postAudio.php'); ?>
         <!-- ######### -->
         <hr/>
        
-
+        
         <div class="row">
             <div  class="col-md-6" style=" width:220px; height:64px;">
                 <div class="row">

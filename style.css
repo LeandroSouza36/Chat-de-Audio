@@ -31,23 +31,25 @@ audio {
 
 #nameLogin {
   text-decoration: none;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   color: black;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
   font-style: inherit;
-  font-size: 1.25rem; /* Ajuste de tamanho de fonte, se necessário */
+  font-size: 10px; /* Ajuste de tamanho de fonte, se necessário */
 }
 
 #painelMenu {
-  background-color: #f2f2f2;
-  padding: 50px;
+  background-color: #ffffff;
+  padding: 20px;
+  border: 2px solid #333;
 }
 
 a:link {
   text-decoration: none;
   color: black;
-  font-size: 1.25rem; /* Ajuste de tamanho de fonte, se necessário */
+  font-size: 1rem; /* Ajuste de tamanho de fonte, se necessário */
+  margin: 5px;
 }
 a:hover {
   text-decoration: none;
@@ -137,7 +139,6 @@ cores {
 }
 
 #bloco1PainelAudio {
-  background-color: #f2f2f2;
 }
 
 #bloco2PainelAudio {
@@ -149,7 +150,6 @@ cores {
   width: 80%;
   height: 50px;
   min-height: 50px;
-  background-color: #ffb7ff;
   border-radius: 10px;
   margin: 15px;
 }

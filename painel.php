@@ -115,6 +115,7 @@ include('verifica_login.php');
                         if ($(this).text() === 'Gravar') {
                             mediaRecorder.start()
                             $(this).text('Gravando')
+                            console.log("kkk")
                         } else {
                             mediaRecorder.stop()
                             $(this).text('Gravar')
