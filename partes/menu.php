@@ -2,6 +2,7 @@
                 <!-- MENU-->
                 <a href="painel.php">Inicio</a>
                 <a href="perfil.php">Perfil</a>
+                <a href="trendings.php">Trendings</a>
                 <a href="notificacoes.php">Notificações  </a> <?php include('partes/numeroDeNotificações.php'); ?>
                 <a href="listaDeAmigos.php">Lista de Amigos</a>
                 <a href="AdicionarAmigos.php">Adiconar Pessoas</a>

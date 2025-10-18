@@ -1,9 +1,18 @@
-PARALIZADO------------------------
- - story 24hrs PARALIZADO
- - Events e Triggers PARALIZADO
+AGORA-----------------------------
+TRENDINGS TOPICS:
+   VERIFICAR AUDIO DE TODOS E COM ISSO VER OS QUE TEM MAIS CURTIDAS NO PERIODOS DE 24 HORAS;
+   VARIAVEL TRENDING = NUMERO DE CURTIDAS DURANTE 24 HORAS;
+   ESSA VARIAVEL TEM QUE ESTÁ EM TODOS OS AUDIOS
+   NO AUDIO TEM A COLUNA ESTRELA E DATA, É SÓ FAZER UMA NOVA COLUNA COM TODAS A QUANTIDADE DE ESTRELAS COM a
+   DATA DA ULTIMA 24 HRS
+
+- CONSULTA E VISUALIZAÇÃO DOS AUDIOS MAIS CURTIDOS NAS ULTIMAS 24HRS (FEITO)
+- NA PAGINA APARECER A QUANTIDADE DE CURTIDAS
+- VISUALIZAÇÃO BONITA (O PADRÃO DA PAGINA INICIAL)
+
 FAZER-----------------------------
 
- - trendings top (os mais curtidos do dia)
+ - trendings top (os mais curtidos do dia) X
  - Barulho (Compartilhar)
  - menu superior. (feedback, criar conta, sair, sobre)
  - MENU 2 (O DA ESQUERDA)
@@ -72,3 +81,8 @@ fontes:
   -Letras Grandes : Cambria
   -Letras Medias  : Calibri
   -Letras Pequenas: Garamond
+
+
+PARALIZADO------------------------
+ - story 24hrs PARALIZADO
+ - Events e Triggers PARALIZADO
