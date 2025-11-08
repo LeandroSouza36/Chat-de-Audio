@@ -20,8 +20,9 @@ $novaEstrela = $estrela + 1;
   $result_estrela = "UPDATE chataudio SET estrela=$novaEstrela WHERE id=$id;";
   $resultado_estrela = mysqli_query($conn, $result_estrela);
 
-
-
+  $result_curtidas = "INSERT INTO curtidas (AudioCurtido, QuemCurtiu, HoraDaCurtida,audio)
+        VALUES ('$id', 'teste', NOW(),(SELECT audio FROM chataudio WHERE id = '$id'))";
+  $resultado_curtida = mysqli_query($conn, $result_curtidas);
 
 
   ?>
