@@ -20,7 +20,7 @@ GROUP BY
     AudioCurtido
 ORDER BY 
     totalCurtidas DESC
-LIMIT 1
+LIMIT 10
 ";
 
 $result = mysqli_query($conn, $sql);
