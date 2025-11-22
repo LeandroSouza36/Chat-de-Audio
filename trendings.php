@@ -14,6 +14,7 @@ SELECT
     chataudio.id AS idAudio,
     chataudio.audio,
     chataudio.assunto,
+    chataudio.estrela,       -- ← ADICIONADO
     usuario.usuario,
     usuario.arquivo
 FROM 
@@ -29,11 +30,13 @@ GROUP BY
     chataudio.id,
     chataudio.audio,
     chataudio.assunto,
+    chataudio.estrela,      -- ← ADICIONADO
     usuario.usuario,
     usuario.arquivo
 ORDER BY 
     totalCurtidas DESC
 LIMIT 10;
+
 ";
 
 $result = mysqli_query($conn, $sql);
@@ -78,6 +81,8 @@ $result = mysqli_query($conn, $sql);
                         <source src="<?php echo $row['audio'] ?>" type="audio/mpeg">
                         Seu navegador não suporta o elemento de áudio.
                     </audio> 
+
+
                     <?php
                 }
             } else {
@@ -89,6 +94,8 @@ $result = mysqli_query($conn, $sql);
             <?php include('partes/menu.php'); ?>
         </div>
     </div>
+
+
 </body>
 </html>
 

@@ -50,8 +50,6 @@ include('verifica_login.php');
                 <input id="inputConfirmarAudio" type="submit" value="confirmar" style="display:none" />
             </form>
 
-
-            </script>
             <!--  PAINEL DO AUDIO -->
             <?php
             while ($dado = $conAudio->fetch_array()) {
