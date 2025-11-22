@@ -16,7 +16,7 @@ $contador++;
 ?>
 
 <?php }?>
-
+<!-- -->
 <a style="display: inline-block;
     width: 30px;
     height: 30px;
@@ -27,4 +27,4 @@ $contador++;
     color: white;
     font-weight: bold;
     text-decoration: none;
-    font-size: 25px;"><?php echo $contador ?></a>
+    font-size: 25px;"><?php echo trim($contador) ?></a>

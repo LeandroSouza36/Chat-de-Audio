@@ -13,7 +13,7 @@
        
         
         <div class="row">
-            <div  class="col-md-6" style=" width:220px; height:64px;">
+            <div  class="painelEstrela col-md-6" style=" width:220px; height:64px;">
                 <div class="row">
                     <div  class="col-md-6">
                         <!-- IMAGEM BOTÃO ESTRELA -->

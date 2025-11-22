@@ -1,6 +1,7 @@
 AGORA-----------------------------
-TRENDINGS TOPICS:
-- VISUALIZAÇÃO BONITA (O PADRÃO DA PAGINA INICIAL)
+
+- FAZER FUNÇÃO DE POST DE AUDIO PARA FACILITAR NA IMPLEMENTAÇÃO
+
 
 FAZER-----------------------------
 
@@ -29,6 +30,7 @@ FAZER-----------------------------
 -tirar segunda estrela
 -usuarios cadastrados
 -na pagina inicial terá o audio apenas do usuario e dos amigos
+- VISUALIZAÇÃO BONITA (O PADRÃO DA PAGINA INICIAL)
 TAREFA ATUAL----------------------
 -NOTIFICAÇÕES
    -CRIAR MENU DE Notificação X
