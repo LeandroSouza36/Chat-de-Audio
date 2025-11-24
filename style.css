@@ -129,21 +129,32 @@ cores {
   margin-right: 10px;
 }
 
+#imgMicrofone:hover {
+  transform: scale(1.25);
+  border-color: #ff0080;
+}
 /*PAINEL POST AUDIOS */
 .PainelAudio {
   display: flex;
   flex-wrap: wrap;
   width: 600px;
-  height: 300px;
+
   margin: 60px;
   margin-top: 100px;
+  background: #e0c7d7;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: 0.3s ease;
 }
 
+.PainelAudio:hover {
+  transform: scale(1.25);
+  background: #ff8ad4;
+}
 .painelEstrela {
   margin-bottom: 10px;
-}
-
-#bloco1PainelAudio {
 }
 
 #bloco2PainelAudio {
