@@ -16,12 +16,11 @@
     <link rel="stylesheet" href="../style.css">
     <style>
         .cd-wrapper {
-    width: 120px;
+    width: 1200px;
     height: 60px;           /* metade da altura → meio círculo */
     overflow: hidden;       /* corta a metade superior */
     position: relative;
     margin: 0 auto;
-    margin-bottom: 15px;
 }
 
 .cd-disc {

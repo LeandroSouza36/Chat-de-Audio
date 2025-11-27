@@ -147,10 +147,12 @@ cores {
   margin-bottom: 35px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: 0.3s ease;
+  position: relative;
+  overflow: hidden; /* garante que só a parte que deve aparecer, aparece */
 }
 
 .PainelAudio:hover {
-  transform: scale(1.25);
+  transform: scale(1.01);
   background: #ff8ad4;
 }
 .painelEstrela {
