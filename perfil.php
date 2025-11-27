@@ -46,7 +46,7 @@ $conAudio = $stmt2->get_result();
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body id="body">
 
@@ -55,11 +55,13 @@ $conAudio = $stmt2->get_result();
 </div>
 
 <div class="row">
+            <!-- MENU zona morta -->
+        <?php include('zonaMorta.php'); ?>
     <div class="col-md-2 border">
         <?php include('partes/menu.php'); ?>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-6">
 
         <div class="row">
             <div class="border" style="border-radius: 5px; font-size: 25px; padding: 25px">

@@ -1,59 +1,60 @@
 <div class="PainelAudio border">
-        <!-- BLOCO 1 : IMAGEM E NOME -->
-        <div id="bloco1PainelAudio">       
-            <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["arquivo"] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
-            <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
-            <hr>
-        </div>
-        <!-- ####################### -->
-        <!-- POST AUDIO -->
-        <?php include('partes/postAudio.php'); ?>
-        <!-- ######### -->
-        <hr/>
-       
-        
-        <div class="row">
-            <div  class="painelEstrela col-md-6" style=" width:220px; height:64px;">
-                <div class="row">
-                    <div  class="col-md-6">
-                        <!-- IMAGEM BOTÃO ESTRELA -->
-                        <img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png" style="width:30px; margin-left:10px;">
-                            <!-- QUANTIDADE DE ESTRELAS -->
-                            <span class="quantidadeEstrela">
-                                <?php echo $dado["estrela"] ?>
-                            </span>
-                        <!-- FIM QUANTIDADE DE ESTRELAS -->
-                        <!-- FIM IMAGEM BOTÃO ESTRELA -->
-                        <!-- FORMULARIO BOTÃO ESTRELA -->
-                        <form name="formEstrela" method="POST" action="estrelaEnvio.php">
-                            <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
+    <!-- BLOCO 1 : IMAGEM E NOME -->
+    <div id="bloco1PainelAudio">       
+        <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["arquivo"] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
+        <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
+        <hr>
+    </div>
 
-                            <?php  include('partes/botaoEstrela.php'); ?>
-                            <!-- SCRIPT BOTÃO ESTRELA (COLOCA O VALOR DO ID NO CAMPO INVISIVEL DO FORMULARIO BOTÃO ESTRELA PARA ENVIO) -->
-                            <script>
-                                function Estrela<?php echo $dado["id"] ?>(){
+    <!-- POST AUDIO -->
+    <?php include('partes/postAudio.php'); ?>
+
+
+
+
+    <hr/>
+
+    <!-- CONTROLES DE ESTRELA -->
+    <div class="row">
+        <div  class="painelEstrela col-md-10" style=" width:220px; height:64px;">
+            <div class="row">
+                <div  class="col-md-10">
+                    <img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png" style="width:30px; margin-left:10px;">
+                    <span class="quantidadeEstrela">
+                        <?php echo $dado["estrela"] ?>
+                    </span>
+
+                    <form name="formEstrela" method="POST" action="estrelaEnvio.php">
+                        <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
+                        <?php  include('partes/botaoEstrela.php'); ?>
+                        <script>
+                            function Estrela<?php echo $dado["id"] ?>(){
                                 document.querySelector("#estrela<?php echo $dado["id"] ?>").value = "<?php echo $dado["id"] ?>";
-                                }
-
-                            </script>
-                            <!-- FIM SCRIPT BOTÃO ESTRELA -->
-                        </form>
-                        <!-- FIM FORMULARIO BOTÃO ESTRELA -->
-                    </div>
-                    <div  class="col-md-6">
-
-                    </div>
+                            }
+                        </script>
+                    </form>
                 </div>
             </div>
+            
         </div>
+        <div class="col-md-2">
+    <!-- LIXEIRA (apenas para o dono do áudio) -->
+    <?php if($dado["usuario"] === $_SESSION['usuario']): ?>
+        <form method="POST" action="partes/excluirAudio.php" 
+              onsubmit="return confirm('Deseja realmente excluir este áudio?');" 
+              style="margin:0;">
+            <input type="hidden" name="id" value="<?php echo $dado['id']; ?>">
+            <button type="submit" class="btn btn-link p-0" style="color: #B76EE9;">
+                <i class="bi bi-trash" style="font-size:2rem;"></i>
+            </button>
+        </form>
+    <?php endif; ?>
 
-
-        <!-- POST DATA -->
-        <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium; background-color: white">
-            <?php echo $dado["data"] ?>
         </div>
-        <!-- ######### -->
-      
+    </div>
+
+    <!-- POST DATA -->
+    <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium; background-color: white">
+        <?php echo $dado["data"] ?>
+    </div>
 </div>
-
-
