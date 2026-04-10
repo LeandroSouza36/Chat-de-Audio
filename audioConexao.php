@@ -4,7 +4,7 @@ $servidor = "localhost";
 
 $usuario = "root";
 
-$senha = "";
+$senha = "@Admin123";
 
 $bdname = "chataudiobd";
 
