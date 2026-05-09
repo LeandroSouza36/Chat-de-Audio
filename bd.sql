@@ -67,7 +67,7 @@ INSERT INTO `amigos` (`id`, `usuario`, `amigo`, `status`) VALUES
 
 CREATE TABLE `chataudio` (
   `id` int(220) NOT NULL,
-  `audio` blob NOT NULL,
+  `audio` longblob NOT NULL,
   `usuario` varchar(220) NOT NULL,
   `estrela` int(64) NOT NULL,
   `assunto` varchar(220) NOT NULL,
@@ -101,3 +101,13 @@ MODIFY estrela INT DEFAULT 0;
 ALTER TABLE amigos 
 MODIFY id INT NOT NULL AUTO_INCREMENT,
 ADD PRIMARY KEY (id);
+
+CREATE TABLE estrelas (
+  id INT NOT NULL AUTO_INCREMENT,
+  audio_id INT NOT NULL,
+  usuario VARCHAR(220) NOT NULL,
+  hora DATETIME DEFAULT NOW(),
+  PRIMARY KEY (id),
+  FOREIGN KEY (audio_id) REFERENCES chataudio(id),
+  UNIQUE KEY unico_voto (audio_id, usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

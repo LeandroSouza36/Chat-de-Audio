@@ -7,15 +7,25 @@
     </div>
 
     <!-- POST AUDIO -->
-    <?php include('partes/postAudio.php'); ?>
+     <div class="row">
+    <div id="postAudio">
+        <audio-player title="<?php echo $dado["assunto"] ?>"
+	              src="<?php echo $dado["audio"] ?>"
+	              bar-width="5"
+	              bar-gap="2"
+	              preload 
+	    ></audio-player>
+    </div>
+     </div>
 
+    <!-- POST AUDIO -->
 
 
 
     <hr/>
 
     <!-- CONTROLES DE ESTRELA -->
-    <div class="row">
+    <div class="row" style="margin-top: 20px">
         <div  class="painelEstrela col-md-10" style=" width:220px; height:64px;">
             <div class="row">
                 <div  class="col-md-10">
@@ -24,7 +34,7 @@
                         <?php echo $dado["estrela"] ?>
                     </span>
 
-                    <form name="formEstrela" method="POST" action="estrelaEnvio.php">
+                    <form name="formEstrela" method="POST" action="estrelaEnvio.php" >
                         <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
                         <?php  include('partes/botaoEstrela.php'); ?>
                         <script>
@@ -54,7 +64,9 @@
     </div>
 
     <!-- POST DATA -->
+     <div class="row">
     <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium; background-color: white">
         <?php echo $dado["data"] ?>
+    </div>
     </div>
 </div>

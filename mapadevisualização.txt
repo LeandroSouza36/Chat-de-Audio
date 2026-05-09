@@ -63,6 +63,9 @@ WARNING: ID DE AUDIO NÃO ESTÁ AUTO INCREMENT
 - Popup de confirmação do audio logo apos de gravar (no popup poderá escutar o áudio gravado e os botões de compartilhar e de excluir)
 
 
+estrelas e lixeira estao sobrepondo o audio
+
+
 #######################################################
 
 cor do site :

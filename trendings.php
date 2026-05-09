@@ -5,38 +5,36 @@ include_once("audioConexao.php");
 
 $usuario = $_SESSION['usuario'];
 
-// Busca o áudio mais curtido nas últimas 24 horas
 $sql = "
 SELECT 
-    curtidas.idCurtida,
-    curtidas.AudioCurtido,
+    MIN(estrelas.id) AS idCurtida,
+    estrelas.audio_id AS AudioCurtido,
     COUNT(*) AS totalCurtidas,
     chataudio.id AS idAudio,
     chataudio.audio,
     chataudio.assunto,
-    chataudio.estrela,       -- ← ADICIONADO
+    chataudio.estrela,
     usuario.usuario,
     usuario.arquivo
 FROM 
-    curtidas
+    estrelas
 INNER JOIN chataudio 
-    ON curtidas.AudioCurtido = chataudio.id
+    ON estrelas.audio_id = chataudio.id
 INNER JOIN usuario 
     ON chataudio.usuario = usuario.usuario
 WHERE 
-    curtidas.HoraDaCurtida >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+    estrelas.hora >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
 GROUP BY 
-    curtidas.AudioCurtido, 
+    estrelas.audio_id, 
     chataudio.id,
     chataudio.audio,
     chataudio.assunto,
-    chataudio.estrela,      -- ← ADICIONADO
+    chataudio.estrela,
     usuario.usuario,
     usuario.arquivo
 ORDER BY 
     totalCurtidas DESC
 LIMIT 10;
-
 ";
 
 $result = mysqli_query($conn, $sql);
