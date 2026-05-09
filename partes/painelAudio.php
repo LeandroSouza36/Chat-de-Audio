@@ -1,3 +1,6 @@
+
+
+
 <div class="PainelAudio border">
     <!-- BLOCO 1 : IMAGEM E NOME -->
     <div id="bloco1PainelAudio">       
@@ -36,7 +39,24 @@
 
                     <form name="formEstrela" method="POST" action="estrelaEnvio.php" >
                         <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
-                        <?php  include('partes/botaoEstrela.php'); ?>
+                        <!-- LIXEIRA (botao estrela) -->
+
+
+                            <!-- BOTÃO ESTRELA -->
+                            <input id="inputEstrela<?php echo $dado['id'] ?>"  type="submit" value="estrela" style="display: none;"/>
+                            <!-- FIM BOTÃO ESTRELA -->
+                            <script>
+                                    let img<?php echo $dado['id'] ?> = document.querySelector("#imgEstrela<?php echo $dado['id'] ?>")
+                                    let btn<?php echo $dado['id'] ?> = document.querySelector("#inputEstrela<?php echo $dado['id'] ?>")
+                                    console.log(btn<?php echo $dado['id'] ?>)
+                            //SCRIPT QUE FAZ COM QUE SE APERTE O BOTÃO SUBMIT NO MOMENTO EM QUE EU APERTO NA IMAGEM DA ESTRELA
+                                    function Clicou<?php echo $dado['id'] ?>(){
+                                    console.log("clicou na imagem")
+                                    btn<?php echo $dado['id'] ?>.click()
+                                    }
+                            //FIM SCRIPT
+                            </script>
+                        <!-- LIXEIRA (botao estrela) -->
                         <script>
                             function Estrela<?php echo $dado["id"] ?>(){
                                 document.querySelector("#estrela<?php echo $dado["id"] ?>").value = "<?php echo $dado["id"] ?>";
