@@ -59,33 +59,29 @@ include('partes/head.php');
 <main class="pagina-entrada">
     <?php include('partes/vitrine.php'); ?>
 
-    <div class="coluna-entrada">
-        <div class="cartao-entrada">
-            <div class="logo-entrada">
-                <span class="logo-texto">Retroway</span>
-            </div>
-            <p class="slogan">Cadastre-se para ouvir e compartilhar áudios com seus amigos.</p>
+    <div class="cartao cartao-entrada">
+        <h1>Crie sua conta</h1>
+        <p class="texto-2">Leva menos de um minuto. Depois é só soltar a voz!</p>
 
-            <form action="criarConta.php" method="POST" enctype="multipart/form-data">
-                <label class="foto-escolher">
-                    <img class="avatar" id="previaFoto" src="img/usuario/padrao.svg" alt="">
-                    <span>Escolher foto de perfil</span>
-                    <input type="file" name="arquivo" accept="image/*" id="campoFoto">
-                </label>
-                <input name="usuario" type="text" class="campo" placeholder="Nome de usuário" required
-                       value="<?php echo isset($_POST['usuario']) ? e($_POST['usuario']) : ''; ?>" autocomplete="username">
-                <input name="senha" type="password" class="campo" placeholder="Senha" required autocomplete="new-password">
-                <button type="submit" class="botao botao-azul">Cadastrar</button>
-            </form>
+        <?php if ($msg): ?>
+            <p class="mensagem erro"><?php echo e($msg); ?></p>
+        <?php endif; ?>
 
-            <?php if ($msg): ?>
-                <p class="mensagem erro"><?php echo e($msg); ?></p>
-            <?php endif; ?>
-        </div>
+        <form action="criarConta.php" method="POST" enctype="multipart/form-data">
+            <label class="foto-escolher">
+                <img class="avatar" id="previaFoto" src="img/usuario/padrao.svg" alt="">
+                <span>Escolher foto de perfil<small>Opcional · JPG, PNG, GIF ou WEBP</small></span>
+                <input type="file" name="arquivo" accept="image/*" id="campoFoto">
+            </label>
+            <label class="rotulo-campo" for="usuario">Usuário</label>
+            <input id="usuario" name="usuario" type="text" class="campo" placeholder="ex.: maria_silva" required
+                   value="<?php echo isset($_POST['usuario']) ? e($_POST['usuario']) : ''; ?>" autocomplete="username">
+            <label class="rotulo-campo" for="senha">Senha</label>
+            <input id="senha" name="senha" type="password" class="campo" placeholder="••••••" required autocomplete="new-password">
+            <button type="submit" class="botao botao-neon"><i class="bi bi-stars"></i> Cadastrar</button>
+        </form>
 
-        <div class="cartao-entrada pequeno">
-            Tem uma conta? <a href="index.php" class="link-azul">Conecte-se</a>
-        </div>
+        <p class="troca">Já tem conta? <a href="index.php" class="link-neon">Entrar</a></p>
     </div>
 </main>
 

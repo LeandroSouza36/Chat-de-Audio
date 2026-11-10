@@ -1,23 +1,12 @@
-<!-- Ilustração de dois celulares com posts de áudio (telas de login/cadastro) -->
-<div class="vitrine" aria-hidden="true">
-    <?php foreach (array(array('celular-1', 300, 'bom dia, grupo!'), array('celular-2', 262, 'ouve essa música')) as $cel): ?>
-    <div class="celular <?php echo $cel[0]; ?>">
-        <div class="tela">
-            <div class="tela-topo">Retroway</div>
-            <div class="tela-autor"><span class="bolinha"></span> <?php echo $cel[2]; ?></div>
-            <div class="tela-midia" style="--h: <?php echo $cel[1]; ?>">
-                <span class="play-falso"><i class="bi bi-play-fill"></i></span>
-                <span class="ondas-falsas">
-                    <?php foreach (array(30,60,45,80,55,90,40,70,100,65,35,75,50,85,45,60,30,70,55,40) as $h): ?>
-                        <i style="height: <?php echo $h; ?>%"></i>
-                    <?php endforeach; ?>
-                </span>
-            </div>
-            <div class="tela-acoes"><i class="bi bi-star-fill" style="color:#ffb400"></i><i class="bi bi-person"></i><i class="bi bi-send"></i></div>
-            <div class="tela-linha" style="width: 40%"></div>
-            <div class="tela-linha" style="width: 75%"></div>
-            <div class="tela-linha" style="width: 55%"></div>
-        </div>
+<!-- Lado esquerdo das telas de login/cadastro: globo espelhado, letreiro e discos -->
+<section class="vitrine">
+    <div class="globo-mini" aria-hidden="true"></div>
+    <span class="logo-neon vitrine-letreiro">Retroway</span>
+    <p class="vitrine-frase titulo-neon">A rede social que fala.</p>
+    <p class="vitrine-texto">Grave áudios, solte a voz, ganhe estrelas e suba nas paradas do dia com seus amigos.</p>
+    <div class="vitrine-discos" aria-hidden="true">
+        <span class="mini-disco" style="--h: 320"><span></span></span>
+        <span class="mini-disco" style="--h: 185"><span></span></span>
+        <span class="mini-disco" style="--h: 48"><span></span></span>
     </div>
-    <?php endforeach; ?>
-</div>
+</section>

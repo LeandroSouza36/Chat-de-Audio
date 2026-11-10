@@ -23,19 +23,19 @@ include('partes/head.php');
 <body>
 <?php include('partes/menu.php'); ?>
 
-<main class="principal">
-    <div class="pagina-estreita">
-        <h1 class="titulo-pagina">Amigos <span class="texto-2">(<?php echo count($amigos); ?>)</span></h1>
+<main class="centro">
+        <h1 class="titulo-pagina titulo-neon">Seus amigos</h1>
+        <p class="subtitulo-pagina"><?php echo count($amigos); ?> <?php echo count($amigos) === 1 ? 'pessoa' : 'pessoas'; ?> na sua pista.</p>
 
         <?php if (count($amigos) === 0): ?>
-            <div class="vazio">
+            <div class="cartao vazio">
                 <div class="vazio-icone"><i class="bi bi-people"></i></div>
                 <h2>Você ainda não tem amigos</h2>
                 <p>Encontre pessoas e envie solicitações de amizade.</p>
-                <a href="AdicionarAmigos.php" class="botao botao-azul">Encontrar pessoas</a>
+                <a href="AdicionarAmigos.php" class="botao botao-neon">Encontrar pessoas</a>
             </div>
         <?php else: ?>
-            <div class="lista">
+            <div class="cartao lista">
                 <?php foreach ($amigos as $a): $link = 'perfil.php?user=' . rawurlencode($a['amigo']); ?>
                     <div class="item-lista">
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
@@ -43,12 +43,11 @@ include('partes/head.php');
                             <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($a['amigo']); ?></a>
                             <small>Amigo</small>
                         </div>
-                        <a href="<?php echo e($link); ?>" class="botao botao-cinza botao-pequeno">Ver perfil</a>
+                        <a href="<?php echo e($link); ?>" class="botao botao-contorno botao-pequeno">Ver perfil</a>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
 </main>
 
 <?php include('partes/rodape.php'); ?>

@@ -87,7 +87,7 @@
     if (!midia) return;
     // ignora duplo clique no botão de play ou na onda
     const caminho = ev.composedPath();
-    if (caminho.some((el) => el.tagName === "BUTTON" || el.tagName === "CANVAS")) return;
+    if (caminho.some((el) => el.tagName === "BUTTON" || el.tagName === "CANVAS" || (el.classList && el.classList.contains("disco")))) return;
     const post = midia.closest(".post");
     const explosao = midia.querySelector(".estrela-explosao");
     if (explosao) {

@@ -18,31 +18,26 @@ include('partes/head.php');
 <main class="pagina-entrada">
     <?php include('partes/vitrine.php'); ?>
 
-    <div class="coluna-entrada">
-        <div class="cartao-entrada">
-            <div class="logo-entrada">
-                <span class="logo-texto">Retroway</span>
-            </div>
+    <div class="cartao cartao-entrada">
+        <h1>Entrar na pista</h1>
+        <p class="texto-2">Que bom te ver de novo!</p>
 
-            <form action="login.php" method="POST">
-                <input name="usuario" type="text" class="campo" placeholder="Nome de usuário" autofocus required autocomplete="username">
-                <input name="senha" type="password" class="campo" placeholder="Senha" required autocomplete="current-password">
-                <button type="submit" class="botao botao-azul">Entrar</button>
-            </form>
+        <?php if ($erro): ?>
+            <p class="mensagem erro">Usuário ou senha incorretos. Confira e tente de novo.</p>
+        <?php elseif ($cadastrou): ?>
+            <p class="mensagem sucesso">Conta criada! Agora é só entrar.</p>
+        <?php endif; ?>
 
-            <?php if ($erro): ?>
-                <p class="mensagem erro">Sua senha está incorreta ou o usuário não existe. Confira e tente novamente.</p>
-            <?php elseif ($cadastrou): ?>
-                <p class="mensagem sucesso">Conta criada! Agora é só entrar.</p>
-            <?php endif; ?>
+        <form action="login.php" method="POST">
+            <label class="rotulo-campo" for="usuario">Usuário</label>
+            <input id="usuario" name="usuario" type="text" class="campo" placeholder="seu_usuario" autofocus required autocomplete="username">
+            <label class="rotulo-campo" for="senha">Senha</label>
+            <input id="senha" name="senha" type="password" class="campo" placeholder="••••••" required autocomplete="current-password">
+            <button type="submit" class="botao botao-neon"><i class="bi bi-play-fill"></i> Entrar</button>
+        </form>
 
-            <div class="divisor">OU</div>
-            <p class="texto-2" style="margin:0">Teste com <b>admin</b> / <b>123456</b></p>
-        </div>
-
-        <div class="cartao-entrada pequeno">
-            Não tem uma conta? <a href="criarConta.php" class="link-azul">Cadastre-se</a>
-        </div>
+        <p class="troca">Ainda não tem conta? <a href="criarConta.php" class="link-neon">Cadastre-se</a></p>
+        <p class="dica">Para testar: <b>admin</b> / <b>123456</b></p>
     </div>
 </main>
 </body>

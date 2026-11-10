@@ -35,7 +35,6 @@ if ($dadosPerfil) {
     $totalAmigos = (int)$stmtAmigos->get_result()->fetch_assoc()['total'];
 
     $status = $meuPerfil ? '' : statusAmizade($conn, $eu, $usuarioPerfil);
-    $recente = $totalPosts > 0 && strtotime($posts[0]['data']) > time() - 86400;
 }
 
 $tituloPagina = $dadosPerfil ? '@' . $usuarioPerfil : 'Perfil não encontrado';
@@ -44,70 +43,61 @@ include('partes/head.php');
 <body>
 <?php include('partes/menu.php'); ?>
 
-<main class="principal">
-    <div class="pagina">
-    <?php if (!$dadosPerfil): ?>
-        <div class="vazio">
-            <div class="vazio-icone"><i class="bi bi-person-x"></i></div>
-            <h2>Esta página não está disponível</h2>
-            <p>O usuário "<?php echo e($usuarioPerfil); ?>" não existe.</p>
-            <a href="painel.php" class="link-azul">Voltar para a página inicial</a>
-        </div>
-    <?php else: ?>
+<main class="centro">
+<?php if (!$dadosPerfil): ?>
+    <div class="cartao vazio">
+        <div class="vazio-icone"><i class="bi bi-person-x"></i></div>
+        <h2>Ninguém na pista com esse nome</h2>
+        <p>O usuário "<?php echo e($usuarioPerfil); ?>" não existe.</p>
+        <a href="painel.php" class="botao botao-neon">Voltar para o início</a>
+    </div>
+<?php else: ?>
 
-        <section class="perfil-topo">
-            <div class="perfil-foto">
-                <span class="anel<?php echo $recente ? '' : ' visto'; ?>"><?php echo imgAvatar($dadosPerfil['arquivo'], 'avatar'); ?></span>
-            </div>
+    <section class="cartao perfil">
+        <div class="perfil-capa"></div>
+        <div class="perfil-corpo">
+            <div class="perfil-foto"><?php echo imgAvatar($dadosPerfil['arquivo'], 'avatar'); ?></div>
             <div class="perfil-info">
-                <div class="perfil-linha1">
-                    <h1 class="perfil-nome"><?php echo e($usuarioPerfil); ?></h1>
-                    <?php if ($meuPerfil): ?>
-                        <a href="painel.php#gravar" class="botao botao-cinza" data-gravar>Gravar áudio</a>
-                        <a href="logout.php" class="botao botao-cinza">Sair</a>
-                    <?php else: ?>
-                        <?php echo botaoAmizade($status, $usuarioPerfil); ?>
-                    <?php endif; ?>
-                </div>
-                <ul class="perfil-numeros">
-                    <li><b><?php echo $totalPosts; ?></b> <?php echo $totalPosts === 1 ? 'publicação' : 'publicações'; ?></li>
-                    <li><a href="<?php echo $meuPerfil ? 'listaDeAmigos.php' : '#'; ?>"><b><?php echo $totalAmigos; ?></b> <?php echo $totalAmigos === 1 ? 'amigo' : 'amigos'; ?></a></li>
-                    <li><b><?php echo $totalEstrelas; ?></b> <?php echo $totalEstrelas === 1 ? 'estrela' : 'estrelas'; ?></li>
-                </ul>
-                <div class="perfil-bio">
-                    <?php echo e($usuarioPerfil); ?>
-                    <?php if (!empty($dadosPerfil['data'])): ?>
-                        <small>No Retroway desde <?php echo e(date('m/Y', strtotime($dadosPerfil['data']))); ?></small>
-                    <?php endif; ?>
-                </div>
+                <h1 class="perfil-nome"><?php echo e($usuarioPerfil); ?></h1>
+                <p class="perfil-arroba">@<?php echo e($usuarioPerfil); ?><?php if (!empty($dadosPerfil['data'])): ?> · na pista desde <?php echo e(date('m/Y', strtotime($dadosPerfil['data']))); ?><?php endif; ?></p>
             </div>
-        </section>
-
-        <nav class="abas">
-            <span class="aba ativa"><i class="bi bi-grid-3x3"></i> Publicações</span>
-        </nav>
-
-        <?php if ($totalPosts === 0): ?>
-            <div class="vazio">
-                <div class="vazio-icone"><i class="bi bi-mic"></i></div>
+            <div class="perfil-botoes">
                 <?php if ($meuPerfil): ?>
-                    <h2>Compartilhe áudios</h2>
-                    <p>Quando você publicar áudios, eles vão aparecer no seu perfil.</p>
-                    <a href="painel.php#gravar" class="link-azul" data-gravar>Gravar seu primeiro áudio</a>
+                    <a href="painel.php#gravar" class="botao botao-neon" data-gravar><i class="bi bi-mic-fill"></i> Gravar áudio</a>
+                    <a href="logout.php" class="botao botao-contorno">Sair</a>
                 <?php else: ?>
-                    <h2>Ainda não há publicações</h2>
+                    <?php echo botaoAmizade($status, $usuarioPerfil); ?>
                 <?php endif; ?>
             </div>
-        <?php else: ?>
-            <div class="grade">
-                <?php foreach ($posts as $dado): ?>
-                    <?php include('partes/tilePost.php'); ?>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+        </div>
+        <ul class="perfil-numeros">
+            <li><b><?php echo $totalPosts; ?></b><span><?php echo $totalPosts === 1 ? 'áudio' : 'áudios'; ?></span></li>
+            <li><a href="<?php echo $meuPerfil ? 'listaDeAmigos.php' : '#'; ?>"><b><?php echo $totalAmigos; ?></b><span><?php echo $totalAmigos === 1 ? 'amigo' : 'amigos'; ?></span></a></li>
+            <li><b><?php echo $totalEstrelas; ?></b><span><?php echo $totalEstrelas === 1 ? 'estrela' : 'estrelas'; ?></span></li>
+        </ul>
+    </section>
 
+    <h2 class="secao-titulo"><i class="bi bi-vinyl-fill"></i> <?php echo $meuPerfil ? 'Seus áudios' : 'Áudios de ' . e($usuarioPerfil); ?></h2>
+
+    <?php if ($totalPosts === 0): ?>
+        <div class="cartao vazio">
+            <div class="vazio-icone"><i class="bi bi-vinyl"></i></div>
+            <?php if ($meuPerfil): ?>
+                <h2>Seu toca-discos está vazio</h2>
+                <p>Quando você publicar áudios, eles aparecem aqui.</p>
+                <a href="painel.php#gravar" class="botao botao-neon" data-gravar><i class="bi bi-mic-fill"></i> Gravar o primeiro</a>
+            <?php else: ?>
+                <h2>Nenhum áudio ainda</h2>
+                <p><?php echo e($usuarioPerfil); ?> ainda não publicou nada.</p>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <?php foreach ($posts as $dado): ?>
+            <?php include('partes/painelAudio.php'); ?>
+        <?php endforeach; ?>
     <?php endif; ?>
-    </div>
+
+<?php endif; ?>
 </main>
 
 <?php include('partes/rodape.php'); ?>

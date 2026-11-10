@@ -33,31 +33,30 @@ if ($busca !== '') {
 $stmt->execute();
 $pessoas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$tituloPagina = 'Pesquisa';
+$tituloPagina = 'Procurar pessoas';
 include('partes/head.php');
 ?>
 <body>
 <?php include('partes/menu.php'); ?>
 
-<main class="principal">
-    <div class="pagina-estreita">
-        <h1 class="titulo-pagina">Pesquisa</h1>
+<main class="centro">
+        <h1 class="titulo-pagina titulo-neon">Procurar pessoas</h1>
 
-        <form method="GET" action="AdicionarAmigos.php" class="busca">
+        <form method="GET" action="AdicionarAmigos.php" class="busca-grande">
             <i class="bi bi-search"></i>
             <input type="search" name="q" value="<?php echo e($busca); ?>" placeholder="Pesquisar pessoas" autofocus autocomplete="off">
         </form>
 
-        <h2 class="subtitulo"><?php echo $busca !== '' ? 'Resultados' : 'Sugestões para você'; ?></h2>
+        <h2 class="secao-titulo"><i class="bi bi-<?php echo $busca !== '' ? 'search' : 'stars'; ?>"></i> <?php echo $busca !== '' ? 'Resultados' : 'Sugestões para você'; ?></h2>
 
         <?php if (count($pessoas) === 0): ?>
-            <div class="vazio">
+            <div class="cartao vazio">
                 <div class="vazio-icone"><i class="bi bi-search"></i></div>
                 <h2>Nenhum resultado</h2>
                 <p><?php echo $busca !== '' ? 'Nenhum usuário com "' . e($busca) . '".' : 'Ainda não há outras pessoas cadastradas.'; ?></p>
             </div>
         <?php else: ?>
-            <div class="lista">
+            <div class="cartao lista">
                 <?php foreach ($pessoas as $p): $link = 'perfil.php?user=' . rawurlencode($p['usuario']); ?>
                     <div class="item-lista">
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($p['arquivo'], 'avatar avatar-44'); ?></a>
@@ -75,7 +74,6 @@ include('partes/head.php');
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
 </main>
 
 <?php include('partes/rodape.php'); ?>
