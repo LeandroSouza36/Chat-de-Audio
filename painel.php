@@ -16,19 +16,22 @@ $conAudio = $conn->query("
     ORDER BY c.data DESC, c.id DESC
 ") or die($conn->error);
 
-// Quem postou por último (destaque "NOVO" se postou nas últimas 24h)
-$stmtRecentes = $conn->prepare("
-    SELECT u.usuario, u.arquivo, MAX(c.data) AS ultimo
-    FROM chataudio c
-    INNER JOIN usuario u ON u.usuario = c.usuario
-    WHERE u.usuario <> ?
-    GROUP BY u.usuario, u.arquivo
+// Stories: apaga os vencidos e busca quem tem story nas últimas 24h (os meus primeiro)
+$conn->query("DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
+$stmtStories = $conn->prepare("
+    SELECT s.usuario, u.arquivo, MAX(s.id) AS ultimoId, MAX(s.data) AS ultimo
+    FROM chataudiostory s
+    INNER JOIN usuario u ON u.usuario = s.usuario
+    WHERE s.data >= NOW() - INTERVAL 24 HOUR
+    GROUP BY s.usuario, u.arquivo
     ORDER BY ultimo DESC
-    LIMIT 20
 ");
-$stmtRecentes->bind_param("s", $eu);
-$stmtRecentes->execute();
-$recentes = $stmtRecentes->get_result();
+$stmtStories->execute();
+$meuStory = null;
+$storiesOutros = array();
+foreach ($stmtStories->get_result()->fetch_all(MYSQLI_ASSOC) as $st) {
+    if ($st['usuario'] === $eu) $meuStory = $st; else $storiesOutros[] = $st;
+}
 
 // Meus números
 $stmtNum = $conn->prepare("
@@ -71,21 +74,32 @@ include('partes/head.php');
 
 <main class="centro">
 
-    <!-- QUEM POSTOU -->
+    <!-- STORIES (somem em 24h) -->
     <section class="cartao agora">
-        <h2 class="agora-titulo"><i class="bi bi-music-note-beamed"></i> Na pista agora</h2>
+        <h2 class="agora-titulo"><i class="bi bi-hourglass-split"></i> Stories <span class="texto-2">· somem em 24h</span></h2>
         <div class="agora-lista">
-            <button type="button" class="agora-item" data-gravar-story>
-                <span class="agora-mais"><i class="bi bi-mic-fill"></i></span>
-                <span class="agora-nome">Gravar</span>
-            </button>
-            <?php while ($r = $recentes->fetch_assoc()):
-                $novo = strtotime($r['ultimo']) > time() - 86400; ?>
-                <a class="agora-item<?php echo $novo ? ' novo' : ''; ?>" href="perfil.php?user=<?php echo e(rawurlencode($r['usuario'])); ?>">
-                    <span class="agora-foto"><?php echo imgAvatar($r['arquivo'], 'avatar'); ?></span>
-                    <span class="agora-nome"><?php echo e($r['usuario']); ?></span>
-                </a>
-            <?php endwhile; ?>
+            <div class="agora-item story-meu">
+                <?php if ($meuStory): ?>
+                    <button type="button" class="story-abrir" data-story-user="<?php echo e($eu); ?>" data-ultimo-id="<?php echo (int)$meuStory['ultimoId']; ?>" title="Ver seus stories">
+                        <span class="agora-foto"><?php echo imgAvatar($meusDados['arquivo'] ?? '', 'avatar'); ?></span>
+                    </button>
+                <?php else: ?>
+                    <button type="button" class="story-abrir" data-gravar-story title="Gravar story">
+                        <span class="agora-foto sem-story"><?php echo imgAvatar($meusDados['arquivo'] ?? '', 'avatar'); ?></span>
+                    </button>
+                <?php endif; ?>
+                <button type="button" class="story-add" data-gravar-story title="Novo story"><i class="bi bi-plus"></i></button>
+                <span class="agora-nome">Seu story</span>
+            </div>
+            <?php foreach ($storiesOutros as $st): ?>
+                <button type="button" class="agora-item" data-story-user="<?php echo e($st['usuario']); ?>" data-ultimo-id="<?php echo (int)$st['ultimoId']; ?>">
+                    <span class="agora-foto"><?php echo imgAvatar($st['arquivo'], 'avatar'); ?></span>
+                    <span class="agora-nome"><?php echo e($st['usuario']); ?></span>
+                </button>
+            <?php endforeach; ?>
+            <?php if (count($storiesOutros) === 0): ?>
+                <p class="agora-vazio texto-2">Ninguém postou story hoje. Que tal ser o primeiro? Ele some sozinho depois de 24 horas.</p>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -111,10 +125,11 @@ include('partes/head.php');
 
         <div data-estado="previa" hidden>
             <div class="previa-audio" data-previa></div>
-            <input type="text" class="campo-legenda" data-legenda maxlength="220" placeholder="Dê um nome para o seu áudio...">
+            <input type="text" class="campo-legenda" data-legenda maxlength="220" placeholder="Dê um nome para o seu áudio (só aparece no feed)...">
             <div class="composer-acoes">
-                <button type="button" class="botao botao-contorno" data-descartar>Descartar</button>
-                <button type="button" class="botao botao-neon" data-publicar><i class="bi bi-broadcast"></i> Publicar</button>
+                <button type="button" class="botao botao-link-cinza" data-descartar>Descartar</button>
+                <button type="button" class="botao botao-contorno" data-publicar-story><i class="bi bi-hourglass-split"></i> Story 24h</button>
+                <button type="button" class="botao botao-neon" data-publicar><i class="bi bi-broadcast"></i> Publicar no feed</button>
             </div>
         </div>
     </section>
@@ -186,4 +201,5 @@ include('partes/head.php');
     <div class="rodape-texto">© <?php echo date('Y'); ?> Retroway · feito com ♫</div>
 </aside>
 
+<?php include('partes/storyViewer.php'); ?>
 <?php include('partes/rodape.php'); ?>

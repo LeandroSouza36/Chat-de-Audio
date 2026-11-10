@@ -1,4 +1,5 @@
 <?php
+// Publica um story (áudio que some depois de 24 horas)
 session_start();
 include('verifica_login.php');
 include_once("audioConexao.php");
@@ -12,9 +13,8 @@ if ($audio !== "") {
     $stmt->execute();
 }
 
-// Stories duram 24h: apaga os antigos (substitui o CREATE EVENT,
-// que não funciona no XAMPP porque o event_scheduler vem desligado)
-mysqli_query($conn, "DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
+// Stories duram 24h: apaga os antigos
+$conn->query("DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
 
-header('Location: painel.php');
+header('Location: painel.php?story=ok');
 exit();
