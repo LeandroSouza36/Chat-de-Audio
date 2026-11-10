@@ -1,15 +1,20 @@
 <?php
+session_start();
+include('verifica_login.php');
+include_once("audioConexao.php");
 
-  include_once("audioConexao.php");
-  $audio = $_POST["audio"];
-  $testeaudio = strlen($audio);
+$usuario = $_SESSION['usuario'];
+$audio = isset($_POST["audio"]) ? $_POST["audio"] : "";
 
-  $result_audioStory = "INSERT INTO chataudiostory  (audio) VALUES ('$audio')";
-  $resultado_audioStory = mysqli_query($conn, $result_audioStory);
+if ($audio !== "") {
+    $stmt = $conn->prepare("INSERT INTO chataudiostory (audio, usuario, data) VALUES (?, ?, NOW())");
+    $stmt->bind_param("ss", $audio, $usuario);
+    $stmt->execute();
+}
 
-  $apagarStory = "CREATE EVENT apagarStory$testeaudio
-  ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1440 MINUTE
-  DO DELETE FROM chataudiostory WHERE audio = '$audio'";
-  $resultado_apagarStory = mysqli_query($conn, $apagarStory);
+// Stories duram 24h: apaga os antigos (substitui o CREATE EVENT,
+// que não funciona no XAMPP porque o event_scheduler vem desligado)
+mysqli_query($conn, "DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
 
-  echo "PRODUTOS CADASTRADOS !";
+header('Location: painel.php');
+exit();
