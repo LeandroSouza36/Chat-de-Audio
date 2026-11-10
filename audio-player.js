@@ -27,25 +27,24 @@ class AudioPlayer extends HTMLElement {
         .faixa {
           display: flex;
           align-items: center;
-          gap: 20px;
-          padding: 18px;
-          border-radius: 18px;
-          background:
-            radial-gradient(circle at 0% 50%, hsl(var(--h) 100% 60% / .22), transparent 55%),
-            linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
-          border: 1px solid hsl(var(--h) 100% 70% / .25);
+          gap: 18px;
+          padding: 16px;
+          border-radius: 14px;
+          background: hsl(var(--h) 90% 97.5%);
+          border: 1px solid hsl(var(--h) 70% 92%);
           box-sizing: border-box;
           user-select: none;
-          color: #fff;
+          color: #1c1530;
         }
         /* ---------- disco ---------- */
         .disco {
           position: relative;
-          width: 118px; height: 118px;
+          width: 108px; height: 108px;
           flex-shrink: 0;
           border-radius: 50%;
-          background: repeating-radial-gradient(circle at center, #0c0c10 0 2px, #1c1b24 2px 3.5px);
-          box-shadow: 0 0 0 2px #000, 0 10px 26px rgba(0,0,0,.55), 0 0 26px hsl(var(--h) 100% 60% / .35);
+          cursor: pointer;
+          background: repeating-radial-gradient(circle at center, #16141c 0 2px, #26232f 2px 3.5px);
+          box-shadow: 0 6px 18px rgba(28, 21, 48, .18);
           animation: girar 1.9s linear infinite;
           animation-play-state: paused;
         }
@@ -54,8 +53,8 @@ class AudioPlayer extends HTMLElement {
           content: "";
           position: absolute; inset: 0;
           border-radius: 50%;
-          background: conic-gradient(from 20deg, transparent 0 30deg, rgba(255,255,255,.16) 50deg, transparent 75deg,
-                                     transparent 200deg, rgba(255,255,255,.10) 225deg, transparent 250deg);
+          background: conic-gradient(from 20deg, transparent 0 30deg, rgba(255,255,255,.14) 50deg, transparent 75deg,
+                                     transparent 200deg, rgba(255,255,255,.08) 225deg, transparent 250deg);
           pointer-events: none;
         }
         .rotulo {
@@ -63,76 +62,73 @@ class AudioPlayer extends HTMLElement {
           inset: 29%;
           border-radius: 50%;
           overflow: hidden;
-          background: hsl(var(--h) 100% 60%);
-          box-shadow: 0 0 0 3px hsl(var(--h) 100% 60%);
+          background: hsl(var(--h) 85% 62%);
+          box-shadow: 0 0 0 3px hsl(var(--h) 85% 62%);
         }
         .rotulo img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .furo {
           position: absolute;
           left: 50%; top: 50%;
-          width: 9px; height: 9px;
-          margin: -4.5px 0 0 -4.5px;
+          width: 8px; height: 8px;
+          margin: -4px 0 0 -4px;
           border-radius: 50%;
-          background: #120726;
-          box-shadow: 0 0 0 2px rgba(255,255,255,.5);
+          background: #fff;
+          box-shadow: 0 0 0 1px rgba(0,0,0,.3);
         }
         @keyframes girar { to { transform: rotate(360deg); } }
 
         /* ---------- informações ---------- */
         .info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
         .titulo {
-          font-family: "Righteous", "Rubik", system-ui, sans-serif;
-          font-size: 19px;
-          line-height: 1.25;
-          color: #fff;
-          text-shadow: 0 0 12px hsl(var(--h) 100% 60% / .7);
+          font-size: 17px;
+          font-weight: 600;
+          line-height: 1.3;
+          color: #1c1530;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
           word-break: break-word;
         }
-        canvas { display: block; width: 100%; height: 42px; cursor: pointer; }
+        canvas { display: block; width: 100%; height: 38px; cursor: pointer; }
         .linha { display: flex; align-items: center; gap: 12px; }
         .play {
-          width: 46px; height: 46px;
+          width: 42px; height: 42px;
           border-radius: 50%;
           border: 0;
           cursor: pointer;
-          color: #120726;
-          background: linear-gradient(135deg, hsl(var(--h) 100% 72%), hsl(calc(var(--h) + 35) 100% 58%));
-          box-shadow: 0 0 18px hsl(var(--h) 100% 60% / .65);
+          color: #fff;
+          background: hsl(var(--h) 80% 55%);
           display: grid;
           place-items: center;
           flex-shrink: 0;
-          transition: transform .15s ease;
+          transition: transform .15s ease, filter .15s;
         }
-        .play:hover { transform: scale(1.08); }
-        .play:active { transform: scale(.94); }
-        .play svg { width: 22px; height: 22px; fill: currentColor; }
+        .play:hover { transform: scale(1.06); filter: brightness(1.05); }
+        .play:active { transform: scale(.95); }
+        .play svg { width: 20px; height: 20px; fill: currentColor; }
         .play .icone-pause { display: none; }
         .play.tocando .icone-play { display: none; }
         .play.tocando .icone-pause { display: block; }
         .tempos {
           font-size: 13px;
-          font-weight: 600;
-          color: rgba(255,255,255,.75);
+          font-weight: 500;
+          color: #6f6884;
           font-variant-numeric: tabular-nums;
-          letter-spacing: .5px;
         }
-        .tempos b { color: hsl(var(--h) 100% 75%); font-weight: 600; }
-        .vu { margin-left: auto; display: flex; gap: 3px; align-items: flex-end; height: 18px; opacity: 0; transition: opacity .2s; }
+        .tempos b { color: hsl(var(--h) 70% 45%); font-weight: 600; }
+        .vu { margin-left: auto; display: flex; gap: 3px; align-items: flex-end; height: 16px; opacity: 0; transition: opacity .2s; }
         .vu.ligado { opacity: 1; }
-        .vu i { width: 4px; border-radius: 2px; background: hsl(var(--h) 100% 65%); animation: vu .8s ease-in-out infinite; }
+        .vu i { width: 3px; border-radius: 2px; background: hsl(var(--h) 80% 55%); animation: vu .8s ease-in-out infinite; }
         .vu i:nth-child(2) { animation-delay: .15s; }
         .vu i:nth-child(3) { animation-delay: .3s; }
         .vu i:nth-child(4) { animation-delay: .45s; }
-        @keyframes vu { 0%,100% { height: 4px; } 50% { height: 18px; } }
+        @keyframes vu { 0%,100% { height: 4px; } 50% { height: 16px; } }
 
         @media (max-width: 480px) {
-          .faixa { gap: 14px; padding: 14px; }
-          .disco { width: 86px; height: 86px; }
-          .titulo { font-size: 16px; }
+          .faixa { gap: 14px; padding: 12px; }
+          .disco { width: 80px; height: 80px; }
+          .titulo { font-size: 15px; }
         }
       </style>
       <div class="faixa">
@@ -240,7 +236,7 @@ class AudioPlayer extends HTMLElement {
     const passo = c.width / n;
     const larguraBarra = Math.max(2, passo * 0.5);
     const progresso = this.#duracao ? this.audio.currentTime / this.#duracao : 0;
-    const neon = `hsl(${this.#hue} 100% 66%)`;
+    const neon = `hsl(${this.#hue} 80% 55%)`;
 
     ctx.clearRect(0, 0, c.width, c.height);
     for (let i = 0; i < n; i++) {
@@ -253,9 +249,7 @@ class AudioPlayer extends HTMLElement {
       const x = i * passo + (passo - larguraBarra) / 2;
       const y = (c.height - h) / 2;
       const tocado = i / n <= progresso;
-      ctx.fillStyle = tocado ? neon : "rgba(255,255,255,.22)";
-      ctx.shadowColor = tocado ? neon : "transparent";
-      ctx.shadowBlur = tocado ? 8 : 0;
+      ctx.fillStyle = tocado ? neon : `hsl(${this.#hue} 30% 82%)`;
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, larguraBarra, h, larguraBarra / 2);
       else ctx.rect(x, y, larguraBarra, h);

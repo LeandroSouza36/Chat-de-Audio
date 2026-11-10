@@ -6,7 +6,7 @@ $tileId = (int)$dado['id'];
 $tileTitulo = trim((string)$dado['assunto']) !== '' ? $dado['assunto'] : 'Áudio de ' . $dado['usuario'];
 $tilePosicao = isset($posicao) ? (int)$posicao : 0;
 ?>
-<button type="button" class="cartao ranking-item<?php echo $tilePosicao >= 1 && $tilePosicao <= 3 ? ' top' . $tilePosicao : ''; ?>"
+<button type="button" class="ranking-item<?php echo $tilePosicao >= 1 && $tilePosicao <= 3 ? ' top' . $tilePosicao : ''; ?>"
         data-abrir-post="<?php echo $tileId; ?>" style="--h: <?php echo corDoPost($tileId); ?>">
     <span class="ranking-posicao"><?php echo $tilePosicao; ?></span>
     <span class="mini-disco"><?php echo imgAvatar($dado['arquivo'], 'mini-disco-capa'); ?></span>
