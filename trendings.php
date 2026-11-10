@@ -53,7 +53,7 @@ include('partes/head.php');
             <p>Quando as pessoas publicarem áudios, o ranking aparece aqui.</p>
         </div>
     <?php else: ?>
-        <div class="ranking">
+        <div class="cartao ranking">
             <?php $posicao = 0; foreach ($posts as $dado): $posicao++; ?>
                 <?php include('partes/tilePost.php'); ?>
             <?php endforeach; ?>

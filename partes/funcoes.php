@@ -35,7 +35,7 @@ function tempoAtras($data) {
 
 // Cor neon do post (rosa, roxo, ciano, amarelo, laranja...), sempre a mesma para o mesmo áudio
 function corDoPost($id) {
-    $neon = array(320, 275, 185, 48, 18, 295, 200, 340);
+    $neon = array(320, 275, 190, 25, 255, 300, 210, 340);
     return $neon[((int)$id) % count($neon)];
 }
 

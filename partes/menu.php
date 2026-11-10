@@ -74,7 +74,6 @@ $badge = $numeroNotificacoes > 0 ? '<span class="badge-notif">' . $numeroNotific
             <i class="bi bi-mic-fill"></i> Gravar áudio
         </a>
     </div>
-    <div class="globo-mini" aria-hidden="true"></div>
 </nav>
 
 <!-- BARRA DE BAIXO (celular) -->
