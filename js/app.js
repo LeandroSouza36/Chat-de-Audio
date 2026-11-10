@@ -50,6 +50,41 @@
     }
   }
 
+  // ---------- Ecoar (repetir o áudio de alguém no próprio perfil) ----------
+  async function ecoar(id) {
+    const corpo = new FormData();
+    corpo.append("eco", id);
+    try {
+      const resp = await fetch("ecoar.php", {
+        method: "POST",
+        body: corpo,
+        headers: { "X-Requested-With": "fetch" },
+      });
+      const r = await resp.json();
+      if (!r.ok) {
+        aviso(r.erro || "Não foi possível ecoar. Tente de novo.");
+        return;
+      }
+      const raizes = [document, ...Array.from(document.querySelectorAll("template"), (t) => t.content)];
+      raizes.forEach((raiz) => {
+        raiz.querySelectorAll(`[data-ecoar="${id}"]`).forEach((b) => {
+          b.classList.toggle("ativo", r.ecoou);
+          b.title = r.ecoou ? "Desfazer eco" : "Ecoar no seu perfil";
+          if (r.ecoou && raiz === document) {
+            b.classList.remove("pulo");
+            void b.offsetWidth;
+            b.classList.add("pulo");
+          }
+        });
+        raiz.querySelectorAll(`[data-eco-texto="${id}"]`).forEach((el) => (el.textContent = r.ecoou ? "Ecoado" : "Ecoar"));
+        raiz.querySelectorAll(`[data-ecos="${id}"]`).forEach((el) => (el.textContent = r.total));
+      });
+      aviso(r.ecoou ? "Áudio ecoado! Ele agora aparece no seu perfil." : "Eco desfeito.");
+    } catch (e) {
+      aviso("Não foi possível ecoar. Tente de novo.");
+    }
+  }
+
   document.addEventListener("click", (ev) => {
     const btnEstrela = ev.target.closest("[data-estrela]");
     if (btnEstrela) {
@@ -57,16 +92,9 @@
       return;
     }
 
-    const btnCompartilhar = ev.target.closest("[data-compartilhar]");
-    if (btnCompartilhar) {
-      const url = new URL(btnCompartilhar.dataset.compartilhar, location.href).href;
-      if (navigator.share) {
-        navigator.share({ title: "Retroway", url }).catch(() => {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => aviso("Link copiado!"));
-      } else {
-        prompt("Copie o link:", url);
-      }
+    const btnEco = ev.target.closest("[data-ecoar]");
+    if (btnEco) {
+      ecoar(btnEco.dataset.ecoar);
       return;
     }
 
