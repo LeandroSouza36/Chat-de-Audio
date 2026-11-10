@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `usuario` VARCHAR(220) NOT NULL,
   `senha` VARCHAR(220) NOT NULL,
   `arquivo` VARCHAR(220) NOT NULL DEFAULT 'padrao.svg',
+  `bio` VARCHAR(160) NOT NULL DEFAULT '',
   `data` DATETIME DEFAULT NULL,
   PRIMARY KEY (`usuario_id`),
   UNIQUE KEY `usuario_unico` (`usuario`)

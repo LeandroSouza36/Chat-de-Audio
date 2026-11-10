@@ -11,7 +11,7 @@
 
 <div class="aviso" id="aviso" hidden></div>
 
-<script src="audio-player.js?v=7"></script>
-<script src="js/app.js?v=7"></script>
+<script src="audio-player.js?v=8"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>

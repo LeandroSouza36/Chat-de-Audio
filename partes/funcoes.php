@@ -69,7 +69,8 @@ function estrelasDoUsuario($conn, $usuario) {
 
 // Dados do usuário (foto etc.)
 function dadosUsuario($conn, $usuario) {
-    $stmt = $conn->prepare("SELECT usuario, arquivo, data FROM usuario WHERE usuario = ?");
+    prepararBanco($conn);
+    $stmt = $conn->prepare("SELECT usuario, arquivo, data, bio FROM usuario WHERE usuario = ?");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
     return $stmt->get_result()->fetch_assoc();
@@ -122,6 +123,10 @@ function prepararBanco($conn) {
     static $feito = false;
     if ($feito || !$conn) return;
     $feito = true;
+    $col = $conn->query("SHOW COLUMNS FROM usuario LIKE 'bio'");
+    if ($col && $col->num_rows == 0) {
+        $conn->query("ALTER TABLE usuario ADD COLUMN bio VARCHAR(160) NOT NULL DEFAULT ''");
+    }
     $existe = $conn->query("SHOW TABLES LIKE 'comentarios'");
     if ($existe && $existe->num_rows == 0) {
         $conn->query("

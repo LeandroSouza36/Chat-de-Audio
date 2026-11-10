@@ -36,44 +36,50 @@ class AudioPlayer extends HTMLElement {
           user-select: none;
           color: #1c1530;
         }
-        /* ---------- disco ---------- */
+        /* ---------- disco (minimalista) ---------- */
         .disco {
           position: relative;
-          width: 108px; height: 108px;
+          width: 76px; height: 76px;
           flex-shrink: 0;
           border-radius: 50%;
           cursor: pointer;
-          background: repeating-radial-gradient(circle at center, #16141c 0 2px, #26232f 2px 3.5px);
-          box-shadow: 0 6px 18px rgba(28, 21, 48, .18);
-          animation: girar 1.9s linear infinite;
+          background: #231d31;
+          animation: girar 2.4s linear infinite;
           animation-play-state: paused;
         }
         .disco.girando { animation-play-state: running; }
         .disco::after {
           content: "";
-          position: absolute; inset: 0;
+          position: absolute;
+          inset: 17%;
           border-radius: 50%;
-          background: conic-gradient(from 20deg, transparent 0 30deg, rgba(255,255,255,.14) 50deg, transparent 75deg,
-                                     transparent 200deg, rgba(255,255,255,.08) 225deg, transparent 250deg);
+          border: 1px solid rgba(255, 255, 255, .09);
           pointer-events: none;
         }
         .rotulo {
           position: absolute;
-          inset: 29%;
+          inset: 33%;
           border-radius: 50%;
-          overflow: hidden;
-          background: hsl(var(--h) 85% 62%);
-          box-shadow: 0 0 0 3px hsl(var(--h) 85% 62%);
+          background: hsl(var(--h) 80% 62%);
         }
-        .rotulo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .rotulo img { display: none; }
+        /* pontinho que mostra o disco girando */
+        .rotulo::after {
+          content: "";
+          position: absolute;
+          left: 50%; top: 14%;
+          width: 3px; height: 3px;
+          margin-left: -1.5px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, .9);
+        }
         .furo {
           position: absolute;
           left: 50%; top: 50%;
-          width: 8px; height: 8px;
-          margin: -4px 0 0 -4px;
+          width: 6px; height: 6px;
+          margin: -3px 0 0 -3px;
           border-radius: 50%;
           background: #fff;
-          box-shadow: 0 0 0 1px rgba(0,0,0,.3);
         }
         @keyframes girar { to { transform: rotate(360deg); } }
 
@@ -127,9 +133,10 @@ class AudioPlayer extends HTMLElement {
 
         /* versão compacta (comentários) */
         :host([mini]) .faixa { gap: 10px; padding: 8px 12px 8px 8px; border-radius: 12px; }
-        :host([mini]) .disco { width: 44px; height: 44px; box-shadow: 0 3px 8px rgba(28, 21, 48, .18); }
-        :host([mini]) .rotulo { inset: 32%; box-shadow: 0 0 0 2px hsl(var(--h) 85% 62%); }
-        :host([mini]) .furo { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; }
+        :host([mini]) .disco { width: 38px; height: 38px; }
+        :host([mini]) .disco::after { display: none; }
+        :host([mini]) .rotulo::after { display: none; }
+        :host([mini]) .furo { width: 4px; height: 4px; margin: -2px 0 0 -2px; }
         :host([mini]) .titulo { display: none; }
         :host([mini]) .info { flex-direction: row; align-items: center; gap: 10px; }
         :host([mini]) canvas { height: 26px; flex: 1; min-width: 60px; order: 2; }
@@ -141,7 +148,7 @@ class AudioPlayer extends HTMLElement {
 
         @media (max-width: 480px) {
           .faixa { gap: 14px; padding: 12px; }
-          .disco { width: 80px; height: 80px; }
+          .disco { width: 62px; height: 62px; }
           .titulo { font-size: 15px; }
         }
       </style>

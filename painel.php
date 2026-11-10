@@ -161,6 +161,8 @@ include('partes/head.php');
         <a href="perfil.php"><?php echo imgAvatar($meusDados['arquivo'] ?? '', 'avatar'); ?></a>
         <a href="perfil.php" class="nome-usuario"><?php echo e($eu); ?></a>
         <div class="texto-2">@<?php echo e($eu); ?></div>
+        <?php if (!empty($meusDados['bio'])): ?><p class="eu-bio"><?php echo e($meusDados['bio']); ?></p><?php endif; ?>
+        <a href="editarPerfil.php" class="botao botao-contorno botao-pequeno eu-editar"><i class="bi bi-pencil"></i> Editar perfil</a>
         <div class="eu-numeros">
             <div><b><?php echo (int)$meusNumeros['posts']; ?></b><span>áudios</span></div>
             <div><b><?php echo (int)$meusNumeros['amigos']; ?></b><span>amigos</span></div>
