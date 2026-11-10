@@ -2,6 +2,7 @@
 session_start();
 include('verifica_login.php');
 include_once("audioConexao.php");
+include_once("partes/funcoes.php");
 
 // Recusa uma solicitação de amizade: apaga os dois registros entre os usuários
 $usuario = $_SESSION['usuario'];
@@ -13,5 +14,4 @@ if ($amigoExcluir !== "") {
     $stmt->execute();
 }
 
-header('Location: notificacoes.php');
-exit();
+voltar('notificacoes.php');

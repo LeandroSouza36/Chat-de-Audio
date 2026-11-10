@@ -28,6 +28,10 @@ if (!$conn) {
 
 mysqli_set_charset($conn, "utf8mb4");
 
+// Mesmo fuso horário no PHP e no MySQL (no XAMPP eles costumam vir diferentes)
+date_default_timezone_set('America/Sao_Paulo');
+mysqli_query($conn, "SET time_zone = '" . date('P') . "'");
+
 // Cria o banco se ainda não existir
 if (!mysqli_select_db($conn, $bdname)) {
     mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$bdname` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");

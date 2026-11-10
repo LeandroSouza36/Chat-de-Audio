@@ -2,84 +2,53 @@
 session_start();
 include('verifica_login.php');
 include_once("audioConexao.php");
+include_once("partes/funcoes.php");
 
-$usuario = $_SESSION['usuario'];
+$eu = $_SESSION['usuario'];
 
-$sql = "
-    SELECT a.amigo, u.arquivo 
+$stmt = $conn->prepare("
+    SELECT a.amigo, u.arquivo
     FROM amigos a
     LEFT JOIN usuario u ON u.usuario = a.amigo
-    WHERE a.usuario = ?
-      AND a.status = 'amigo'
-";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $usuario);
+    WHERE a.usuario = ? AND a.status = 'amigo'
+    ORDER BY a.amigo
+");
+$stmt->bind_param("s", $eu);
 $stmt->execute();
-$result = $stmt->get_result();
+$amigos = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$tituloPagina = 'Amigos';
+include('partes/head.php');
 ?>
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"  charset="utf-8">
-    <title>Untitled</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-</head>
 <body>
-    <div id="painelHead">
-        <div ><img id="logoInicio"src="img/retroway.png"></div>
+<?php include('partes/menu.php'); ?>
+
+<main class="principal">
+    <div class="pagina-estreita">
+        <h1 class="titulo-pagina">Amigos <span class="texto-2">(<?php echo count($amigos); ?>)</span></h1>
+
+        <?php if (count($amigos) === 0): ?>
+            <div class="vazio">
+                <div class="vazio-icone"><i class="bi bi-people"></i></div>
+                <h2>Você ainda não tem amigos</h2>
+                <p>Encontre pessoas e envie solicitações de amizade.</p>
+                <a href="AdicionarAmigos.php" class="botao botao-azul">Encontrar pessoas</a>
+            </div>
+        <?php else: ?>
+            <div class="lista">
+                <?php foreach ($amigos as $a): $link = 'perfil.php?user=' . rawurlencode($a['amigo']); ?>
+                    <div class="item-lista">
+                        <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
+                        <div class="item-texto">
+                            <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($a['amigo']); ?></a>
+                            <small>Amigo</small>
+                        </div>
+                        <a href="<?php echo e($link); ?>" class="botao botao-cinza botao-pequeno">Ver perfil</a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
-<div class="row">
-             <!-- MENU zona morta -->
-        <?php include('zonaMorta.php'); ?>
-        <!-- MENU 2 (O DA ESQUERDA ) -->
-        <div id="painelMenu" class="col-xs-12 col-md-2 border">
-            <?php include('partes/menu.php'); ?>
-        </div>
-        <!-- MENU 2 (O DA ESQUERDA ) FIM -->
-    <div class="col-md-6">
+</main>
 
-        <div class="list-group">
-
-            <?php while($dado = $result->fetch_assoc()) { ?>
-            
-            <a href="perfil.php?user=<?php echo $dado['amigo']; ?>" 
-               class="list-group-item list-group-item-action">
-
-                <div class="d-flex align-items-center">
-
-                    <!-- Foto do amigo -->
-                    <img 
-                        src="img/usuario/<?php echo $dado['arquivo']; ?>" 
-                        class="rounded-circle me-3"
-                        width="55"
-                        height="55"
-                        style="object-fit: cover;"
-                    >
-
-                    <!-- Nome -->
-                    <h5 class="mb-0"><?php echo $dado['amigo']; ?></h5>
-                </div>
-
-            </a>
-
-            <?php } ?>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-2">
-        <?php include('partes/menu.php'); ?>
-    </div>
-</div>
-
-</body>
-</html>
+<?php include('partes/rodape.php'); ?>

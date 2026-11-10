@@ -1,61 +1,49 @@
 <?php
 session_start();
+
+// Já está logado? Vai direto para o feed
+if (!empty($_SESSION['usuario'])) {
+    header('Location: painel.php');
+    exit();
+}
+
+$erro = isset($_SESSION['nao_autentificado']);
+unset($_SESSION['nao_autentificado']);
+$cadastrou = isset($_GET['cadastro']);
+
+$tituloPagina = 'Entrar';
+include('partes/head.php');
 ?>
-
-<!DOCTYPE html>
-<html>
-    
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistema de Login - PHP + MySQL - Canal TI</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link rel="stylesheet" href="css/bulma.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/login.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-</head>
-
 <body>
-    <section class="hero is-success is-fullheight">
-        <div class="hero-body" style="background: linear-gradient(90deg, rgba(252,214,249,1) 0%, rgba(255,183,255,1) 50%, rgba(182,110,232,1) 120%);">
-            <div class="container has-text-centered">
-                <div class="column is-4 is-offset-4">
-                    <div><img id="logoInicio"src="img/retroway.png"></div>
-                    <?php
-                      if(isset($_SESSION['nao_autentificado']))
-                          echo "<div class='notification is-danger'>
-                          <p>ERRO: Usuário ou senha inválidos.</p>
-                        </div>"
-                      
-                    ?>
+<main class="pagina-entrada">
+    <?php include('partes/vitrine.php'); ?>
 
-                    <?php
-                    unset($_SESSION['nao_autentificado']);
-                    ?>
-                    <div class="box">
-                        <form action="login.php" method="POST">
-                            <div class="field">
-                                <div class="control">
-                                    <input name="usuario" name="text" class="input is-large" placeholder="Seu usuário" autofocus="">
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <div class="control">
-                                    <input name="senha" class="input is-large" type="password" placeholder="Sua senha">
-                                </div>
-                            </div>
-                            <button type="submit" class="button is-block is-link is-large is-fullwidth">Entrar</button>
-                        </form>
-                    </div>
-                    <a href="criarConta.php">
-                        <button type="button" class=" btn-success button is-large is-fullwidth">Criar nova conta</button>
-                    </a>
-                </div>
+    <div class="coluna-entrada">
+        <div class="cartao-entrada">
+            <div class="logo-entrada">
+                <span class="logo-texto">Retroway</span>
             </div>
-        </div>
-    </section>
-</body>
 
+            <form action="login.php" method="POST">
+                <input name="usuario" type="text" class="campo" placeholder="Nome de usuário" autofocus required autocomplete="username">
+                <input name="senha" type="password" class="campo" placeholder="Senha" required autocomplete="current-password">
+                <button type="submit" class="botao botao-azul">Entrar</button>
+            </form>
+
+            <?php if ($erro): ?>
+                <p class="mensagem erro">Sua senha está incorreta ou o usuário não existe. Confira e tente novamente.</p>
+            <?php elseif ($cadastrou): ?>
+                <p class="mensagem sucesso">Conta criada! Agora é só entrar.</p>
+            <?php endif; ?>
+
+            <div class="divisor">OU</div>
+            <p class="texto-2" style="margin:0">Teste com <b>admin</b> / <b>123456</b></p>
+        </div>
+
+        <div class="cartao-entrada pequeno">
+            Não tem uma conta? <a href="criarConta.php" class="link-azul">Cadastre-se</a>
+        </div>
+    </div>
+</main>
+</body>
 </html>

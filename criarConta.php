@@ -1,97 +1,101 @@
-<?php 
-
+<?php
+session_start();
 include("audioConexao.php");
+
 $msg = false;
 
-if(isset($_POST['usuario']) && isset($_POST['senha'])){
+if (isset($_POST['usuario']) && isset($_POST['senha'])) {
 
     $usuario = trim($_POST["usuario"]);
-    $senha = md5(trim($_POST["senha"]));
-
+    $senhaDigitada = trim($_POST["senha"]);
+    $senha = md5($senhaDigitada);
     $novo_nome = "padrao.svg"; // foto padrão se o usuário não enviar uma
 
-    if($usuario === "" || trim($_POST["senha"]) === ""){
+    if ($usuario === "" || $senhaDigitada === "") {
         $msg = "Preencha usuário e senha.";
+    } elseif (!preg_match('/^[A-Za-z0-9_.]{3,30}$/', $usuario)) {
+        $msg = "O nome de usuário deve ter de 3 a 30 caracteres: letras, números, ponto ou _ (sem espaços).";
     } else {
+        // Verifica se o nome de usuário já existe
+        $stmtExiste = $conn->prepare("SELECT usuario_id FROM usuario WHERE usuario = ?");
+        $stmtExiste->bind_param("s", $usuario);
+        $stmtExiste->execute();
 
-    // Verifica se o nome de usuário já existe
-    $stmtExiste = $conn->prepare("SELECT usuario_id FROM usuario WHERE usuario = ?");
-    $stmtExiste->bind_param("s", $usuario);
-    $stmtExiste->execute();
-    $jaExiste = $stmtExiste->get_result()->num_rows > 0;
+        if ($stmtExiste->get_result()->num_rows > 0) {
+            $msg = "Esse nome de usuário já existe. Escolha outro.";
+        } else {
+            $extensoesPermitidas = array("jpg", "jpeg", "png", "gif", "webp", "jfif");
 
-    if($jaExiste){
-        $msg = "Esse nome de usuário já existe. Escolha outro.";
-    } else {
+            if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
+                $extensao = strtolower(pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION));
+                if (in_array($extensao, $extensoesPermitidas)) {
+                    $diretorio = "img/usuario/";
+                    if (!is_dir($diretorio)) {
+                        mkdir($diretorio, 0755, true);
+                    }
+                    $nomeArquivo = md5(time() . $usuario) . "." . $extensao;
+                    if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio . $nomeArquivo)) {
+                        $novo_nome = $nomeArquivo;
+                    }
+                }
+            }
 
-    $extensoesPermitidas = array("jpg", "jpeg", "png", "gif", "webp", "jfif");
-    $extensaoEnviada = isset($_FILES['arquivo']) ? strtolower(pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION)) : "";
+            $stmt = $conn->prepare("INSERT INTO usuario (usuario, senha, arquivo, data) VALUES (?, ?, ?, NOW())");
+            $stmt->bind_param("sss", $usuario, $senha, $novo_nome);
 
-    if(isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0 && in_array($extensaoEnviada, $extensoesPermitidas)){
-
-        $extensao = $extensaoEnviada;
-        $novo_nome = md5(time()) . "." . $extensao;
-        $diretorio = "img/usuario/";
-
-        if(!is_dir($diretorio)){
-            mkdir($diretorio, 0755, true);
+            if ($stmt->execute()) {
+                header('Location: index.php?cadastro=ok');
+                exit();
+            }
+            $msg = "Erro: " . $conn->error;
         }
-
-        move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio.$novo_nome);
     }
-
-    $stmt = $conn->prepare("INSERT INTO usuario (usuario, senha, arquivo, data) VALUES (?, ?, ?, NOW())");
-    $stmt->bind_param("sss", $usuario, $senha, $novo_nome);
-
-    if($stmt->execute()){
-        $msg = "Conta criada com sucesso! <a href='index.php'>Fazer login</a>";
-    } else {
-        $msg = "Erro: " . $conn->error;
-    }
-
-    } // fim do else (usuário não existe)
-    } // fim do else (campos preenchidos)
 }
+
+$tituloPagina = 'Cadastre-se';
+include('partes/head.php');
 ?>
+<body>
+<main class="pagina-entrada">
+    <?php include('partes/vitrine.php'); ?>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="coluna-entrada">
+        <div class="cartao-entrada">
+            <div class="logo-entrada">
+                <span class="logo-texto">Retroway</span>
+            </div>
+            <p class="slogan">Cadastre-se para ouvir e compartilhar áudios com seus amigos.</p>
 
-<?php if($msg != false) echo "<p> $msg </p>";?>
+            <form action="criarConta.php" method="POST" enctype="multipart/form-data">
+                <label class="foto-escolher">
+                    <img class="avatar" id="previaFoto" src="img/usuario/padrao.svg" alt="">
+                    <span>Escolher foto de perfil</span>
+                    <input type="file" name="arquivo" accept="image/*" id="campoFoto">
+                </label>
+                <input name="usuario" type="text" class="campo" placeholder="Nome de usuário" required
+                       value="<?php echo isset($_POST['usuario']) ? e($_POST['usuario']) : ''; ?>" autocomplete="username">
+                <input name="senha" type="password" class="campo" placeholder="Senha" required autocomplete="new-password">
+                <button type="submit" class="botao botao-azul">Cadastrar</button>
+            </form>
 
-<body style="background: linear-gradient(90deg, rgba(252,214,249,1) 0%, rgba(255,183,255,1) 50%, rgba(182,110,232,1) 120%);">
-	<div class="row">
-		<div class="col-md-4"></div>
+            <?php if ($msg): ?>
+                <p class="mensagem erro"><?php echo e($msg); ?></p>
+            <?php endif; ?>
+        </div>
 
-		<div class="col-md-4" style="margin-top: 100px">
-			<h1 style="text-align: center; -webkit-text-stroke: 1px #fff; font-weight: 900">CADASTRO</h1>
-	  		<hr>
+        <div class="cartao-entrada pequeno">
+            Tem uma conta? <a href="index.php" class="link-azul">Conecte-se</a>
+        </div>
+    </div>
+</main>
 
-			<form action="criarConta.php" method="POST" enctype="multipart/form-data">
-
-				<div class="field">
-					<div class="control">
-						<h2 style="font-weight: 800">LOGIN :</h2>
-						<input name="usuario" type="text" placeholder="Seu usuário" autofocus class="form-control" style="font-size: 20px; margin-bottom: 20px">
-					</div>
-				</div>
-
-				<div class="field">
-					<div class="control">
-						<h2 style="font-weight: 800">SENHA :</h2>
-						<input name="senha" type="password" placeholder="Sua senha" class="form-control" style="font-size: 20px; margin-bottom: 20px">
-					</div>
-				</div>
-
-				<h2 style="font-weight: 800">FOTO DE PERFIL :</h2>
-				<input type="file" name="arquivo"><br><br>
-
-				<input type="submit" value="Salvar" class="btn btn-success">
-
-			</form>
-		</div>
-
-		<div class="col-md-4"></div>
-	</div>
+<script>
+// Mostra a foto escolhida antes de enviar
+document.getElementById('campoFoto').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+        document.getElementById('previaFoto').src = URL.createObjectURL(this.files[0]);
+    }
+});
+</script>
 </body>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
