@@ -2,11 +2,12 @@
 session_start();
 include('verifica_login.php');
 include_once("audioConexao.php");
+include_once("partes/funcoes.php");
 
 $adicionarAmigo = isset($_POST["adicionarAmigo"]) ? $_POST["adicionarAmigo"] : "";
 $usuario = $_SESSION['usuario'];
 
-if ($adicionarAmigo !== "" && $adicionarAmigo !== $usuario) {
+if ($adicionarAmigo !== "" && $adicionarAmigo !== $usuario && statusAmizade($conn, $usuario, $adicionarAmigo) === '') {
     // Eu solicitei a amizade
     $stmt = $conn->prepare("INSERT INTO amigos (usuario, amigo, status) VALUES (?, ?, 'solicitado')");
     $stmt->bind_param("ss", $usuario, $adicionarAmigo);
@@ -18,5 +19,4 @@ if ($adicionarAmigo !== "" && $adicionarAmigo !== $usuario) {
     $stmt2->execute();
 }
 
-header('Location: AdicionarAmigos.php');
-exit();
+voltar('AdicionarAmigos.php');

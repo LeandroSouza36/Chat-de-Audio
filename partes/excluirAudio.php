@@ -2,38 +2,28 @@
 session_start();
 include('../verifica_login.php');
 include('../audioConexao.php');
+include_once(__DIR__ . '/funcoes.php');
 
 if (isset($_POST['id'])) {
-    $id = intval($_POST['id']); // segurança
-    $usuarioAtual = $_SESSION['usuario']; // usuário logado
+    $id = intval($_POST['id']);
+    $usuarioAtual = $_SESSION['usuario'];
 
-    // Buscar arquivo do áudio e verificar dono
-    $sqlSelect = "SELECT audio, usuario FROM chataudio WHERE id = ?";
-    $stmt = $conn->prepare($sqlSelect);
+    // Só o dono do áudio pode apagar
+    $stmt = $conn->prepare("SELECT usuario FROM chataudio WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $row = $stmt->get_result()->fetch_assoc();
 
-    if ($row = $result->fetch_assoc()) {
-        // Só permite apagar se o usuário logado for o dono do áudio
-        if ($row['usuario'] === $usuarioAtual) {
-            $arquivo = $row['audio'];
-            if (file_exists($arquivo)) {
-                unlink($arquivo); // exclui arquivo do servidor
-            }
+    if ($row && $row['usuario'] === $usuarioAtual) {
+        // Apaga as estrelas do áudio e depois o áudio
+        $stmtE = $conn->prepare("DELETE FROM estrelas WHERE audio_id = ?");
+        $stmtE->bind_param("i", $id);
+        $stmtE->execute();
 
-            // Excluir do banco de dados
-            $sqlDelete = "DELETE FROM chataudio WHERE id = ?";
-            $stmtDelete = $conn->prepare($sqlDelete);
-            $stmtDelete->bind_param("i", $id);
-            $stmtDelete->execute();
-        } else {
-            // Caso não seja dono, não faz nada
-            $_SESSION['msg'] = "Você não pode apagar áudios de outro usuário!";
-        }
+        $stmtDelete = $conn->prepare("DELETE FROM chataudio WHERE id = ?");
+        $stmtDelete->bind_param("i", $id);
+        $stmtDelete->execute();
     }
 }
 
-header("Location: ../painel.php"); // volta para a página principal
-exit();
-?>
+voltar('../painel.php');

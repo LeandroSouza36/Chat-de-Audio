@@ -2,100 +2,98 @@
 session_start();
 include('verifica_login.php');
 include_once("audioConexao.php");
+include_once("partes/funcoes.php");
 
-$usuario = $_SESSION['usuario'];
+$eu = $_SESSION['usuario'];
 
-// Buscar notificações de amizade
-$sql = "
-    SELECT a.usuario, u.arquivo 
+// Solicitações de amizade recebidas
+$stmt = $conn->prepare("
+    SELECT a.usuario, u.arquivo
     FROM amigos a
     LEFT JOIN usuario u ON u.usuario = a.usuario
-    WHERE a.amigo = ?
-      AND a.status = 'solicitado'
-";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $usuario);
+    WHERE a.amigo = ? AND a.status = 'solicitado'
+    ORDER BY a.id DESC
+");
+$stmt->bind_param("s", $eu);
 $stmt->execute();
-$result = $stmt->get_result();
+$solicitacoes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// Estrelas que outras pessoas deram nos meus áudios
+$stmt2 = $conn->prepare("
+    SELECT e.usuario, e.hora, c.id AS audio_id, c.assunto, u.arquivo
+    FROM estrelas e
+    INNER JOIN chataudio c ON c.id = e.audio_id
+    LEFT JOIN usuario u ON u.usuario = e.usuario
+    WHERE c.usuario = ? AND e.usuario <> ?
+    ORDER BY e.hora DESC
+    LIMIT 40
+");
+$stmt2->bind_param("ss", $eu, $eu);
+$stmt2->execute();
+$atividades = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$tituloPagina = 'Notificações';
+include('partes/head.php');
 ?>
+<body>
+<?php include('partes/menu.php'); ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
+<main class="principal">
+    <div class="pagina-estreita">
+        <h1 class="titulo-pagina">Notificações</h1>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"  charset="utf-8">
-    <title>Untitled</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-</head>
-<body style="padding:20px; background-color:#fefbff;">
-
-    <div id="painelHead">
-        <div><img id="logoInicio" src="img/retroway.png"></div>
-    </div>
-
-    <div class="row">
-        <!-- MENU zona morta -->
-        <?php include('zonaMorta.php'); ?>
-
-        <!-- MENU LATERAL ESQUERDO -->
-        <div id="painelMenu" class="col-xs-12 col-md-2 border">
-            <?php include('partes/menu.php'); ?>
-        </div>
-
-        <!-- CONTEÚDO CENTRAL -->
-        <div class="col-md-6">
-            <div class="list-group">
-
-                <?php while($dado = $result->fetch_assoc()) { ?>
-                    <div class="list-group-item d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <img 
-                                src="img/usuario/<?php echo $dado['arquivo']; ?>" 
-                                class="rounded-circle me-3" 
-                                width="55" height="55" 
-                                style="object-fit: cover;"
-                            >
-                            <div>
-                                <h5 class="mb-1"><?php echo $dado['usuario']; ?></h5>
-                                <small>Solicitação de amizade</small>
-                            </div>
-                        </div>
-                        <div class="d-flex gap-2">
-    <!-- VER PERFIL -->
-    <a href="perfil.php?user=<?php echo $dado['usuario']; ?>" class="btn btn-primary btn-sm">
-        Ver Perfil
-    </a>
-
-    <!-- ADICIONAR AMIGO -->
-    <form action="notificacoesAdicionar.php" method="POST">
-        <input name="adicionar" type="hidden" value="<?php echo $dado['usuario']; ?>">
-        <button type="submit" class="btn btn-success btn-sm">Adicionar</button>
-    </form>
-
-    <!-- EXCLUIR -->
-    <form action="notificacoesExcluir.php" method="POST">
-        <input name="excluir" type="hidden" value="<?php echo $dado['usuario']; ?>">
-        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-    </form>
-</div>
-
-                    </div>
-                <?php } ?>
-
+        <?php if (count($solicitacoes) === 0 && count($atividades) === 0): ?>
+            <div class="vazio">
+                <div class="vazio-icone"><i class="bi bi-heart"></i></div>
+                <h2>Atividade nos seus áudios</h2>
+                <p>Quando alguém der estrela nos seus áudios ou pedir sua amizade, você verá aqui.</p>
             </div>
-        </div>
+        <?php endif; ?>
 
-        <!-- MENU LATERAL DIREITO -->
-        <div class="col-md-2">
-            <?php include('partes/menu.php'); ?>
-        </div>
+        <?php if (count($solicitacoes) > 0): ?>
+            <h2 class="subtitulo">Solicitações de amizade</h2>
+            <div class="lista">
+                <?php foreach ($solicitacoes as $s): $link = 'perfil.php?user=' . rawurlencode($s['usuario']); ?>
+                    <div class="item-lista">
+                        <a href="<?php echo e($link); ?>"><?php echo imgAvatar($s['arquivo'], 'avatar avatar-44'); ?></a>
+                        <div class="item-texto">
+                            <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($s['usuario']); ?></a>
+                            quer ser seu amigo.
+                        </div>
+                        <div class="item-botoes">
+                            <form action="notificacoesAdicionar.php" method="POST" class="form-inline">
+                                <input name="adicionar" type="hidden" value="<?php echo e($s['usuario']); ?>">
+                                <button type="submit" class="botao botao-azul botao-pequeno">Confirmar</button>
+                            </form>
+                            <form action="notificacoesExcluir.php" method="POST" class="form-inline">
+                                <input name="excluir" type="hidden" value="<?php echo e($s['usuario']); ?>">
+                                <button type="submit" class="botao botao-cinza botao-pequeno">Excluir</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (count($atividades) > 0): ?>
+            <h2 class="subtitulo">Atividade</h2>
+            <div class="lista">
+                <?php foreach ($atividades as $a): $link = 'perfil.php?user=' . rawurlencode($a['usuario']); ?>
+                    <div class="item-lista">
+                        <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
+                        <div class="item-texto">
+                            <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($a['usuario']); ?></a>
+                            deu uma estrela no seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
+                            <span class="tempo"><?php echo e(tempoAtras($a['hora'])); ?></span>
+                        </div>
+                        <a href="perfil.php#post-<?php echo (int)$a['audio_id']; ?>" class="mini-post" style="--h: <?php echo corDoPost($a['audio_id']); ?>">
+                            <i class="bi bi-mic-fill"></i>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
+</main>
 
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-</body>
-</html>
+<?php include('partes/rodape.php'); ?>

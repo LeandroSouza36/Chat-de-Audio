@@ -14,5 +14,6 @@ include('verifica_login.php');
     $stmt->execute();
   }
 
-?>
-<body onload='window.history.back();'>
+
+  header('Location: painel.php');
+  exit();

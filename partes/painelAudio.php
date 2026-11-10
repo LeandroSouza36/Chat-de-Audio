@@ -1,92 +1,58 @@
+<?php
+// Um post de áudio. Precisa de: $dado (id, usuario, assunto, estrela, audio, data, arquivo)
+// e $minhasEstrelas (resultado de estrelasDoUsuario).
+include_once(__DIR__ . '/funcoes.php');
+if (!isset($minhasEstrelas)) $minhasEstrelas = array();
 
+$postId = (int)$dado['id'];
+$postCurtido = isset($minhasEstrelas[$postId]);
+$postEstrelas = (int)$dado['estrela'];
+$postDono = ($dado['usuario'] === $_SESSION['usuario']);
+$postLink = 'perfil.php?user=' . rawurlencode($dado['usuario']);
+?>
+<article class="post" id="post-<?php echo $postId; ?>" data-id="<?php echo $postId; ?>">
+    <header class="post-topo">
+        <a href="<?php echo e($postLink); ?>" class="post-autor">
+            <span class="anel"><?php echo imgAvatar($dado['arquivo'], 'avatar avatar-32'); ?></span>
+            <span class="nome-usuario"><?php echo e($dado['usuario']); ?></span>
+        </a>
+        <span class="ponto">•</span>
+        <time class="post-tempo" title="<?php echo e(date('d/m/Y H:i', strtotime($dado['data']))); ?>"><?php echo e(tempoAtras($dado['data'])); ?></time>
 
-
-<div class="PainelAudio border">
-    <!-- BLOCO 1 : IMAGEM E NOME -->
-    <div id="bloco1PainelAudio">       
-        <img id="imagemPainelAudio" class="rounded-circle" src="img/usuario/<?php echo $dado["arquivo"] ?>" style="width:600px; height: 120px; object-fit: cover; object-position: center;">
-        <span id="nomePainelAudio"><?php echo $dado["usuario"] ?></span>
-        <hr>
-    </div>
-
-    <!-- POST AUDIO -->
-     <div class="row">
-    <div id="postAudio">
-        <audio-player title="<?php echo $dado["assunto"] ?>"
-	              src="<?php echo $dado["audio"] ?>"
-	              bar-width="5"
-	              bar-gap="2"
-	              preload 
-	    ></audio-player>
-    </div>
-     </div>
-
-    <!-- POST AUDIO -->
-
-
-
-    <hr/>
-
-    <!-- CONTROLES DE ESTRELA -->
-    <div class="row" style="margin-top: 20px">
-        <div  class="painelEstrela col-md-10" style=" width:220px; height:64px;">
-            <div class="row">
-                <div  class="col-md-10">
-                    <img onclick="Clicou<?php echo $dado['id'] ?>();" id="imgEstrela<?php echo $dado['id'] ?>" onmouseover="Estrela<?php echo $dado['id'] ?>()" src="img/star.png" style="width:30px; margin-left:10px;">
-                    <span class="quantidadeEstrela">
-                        <?php echo $dado["estrela"] ?>
-                    </span>
-
-                    <form name="formEstrela" method="POST" action="estrelaEnvio.php" >
-                        <input name="estrela" type="text" id="estrela<?php echo $dado["id"] ?>" style="display: none"></p>
-                        <!-- LIXEIRA (botao estrela) -->
-
-
-                            <!-- BOTÃO ESTRELA -->
-                            <input id="inputEstrela<?php echo $dado['id'] ?>"  type="submit" value="estrela" style="display: none;"/>
-                            <!-- FIM BOTÃO ESTRELA -->
-                            <script>
-                                    let img<?php echo $dado['id'] ?> = document.querySelector("#imgEstrela<?php echo $dado['id'] ?>")
-                                    let btn<?php echo $dado['id'] ?> = document.querySelector("#inputEstrela<?php echo $dado['id'] ?>")
-                                    console.log(btn<?php echo $dado['id'] ?>)
-                            //SCRIPT QUE FAZ COM QUE SE APERTE O BOTÃO SUBMIT NO MOMENTO EM QUE EU APERTO NA IMAGEM DA ESTRELA
-                                    function Clicou<?php echo $dado['id'] ?>(){
-                                    console.log("clicou na imagem")
-                                    btn<?php echo $dado['id'] ?>.click()
-                                    }
-                            //FIM SCRIPT
-                            </script>
-                        <!-- LIXEIRA (botao estrela) -->
-                        <script>
-                            function Estrela<?php echo $dado["id"] ?>(){
-                                document.querySelector("#estrela<?php echo $dado["id"] ?>").value = "<?php echo $dado["id"] ?>";
-                            }
-                        </script>
-                    </form>
-                </div>
-            </div>
-            
-        </div>
-        <div class="col-md-2">
-    <!-- LIXEIRA (apenas para o dono do áudio) -->
-    <?php if($dado["usuario"] === $_SESSION['usuario']): ?>
-        <form method="POST" action="partes/excluirAudio.php" 
-              onsubmit="return confirm('Deseja realmente excluir este áudio?');" 
-              style="margin:0;">
-            <input type="hidden" name="id" value="<?php echo $dado['id']; ?>">
-            <button type="submit" class="btn btn-link p-0" style="color: #B76EE9;">
-                <i class="bi bi-trash" style="font-size:2rem;"></i>
-            </button>
+        <?php if ($postDono): ?>
+        <form method="POST" action="partes/excluirAudio.php" class="post-excluir"
+              onsubmit="return confirm('Deseja realmente excluir este áudio?');">
+            <input type="hidden" name="id" value="<?php echo $postId; ?>">
+            <button type="submit" class="botao-icone" title="Excluir áudio"><i class="bi bi-trash3"></i></button>
         </form>
+        <?php endif; ?>
+    </header>
+
+    <div class="post-midia">
+        <audio-player src="<?php echo e($dado['audio']); ?>"
+                      title="<?php echo e($dado['assunto']); ?>"
+                      hue="<?php echo corDoPost($postId); ?>"></audio-player>
+        <div class="estrela-explosao"><i class="bi bi-star-fill"></i></div>
+    </div>
+
+    <div class="post-acoes">
+        <button type="button" class="botao-icone botao-estrela<?php echo $postCurtido ? ' ativo' : ''; ?>"
+                data-estrela="<?php echo $postId; ?>" title="Dar estrela">
+            <i class="bi <?php echo $postCurtido ? 'bi-star-fill' : 'bi-star'; ?>"></i>
+        </button>
+        <a href="<?php echo e($postLink); ?>" class="botao-icone" title="Ver perfil"><i class="bi bi-person"></i></a>
+        <button type="button" class="botao-icone" data-compartilhar="<?php echo e($postLink . '#post-' . $postId); ?>" title="Compartilhar"><i class="bi bi-send"></i></button>
+    </div>
+
+    <div class="post-estrelas">
+        <span class="contagem-estrelas" data-contagem="<?php echo $postId; ?>"><?php echo $postEstrelas; ?></span>
+        <span data-palavra="<?php echo $postId; ?>"><?php echo $postEstrelas === 1 ? 'estrela' : 'estrelas'; ?></span>
+    </div>
+
+    <?php if (trim((string)$dado['assunto']) !== ''): ?>
+    <div class="post-legenda">
+        <a href="<?php echo e($postLink); ?>" class="nome-usuario"><?php echo e($dado['usuario']); ?></a>
+        <?php echo e($dado['assunto']); ?>
+    </div>
     <?php endif; ?>
-
-        </div>
-    </div>
-
-    <!-- POST DATA -->
-     <div class="row">
-    <div class="border " style="width:450px; height:30px;font-family:Century Gothic; font-size:medium; background-color: white">
-        <?php echo $dado["data"] ?>
-    </div>
-    </div>
-</div>
+</article>
