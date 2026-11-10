@@ -125,6 +125,20 @@ class AudioPlayer extends HTMLElement {
         .vu i:nth-child(4) { animation-delay: .45s; }
         @keyframes vu { 0%,100% { height: 4px; } 50% { height: 16px; } }
 
+        /* versão compacta (comentários) */
+        :host([mini]) .faixa { gap: 10px; padding: 8px 12px 8px 8px; border-radius: 12px; }
+        :host([mini]) .disco { width: 44px; height: 44px; box-shadow: 0 3px 8px rgba(28, 21, 48, .18); }
+        :host([mini]) .rotulo { inset: 32%; box-shadow: 0 0 0 2px hsl(var(--h) 85% 62%); }
+        :host([mini]) .furo { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; }
+        :host([mini]) .titulo { display: none; }
+        :host([mini]) .info { flex-direction: row; align-items: center; gap: 10px; }
+        :host([mini]) canvas { height: 26px; flex: 1; min-width: 60px; order: 2; }
+        :host([mini]) .linha { order: 1; gap: 8px; }
+        :host([mini]) .play { width: 32px; height: 32px; }
+        :host([mini]) .play svg { width: 15px; height: 15px; }
+        :host([mini]) .tempos { font-size: 12px; order: 3; }
+        :host([mini]) .vu { display: none; }
+
         @media (max-width: 480px) {
           .faixa { gap: 14px; padding: 12px; }
           .disco { width: 80px; height: 80px; }

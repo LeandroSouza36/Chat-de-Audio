@@ -18,7 +18,7 @@ $stmt->bind_param("s", $eu);
 $stmt->execute();
 $solicitacoes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// Estrelas e ecos que outras pessoas deram nos meus áudios
+// Estrelas, ecos e comentários que outras pessoas fizeram nos meus áudios
 $stmt2 = $conn->prepare("
     SELECT * FROM (
         SELECT 'estrela' AS tipo, e.usuario, e.hora, c.id AS audio_id, c.assunto, u.arquivo
@@ -32,11 +32,17 @@ $stmt2 = $conn->prepare("
         INNER JOIN chataudio c ON c.id = o.audio_id
         LEFT JOIN usuario u ON u.usuario = o.usuario
         WHERE c.usuario = ? AND o.usuario <> ?
+        UNION ALL
+        SELECT 'comentario' AS tipo, k.usuario, k.data AS hora, c.id AS audio_id, c.assunto, u.arquivo
+        FROM comentarios k
+        INNER JOIN chataudio c ON c.id = k.audio_id
+        LEFT JOIN usuario u ON u.usuario = k.usuario
+        WHERE c.usuario = ? AND k.usuario <> ?
     ) t
     ORDER BY hora DESC
     LIMIT 40
 ");
-$stmt2->bind_param("ssss", $eu, $eu, $eu, $eu);
+$stmt2->bind_param("ssssss", $eu, $eu, $eu, $eu, $eu, $eu);
 $stmt2->execute();
 $atividades = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -53,7 +59,7 @@ include('partes/head.php');
             <div class="cartao vazio">
                 <div class="vazio-icone"><i class="bi bi-bell"></i></div>
                 <h2>Atividade nos seus áudios</h2>
-                <p>Quando alguém der estrela, ecoar seus áudios ou pedir sua amizade, você verá aqui.</p>
+                <p>Quando alguém der estrela, comentar, ecoar seus áudios ou pedir sua amizade, você verá aqui.</p>
             </div>
         <?php endif; ?>
 
@@ -90,7 +96,9 @@ include('partes/head.php');
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
                         <div class="item-texto">
                             <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($a['usuario']); ?></a>
-                            <?php if ($a['tipo'] === 'eco'): ?>
+                            <?php if ($a['tipo'] === 'comentario'): ?>
+                                <i class="bi bi-chat-fill icone-atividade comentario"></i> comentou com um áudio no seu post<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
+                            <?php elseif ($a['tipo'] === 'eco'): ?>
                                 <i class="bi bi-repeat icone-atividade eco"></i> ecoou seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
                             <?php else: ?>
                                 <i class="bi bi-star-fill icone-atividade estrela"></i> deu uma estrela no seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.

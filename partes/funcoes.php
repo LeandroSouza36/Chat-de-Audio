@@ -117,11 +117,25 @@ function ecosDoUsuario($conn, $usuario) {
     return $ids;
 }
 
-// Cria a tabela de ecos em bancos que foram criados antes desse recurso existir
+// Cria as tabelas novas (ecos, comentários) em bancos criados antes desses recursos existirem
 function prepararBanco($conn) {
     static $feito = false;
     if ($feito || !$conn) return;
     $feito = true;
+    $existe = $conn->query("SHOW TABLES LIKE 'comentarios'");
+    if ($existe && $existe->num_rows == 0) {
+        $conn->query("
+            CREATE TABLE IF NOT EXISTS `comentarios` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `audio_id` INT NOT NULL,
+              `usuario` VARCHAR(220) NOT NULL,
+              `audio` LONGBLOB NOT NULL,
+              `data` DATETIME DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              KEY `por_audio` (`audio_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ");
+    }
     $existe = $conn->query("SHOW TABLES LIKE 'ecos'");
     if ($existe && $existe->num_rows == 0) {
         $conn->query("

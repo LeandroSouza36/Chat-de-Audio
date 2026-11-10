@@ -20,6 +20,10 @@ if (isset($_POST['id'])) {
         $stmtE->bind_param("i", $id);
         $stmtE->execute();
 
+        $stmtCom = $conn->prepare("DELETE FROM comentarios WHERE audio_id = ?");
+        $stmtCom->bind_param("i", $id);
+        $stmtCom->execute();
+
         $stmtEco = $conn->prepare("DELETE FROM ecos WHERE audio_id = ?");
         $stmtEco->bind_param("i", $id);
         $stmtEco->execute();
