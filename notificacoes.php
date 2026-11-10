@@ -18,17 +18,25 @@ $stmt->bind_param("s", $eu);
 $stmt->execute();
 $solicitacoes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// Estrelas que outras pessoas deram nos meus áudios
+// Estrelas e ecos que outras pessoas deram nos meus áudios
 $stmt2 = $conn->prepare("
-    SELECT e.usuario, e.hora, c.id AS audio_id, c.assunto, u.arquivo
-    FROM estrelas e
-    INNER JOIN chataudio c ON c.id = e.audio_id
-    LEFT JOIN usuario u ON u.usuario = e.usuario
-    WHERE c.usuario = ? AND e.usuario <> ?
-    ORDER BY e.hora DESC
+    SELECT * FROM (
+        SELECT 'estrela' AS tipo, e.usuario, e.hora, c.id AS audio_id, c.assunto, u.arquivo
+        FROM estrelas e
+        INNER JOIN chataudio c ON c.id = e.audio_id
+        LEFT JOIN usuario u ON u.usuario = e.usuario
+        WHERE c.usuario = ? AND e.usuario <> ?
+        UNION ALL
+        SELECT 'eco' AS tipo, o.usuario, o.data AS hora, c.id AS audio_id, c.assunto, u.arquivo
+        FROM ecos o
+        INNER JOIN chataudio c ON c.id = o.audio_id
+        LEFT JOIN usuario u ON u.usuario = o.usuario
+        WHERE c.usuario = ? AND o.usuario <> ?
+    ) t
+    ORDER BY hora DESC
     LIMIT 40
 ");
-$stmt2->bind_param("ss", $eu, $eu);
+$stmt2->bind_param("ssss", $eu, $eu, $eu, $eu);
 $stmt2->execute();
 $atividades = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -45,7 +53,7 @@ include('partes/head.php');
             <div class="cartao vazio">
                 <div class="vazio-icone"><i class="bi bi-bell"></i></div>
                 <h2>Atividade nos seus áudios</h2>
-                <p>Quando alguém der estrela nos seus áudios ou pedir sua amizade, você verá aqui.</p>
+                <p>Quando alguém der estrela, ecoar seus áudios ou pedir sua amizade, você verá aqui.</p>
             </div>
         <?php endif; ?>
 
@@ -75,14 +83,18 @@ include('partes/head.php');
         <?php endif; ?>
 
         <?php if (count($atividades) > 0): ?>
-            <h2 class="secao-titulo"><i class="bi bi-stars"></i> Estrelas recebidas</h2>
+            <h2 class="secao-titulo"><i class="bi bi-stars"></i> Atividade nos seus áudios</h2>
             <div class="cartao lista">
                 <?php foreach ($atividades as $a): $link = 'perfil.php?user=' . rawurlencode($a['usuario']); ?>
                     <div class="item-lista">
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
                         <div class="item-texto">
                             <a href="<?php echo e($link); ?>" class="nome-usuario"><?php echo e($a['usuario']); ?></a>
-                            deu uma estrela no seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
+                            <?php if ($a['tipo'] === 'eco'): ?>
+                                <i class="bi bi-repeat icone-atividade eco"></i> ecoou seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
+                            <?php else: ?>
+                                <i class="bi bi-star-fill icone-atividade estrela"></i> deu uma estrela no seu áudio<?php echo trim((string)$a['assunto']) !== '' ? ': "' . e($a['assunto']) . '"' : ''; ?>.
+                            <?php endif; ?>
                             <span class="tempo"><?php echo e(tempoAtras($a['hora'])); ?></span>
                         </div>
                         <a href="perfil.php#post-<?php echo (int)$a['audio_id']; ?>" class="mini-post" style="--h: <?php echo corDoPost($a['audio_id']); ?>">

@@ -103,3 +103,37 @@ function botaoAmizade($status, $outro, $classeExtra = '') {
          . '<input type="hidden" name="adicionarAmigo" value="' . $outro . '">'
          . '<button type="submit" class="botao botao-neon ' . $classeExtra . '">Adicionar</button></form>';
 }
+
+// IDs dos áudios que o usuário já ecoou
+function ecosDoUsuario($conn, $usuario) {
+    $ids = array();
+    $stmt = $conn->prepare("SELECT audio_id FROM ecos WHERE usuario = ?");
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($linha = $res->fetch_assoc()) {
+        $ids[(int)$linha['audio_id']] = true;
+    }
+    return $ids;
+}
+
+// Cria a tabela de ecos em bancos que foram criados antes desse recurso existir
+function prepararBanco($conn) {
+    static $feito = false;
+    if ($feito || !$conn) return;
+    $feito = true;
+    $existe = $conn->query("SHOW TABLES LIKE 'ecos'");
+    if ($existe && $existe->num_rows == 0) {
+        $conn->query("
+            CREATE TABLE IF NOT EXISTS `ecos` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `audio_id` INT NOT NULL,
+              `usuario` VARCHAR(220) NOT NULL,
+              `data` DATETIME DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `unico_eco` (`audio_id`, `usuario`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ");
+    }
+}
+if (isset($conn)) prepararBanco($conn);

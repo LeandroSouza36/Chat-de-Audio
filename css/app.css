@@ -931,3 +931,27 @@ img { display: block; }
 @media (max-width: 800px) {
   .story-caixa { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; }
 }
+
+/* ==========================================================
+   ECOS
+   ========================================================== */
+.post-eco {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--texto-2);
+  margin: -2px 0 10px 4px;
+}
+.post-eco > i { color: #12a37a; font-size: 15px; }
+.post-eco .nome-usuario { font-weight: 600; }
+.botao-eco.ativo { color: #12a37a; font-weight: 600; }
+.botao-eco.ativo:hover { background: #e7f8f1; color: #12a37a; }
+.botao-eco.pulo { animation: pulo .45s ease; }
+.contagem-eco { color: var(--texto-3); font-weight: 500; }
+.botao-eco.ativo .contagem-eco { color: #12a37a; }
+.pilula-eco-dono { cursor: default; }
+.pilula-eco-dono:hover { background: none; color: var(--texto-2); }
+.icone-atividade { font-size: 13px; margin: 0 2px; }
+.icone-atividade.eco { color: #12a37a; }
+.icone-atividade.estrela { color: var(--amarelo); }

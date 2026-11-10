@@ -7,10 +7,12 @@ include_once("partes/funcoes.php");
 $eu = $_SESSION['usuario'];
 $meusDados = dadosUsuario($conn, $eu);
 $minhasEstrelas = estrelasDoUsuario($conn, $eu);
+$meusEcos = ecosDoUsuario($conn, $eu);
 
 // Feed: todos os áudios, do mais novo para o mais antigo
 $conAudio = $conn->query("
-    SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo
+    SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
+           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos
     FROM chataudio c
     INNER JOIN usuario u ON c.usuario = u.usuario
     ORDER BY c.data DESC, c.id DESC

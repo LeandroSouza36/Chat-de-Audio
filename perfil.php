@@ -10,24 +10,45 @@ $meuPerfil = ($usuarioPerfil === $eu);
 
 $dadosPerfil = dadosUsuario($conn, $usuarioPerfil);
 $minhasEstrelas = estrelasDoUsuario($conn, $eu);
+$meusEcos = ecosDoUsuario($conn, $eu);
 
 if ($dadosPerfil) {
-    // Áudios do perfil
+    // Áudios do perfil: os próprios + os que a pessoa ecoou, do mais recente para o mais antigo
     $stmt = $conn->prepare("
-        SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo
-        FROM chataudio c
-        INNER JOIN usuario u ON u.usuario = c.usuario
-        WHERE c.usuario = ?
-        ORDER BY c.data DESC, c.id DESC
+        SELECT * FROM (
+            SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
+                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos,
+                   NULL AS ecoadoPor, c.data AS quando
+            FROM chataudio c
+            INNER JOIN usuario u ON u.usuario = c.usuario
+            WHERE c.usuario = ?
+            UNION ALL
+            SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
+                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos,
+                   e.usuario AS ecoadoPor, e.data AS quando
+            FROM ecos e
+            INNER JOIN chataudio c ON c.id = e.audio_id
+            INNER JOIN usuario u ON u.usuario = c.usuario
+            WHERE e.usuario = ?
+        ) t
+        ORDER BY quando DESC, id DESC
     ");
-    $stmt->bind_param("s", $usuarioPerfil);
+    $stmt->bind_param("ss", $usuarioPerfil, $usuarioPerfil);
     $stmt->execute();
     $posts = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     // Números do perfil
-    $totalPosts = count($posts);
+    $totalPosts = 0;
+    $totalEcos = 0;
     $totalEstrelas = 0;
-    foreach ($posts as $p) $totalEstrelas += (int)$p['estrela'];
+    foreach ($posts as $p) {
+        if (empty($p['ecoadoPor'])) {
+            $totalPosts++;
+            $totalEstrelas += (int)$p['estrela'];
+        } else {
+            $totalEcos++;
+        }
+    }
 
     $stmtAmigos = $conn->prepare("SELECT COUNT(*) AS total FROM amigos WHERE usuario = ? AND status = 'amigo'");
     $stmtAmigos->bind_param("s", $usuarioPerfil);
@@ -74,12 +95,13 @@ include('partes/head.php');
             <li><b><?php echo $totalPosts; ?></b><span><?php echo $totalPosts === 1 ? 'áudio' : 'áudios'; ?></span></li>
             <li><a href="<?php echo $meuPerfil ? 'listaDeAmigos.php' : '#'; ?>"><b><?php echo $totalAmigos; ?></b><span><?php echo $totalAmigos === 1 ? 'amigo' : 'amigos'; ?></span></a></li>
             <li><b><?php echo $totalEstrelas; ?></b><span><?php echo $totalEstrelas === 1 ? 'estrela' : 'estrelas'; ?></span></li>
+            <li><b><?php echo $totalEcos; ?></b><span><?php echo $totalEcos === 1 ? 'eco' : 'ecos'; ?></span></li>
         </ul>
     </section>
 
-    <h2 class="secao-titulo"><i class="bi bi-vinyl-fill"></i> <?php echo $meuPerfil ? 'Seus áudios' : 'Áudios de ' . e($usuarioPerfil); ?></h2>
+    <h2 class="secao-titulo"><i class="bi bi-vinyl-fill"></i> <?php echo $meuPerfil ? 'Seus áudios e ecos' : 'Áudios e ecos de ' . e($usuarioPerfil); ?></h2>
 
-    <?php if ($totalPosts === 0): ?>
+    <?php if (count($posts) === 0): ?>
         <div class="cartao vazio">
             <div class="vazio-icone"><i class="bi bi-vinyl"></i></div>
             <?php if ($meuPerfil): ?>
