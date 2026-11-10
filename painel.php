@@ -12,7 +12,7 @@ $meusEcos = ecosDoUsuario($conn, $eu);
 // Feed: todos os áudios, do mais novo para o mais antigo
 $conAudio = $conn->query("
     SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
-           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos
+           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
     FROM chataudio c
     INNER JOIN usuario u ON c.usuario = u.usuario
     ORDER BY c.data DESC, c.id DESC

@@ -529,3 +529,222 @@
     b.addEventListener("click", () => abrir(b.dataset.storyUser))
   );
 })();
+
+// ==========================================================
+// COMENTÁRIOS EM ÁUDIO
+// ==========================================================
+(function () {
+  "use strict";
+  const LIMITE_SEGUNDOS = 60; // comentários de até 1 minuto
+  const aviso = (t) => window.aviso && window.aviso(t);
+  const meuAvatar = () => {
+    const img = document.querySelector(".topo-perfil img");
+    return img ? img.getAttribute("src") : "img/usuario/padrao.svg";
+  };
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const corDe = (nome) => {
+    const cores = [320, 275, 190, 25, 255, 300, 210, 340];
+    let soma = 0;
+    for (const c of nome) soma += c.charCodeAt(0);
+    return cores[soma % cores.length];
+  };
+
+  // gravação em andamento (só uma por vez)
+  let gravacao = null;
+
+  function atualizarContagem(audioId, total) {
+    const raizes = [document, ...Array.from(document.querySelectorAll("template"), (t) => t.content)];
+    raizes.forEach((r) => r.querySelectorAll(`[data-comentarios="${audioId}"]`).forEach((el) => (el.textContent = total)));
+  }
+
+  function htmlComentario(k) {
+    return `
+      <div class="comentario" data-comentario-id="${k.id}">
+        <a href="perfil.php?user=${encodeURIComponent(k.usuario)}">
+          <img class="avatar avatar-32" src="${esc(k.avatar)}" alt="" onerror="this.onerror=null;this.src='img/usuario/padrao.svg'">
+        </a>
+        <div class="comentario-corpo">
+          <div class="comentario-topo">
+            <a class="nome-usuario" href="perfil.php?user=${encodeURIComponent(k.usuario)}">${esc(k.usuario)}</a>
+            <span class="texto-2">· ${esc(k.tempo)}</span>
+            ${k.podeExcluir ? `<button type="button" class="botao-icone comentario-excluir" data-excluir-comentario="${k.id}" title="Excluir comentário"><i class="bi bi-trash3"></i></button>` : ""}
+          </div>
+          <audio-player mini src="${esc(k.audio)}" hue="${corDe(k.usuario)}"></audio-player>
+        </div>
+      </div>`;
+  }
+
+  function htmlGravador() {
+    return `
+      <div class="comentario-gravar" data-cg-estado="inicial">
+        <img class="avatar avatar-32" src="${esc(meuAvatar())}" alt="" onerror="this.onerror=null;this.src='img/usuario/padrao.svg'">
+        <button type="button" class="comentario-campo" data-cg-iniciar><i class="bi bi-mic-fill"></i> Responder com um áudio...</button>
+      </div>
+      <div class="comentario-gravar" data-cg-estado="gravando" hidden>
+        <span class="ponto-gravando"></span>
+        <span class="comentario-tempo" data-cg-tempo>0:00</span>
+        <span class="texto-2">de 1:00</span>
+        <button type="button" class="botao-parar pequeno" data-cg-parar title="Parar"><i class="bi bi-stop-fill"></i></button>
+      </div>
+      <div class="comentario-previa" data-cg-estado="previa" hidden>
+        <div data-cg-player></div>
+        <div class="comentario-acoes">
+          <button type="button" class="botao botao-link-cinza botao-pequeno" data-cg-descartar>Descartar</button>
+          <button type="button" class="botao botao-neon botao-pequeno" data-cg-enviar><i class="bi bi-send-fill"></i> Enviar</button>
+        </div>
+      </div>`;
+  }
+
+  async function abrirPainel(post, audioId) {
+    const painel = post.querySelector(".comentarios");
+    if (!painel) return;
+    if (!painel.hidden) {
+      painel.hidden = true;
+      post.querySelector("[data-comentar]").classList.remove("ativo");
+      return;
+    }
+    painel.hidden = false;
+    post.querySelector("[data-comentar]").classList.add("ativo");
+    if (painel.dataset.carregado) return;
+
+    painel.innerHTML = '<p class="comentarios-carregando texto-2">Carregando comentários...</p>';
+    try {
+      const r = await (await fetch("comentariosDados.php?id=" + encodeURIComponent(audioId))).json();
+      const lista = r.comentarios || [];
+      painel.innerHTML =
+        `<div class="comentarios-lista">${lista.length ? lista.map(htmlComentario).join("") : '<p class="comentarios-vazio texto-2">Nenhum comentário ainda. Seja o primeiro a responder!</p>'}</div>` +
+        htmlGravador();
+      painel.dataset.carregado = "1";
+      painel.dataset.audioId = audioId;
+    } catch (e) {
+      painel.innerHTML = '<p class="comentarios-vazio texto-2">Não foi possível carregar os comentários.</p>';
+    }
+  }
+
+  function mostrarEstado(painel, estado) {
+    painel.querySelectorAll("[data-cg-estado]").forEach((el) => (el.hidden = el.dataset.cgEstado !== estado));
+  }
+
+  async function iniciar(painel) {
+    if (gravacao) {
+      aviso("Termine a gravação que já está em andamento.");
+      return;
+    }
+    let fluxo;
+    try {
+      fluxo = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (e) {
+      aviso("Permita o uso do microfone para gravar.");
+      return;
+    }
+    const gravador = new MediaRecorder(fluxo);
+    const pedacos = [];
+    const inicio = Date.now();
+    const tempoEl = painel.querySelector("[data-cg-tempo]");
+    gravacao = { painel, gravador, fluxo, timer: 0, dataUrl: "" };
+
+    gravador.ondataavailable = (e) => e.data.size && pedacos.push(e.data);
+    gravador.onstop = () => {
+      clearInterval(gravacao.timer);
+      fluxo.getTracks().forEach((t) => t.stop());
+      const blob = new Blob(pedacos, { type: gravador.mimeType || "audio/webm" });
+      const leitor = new FileReader();
+      leitor.onloadend = () => {
+        gravacao.dataUrl = leitor.result;
+        const area = painel.querySelector("[data-cg-player]");
+        area.innerHTML = "";
+        const player = document.createElement("audio-player");
+        player.setAttribute("mini", "");
+        player.setAttribute("hue", "275");
+        player.setAttribute("src", leitor.result);
+        area.appendChild(player);
+        mostrarEstado(painel, "previa");
+      };
+      leitor.readAsDataURL(blob);
+    };
+
+    gravador.start();
+    tempoEl.textContent = "0:00";
+    gravacao.timer = setInterval(() => {
+      const s = Math.floor((Date.now() - inicio) / 1000);
+      tempoEl.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+      if (s >= LIMITE_SEGUNDOS && gravador.state === "recording") gravador.stop();
+    }, 250);
+    mostrarEstado(painel, "gravando");
+  }
+
+  function descartar(painel) {
+    if (gravacao && gravacao.gravador.state === "recording") {
+      gravacao.gravador.onstop = null;
+      gravacao.gravador.stop();
+      gravacao.fluxo.getTracks().forEach((t) => t.stop());
+      clearInterval(gravacao.timer);
+    }
+    gravacao = null;
+    painel.querySelector("[data-cg-player]").innerHTML = "";
+    mostrarEstado(painel, "inicial");
+  }
+
+  async function enviar(painel) {
+    if (!gravacao || !gravacao.dataUrl) return;
+    const botao = painel.querySelector("[data-cg-enviar]");
+    botao.disabled = true;
+    botao.textContent = "Enviando...";
+    const corpo = new FormData();
+    corpo.append("id", painel.dataset.audioId);
+    corpo.append("audio", gravacao.dataUrl);
+    try {
+      const r = await (await fetch("comentarioEnviar.php", { method: "POST", body: corpo })).json();
+      if (!r.ok) throw new Error(r.erro);
+      const lista = painel.querySelector(".comentarios-lista");
+      const vazio = lista.querySelector(".comentarios-vazio");
+      if (vazio) vazio.remove();
+      lista.insertAdjacentHTML("beforeend", htmlComentario(r.comentario));
+      atualizarContagem(painel.dataset.audioId, r.total);
+      gravacao = null;
+      painel.querySelector("[data-cg-player]").innerHTML = "";
+      mostrarEstado(painel, "inicial");
+      aviso("Comentário enviado!");
+    } catch (e) {
+      aviso((e && e.message) || "Não foi possível enviar o comentário.");
+    }
+    botao.disabled = false;
+    botao.innerHTML = '<i class="bi bi-send-fill"></i> Enviar';
+  }
+
+  async function excluir(btn) {
+    if (!confirm("Excluir este comentário?")) return;
+    const item = btn.closest(".comentario");
+    const painel = btn.closest(".comentarios");
+    const corpo = new FormData();
+    corpo.append("id", btn.dataset.excluirComentario);
+    try {
+      const r = await (await fetch("comentarioExcluir.php", { method: "POST", body: corpo })).json();
+      if (!r.ok) throw new Error();
+      item.remove();
+      atualizarContagem(r.audioId, r.total);
+      const lista = painel.querySelector(".comentarios-lista");
+      if (!lista.querySelector(".comentario")) {
+        lista.innerHTML = '<p class="comentarios-vazio texto-2">Nenhum comentário ainda. Seja o primeiro a responder!</p>';
+      }
+    } catch (e) {
+      aviso("Não foi possível excluir o comentário.");
+    }
+  }
+
+  document.addEventListener("click", (ev) => {
+    const alvo = ev.target;
+    const btnComentar = alvo.closest("[data-comentar]");
+    if (btnComentar) {
+      abrirPainel(btnComentar.closest(".post"), btnComentar.dataset.comentar);
+      return;
+    }
+    const painel = alvo.closest(".comentarios");
+    if (!painel) return;
+    if (alvo.closest("[data-cg-iniciar]")) iniciar(painel);
+    else if (alvo.closest("[data-cg-parar]")) gravacao && gravacao.gravador.state === "recording" && gravacao.gravador.stop();
+    else if (alvo.closest("[data-cg-descartar]")) descartar(painel);
+    else if (alvo.closest("[data-cg-enviar]")) enviar(painel);
+    else if (alvo.closest("[data-excluir-comentario]")) excluir(alvo.closest("[data-excluir-comentario]"));
+  });
+})();

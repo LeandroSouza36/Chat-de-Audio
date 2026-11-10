@@ -14,6 +14,6 @@ if (!isset($tituloPagina)) $tituloPagina = 'Retroway';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/icones.css?v=6">
-    <link rel="stylesheet" href="css/app.css?v=6">
+    <link rel="stylesheet" href="css/icones.css?v=7">
+    <link rel="stylesheet" href="css/app.css?v=7">
 </head>

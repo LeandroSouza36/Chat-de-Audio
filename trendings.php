@@ -11,7 +11,7 @@ $meusEcos = ecosDoUsuario($conn, $eu);
 // Paradas do dia: áudios com mais estrelas nas últimas 24 horas
 $emAlta = $conn->query("
     SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo, h.estrelasHoje,
-           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos
+           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
     FROM (
         SELECT audio_id, COUNT(*) AS estrelasHoje
         FROM estrelas
@@ -31,7 +31,7 @@ if (count($posts) === 0) {
     $subtitulo = 'Ninguém deu estrela hoje ainda — estes são os maiores sucessos de todos os tempos.';
     $posts = $conn->query("
         SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
-               (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos
+               (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
         FROM chataudio c
         INNER JOIN usuario u ON u.usuario = c.usuario
         ORDER BY c.estrela DESC, c.data DESC

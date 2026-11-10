@@ -13,6 +13,7 @@ $postDono = ($dado['usuario'] === $_SESSION['usuario']);
 $postLink = 'perfil.php?user=' . rawurlencode($dado['usuario']);
 $postEcoou = isset($meusEcos[$postId]);
 $postEcos = isset($dado['ecos']) ? (int)$dado['ecos'] : 0;
+$postComentarios = isset($dado['comentarios']) ? (int)$dado['comentarios'] : 0;
 $postEcoadoPor = !empty($dado['ecoadoPor']) ? $dado['ecoadoPor'] : '';
 $postTitulo = trim((string)$dado['assunto']) !== '' ? $dado['assunto'] : 'Áudio de ' . $dado['usuario'];
 ?>
@@ -57,6 +58,9 @@ $postTitulo = trim((string)$dado['assunto']) !== '' ? $dado['assunto'] : 'Áudio
             <i class="bi <?php echo $postCurtido ? 'bi-star-fill' : 'bi-star'; ?>"></i>
             <span data-contagem="<?php echo $postId; ?>"><?php echo $postEstrelas; ?></span>
         </button>
+        <button type="button" class="pilula botao-comentar" data-comentar="<?php echo $postId; ?>" title="Comentários em áudio">
+            <i class="bi bi-chat"></i> <span data-comentarios="<?php echo $postId; ?>"><?php echo $postComentarios; ?></span>
+        </button>
         <?php if ($postDono): ?>
         <span class="pilula pilula-eco-dono" title="Ecos que este áudio recebeu">
             <i class="bi bi-repeat"></i> <span data-ecos="<?php echo $postId; ?>"><?php echo $postEcos; ?></span> <?php echo $postEcos === 1 ? 'eco' : 'ecos'; ?>
@@ -70,4 +74,7 @@ $postTitulo = trim((string)$dado['assunto']) !== '' ? $dado['assunto'] : 'Áudio
         <?php endif; ?>
         <a href="<?php echo e($postLink); ?>" class="pilula pilula-direita"><i class="bi bi-person"></i> Ver perfil</a>
     </div>
+
+    <!-- Comentários em áudio (carregados ao abrir) -->
+    <div class="comentarios" data-painel-comentarios="<?php echo $postId; ?>" hidden></div>
 </article>

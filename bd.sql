@@ -66,6 +66,17 @@ CREATE TABLE IF NOT EXISTS `ecos` (
   UNIQUE KEY `unico_eco` (`audio_id`, `usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Comentários em áudio
+CREATE TABLE IF NOT EXISTS `comentarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `audio_id` INT NOT NULL,
+  `usuario` VARCHAR(220) NOT NULL,
+  `audio` LONGBLOB NOT NULL,
+  `data` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `por_audio` (`audio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Usuários de teste (senha de ambos: 123456)
 INSERT IGNORE INTO `usuario` (`usuario`, `senha`, `arquivo`, `data`) VALUES
 ('admin',  MD5('123456'), 'padrao.svg', NOW()),

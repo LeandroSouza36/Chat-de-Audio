@@ -17,14 +17,14 @@ if ($dadosPerfil) {
     $stmt = $conn->prepare("
         SELECT * FROM (
             SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
-                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos,
+                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios,
                    NULL AS ecoadoPor, c.data AS quando
             FROM chataudio c
             INNER JOIN usuario u ON u.usuario = c.usuario
             WHERE c.usuario = ?
             UNION ALL
             SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
-                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos,
+                   (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios,
                    e.usuario AS ecoadoPor, e.data AS quando
             FROM ecos e
             INNER JOIN chataudio c ON c.id = e.audio_id
