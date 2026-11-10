@@ -81,11 +81,16 @@ include('partes/head.php');
             <div class="perfil-info">
                 <h1 class="perfil-nome"><?php echo e($usuarioPerfil); ?></h1>
                 <p class="perfil-arroba">@<?php echo e($usuarioPerfil); ?><?php if (!empty($dadosPerfil['data'])): ?> · na pista desde <?php echo e(date('m/Y', strtotime($dadosPerfil['data']))); ?><?php endif; ?></p>
+                <?php if (!empty($dadosPerfil['bio'])): ?>
+                    <p class="perfil-bio-texto"><?php echo nl2br(e($dadosPerfil['bio'])); ?></p>
+                <?php elseif ($meuPerfil): ?>
+                    <p class="perfil-bio-texto vazia"><a href="editarPerfil.php">+ Adicionar uma bio</a></p>
+                <?php endif; ?>
             </div>
             <div class="perfil-botoes">
                 <?php if ($meuPerfil): ?>
+                    <a href="editarPerfil.php" class="botao botao-contorno"><i class="bi bi-pencil"></i> Editar perfil</a>
                     <a href="painel.php#gravar" class="botao botao-neon" data-gravar><i class="bi bi-mic-fill"></i> Gravar áudio</a>
-                    <a href="logout.php" class="botao botao-contorno">Sair</a>
                 <?php else: ?>
                     <?php echo botaoAmizade($status, $usuarioPerfil); ?>
                 <?php endif; ?>
