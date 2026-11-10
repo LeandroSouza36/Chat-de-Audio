@@ -7,7 +7,7 @@ include_once("partes/funcoes.php");
 $eu = $_SESSION['usuario'];
 $minhasEstrelas = estrelasDoUsuario($conn, $eu);
 
-// Em alta: áudios com mais estrelas nas últimas 24 horas
+// Paradas do dia: áudios com mais estrelas nas últimas 24 horas
 $emAlta = $conn->query("
     SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo, h.estrelasHoje
     FROM (
@@ -18,51 +18,47 @@ $emAlta = $conn->query("
     ) h
     INNER JOIN chataudio c ON c.id = h.audio_id
     INNER JOIN usuario u ON u.usuario = c.usuario
-    ORDER BY h.estrelasHoje DESC, c.data DESC
-    LIMIT 30
+    ORDER BY c.estrela DESC, h.estrelasHoje DESC, c.data DESC
+    LIMIT 20
 ")->fetch_all(MYSQLI_ASSOC);
 
 // Se ninguém deu estrela hoje, mostra os mais estrelados de todos os tempos
-$titulo = 'Em alta hoje';
+$subtitulo = 'Os sucessos que ganharam estrelas nas últimas 24 horas.';
 $posts = $emAlta;
 if (count($posts) === 0) {
-    $titulo = 'Mais estrelados';
+    $subtitulo = 'Ninguém deu estrela hoje ainda — estes são os maiores sucessos de todos os tempos.';
     $posts = $conn->query("
         SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo
         FROM chataudio c
         INNER JOIN usuario u ON u.usuario = c.usuario
         ORDER BY c.estrela DESC, c.data DESC
-        LIMIT 30
+        LIMIT 20
     ")->fetch_all(MYSQLI_ASSOC);
 }
 
-$tituloPagina = 'Explorar';
+$tituloPagina = 'Paradas do dia';
 include('partes/head.php');
 ?>
 <body>
 <?php include('partes/menu.php'); ?>
 
-<main class="principal">
-    <div class="pagina">
-        <h1 class="titulo-pagina">Explorar</h1>
-        <div class="chips">
-            <span class="chip ativo"><i class="bi bi-fire"></i> <?php echo e($titulo); ?></span>
-        </div>
+<main class="centro">
+    <h1 class="titulo-pagina titulo-neon">Paradas do dia</h1>
+    <p class="subtitulo-pagina"><?php echo e($subtitulo); ?></p>
 
-        <?php if (count($posts) === 0): ?>
-            <div class="vazio">
-                <div class="vazio-icone"><i class="bi bi-compass"></i></div>
-                <h2>Nada por aqui ainda</h2>
-                <p>Quando as pessoas publicarem áudios, eles aparecem aqui.</p>
-            </div>
-        <?php else: ?>
-            <div class="grade">
-                <?php foreach ($posts as $dado): ?>
-                    <?php include('partes/tilePost.php'); ?>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
+    <?php if (count($posts) === 0): ?>
+        <div class="cartao vazio">
+            <div class="vazio-icone"><i class="bi bi-trophy"></i></div>
+            <h2>Sem sucessos por enquanto</h2>
+            <p>Quando as pessoas publicarem áudios, o ranking aparece aqui.</p>
+        </div>
+    <?php else: ?>
+        <div class="ranking">
+            <?php $posicao = 0; foreach ($posts as $dado): $posicao++; ?>
+                <?php include('partes/tilePost.php'); ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </main>
 
 <?php include('partes/rodape.php'); ?>

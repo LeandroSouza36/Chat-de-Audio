@@ -1,6 +1,5 @@
-// <audio-player src="..." title="..." hue="280" [compacto]>
-// Player de áudio no formato de post: fundo em degradê, botão de play no centro
-// e forma de onda clicável na parte de baixo.
+// <audio-player src="..." title="..." capa="img/..." hue="320" [compacto]>
+// Player em forma de disco de vinil (gira enquanto toca), com onda neon clicável.
 class AudioPlayer extends HTMLElement {
   static #todos = new Set();
 
@@ -13,9 +12,10 @@ class AudioPlayer extends HTMLElement {
   #ro = null;
   #corrigindoDuracao = false;
   #duracao = 0;
+  #hue = 320;
 
   static get observedAttributes() {
-    return ["src", "title", "hue"];
+    return ["src", "title", "hue", "capa"];
   }
 
   constructor() {
@@ -23,91 +23,146 @@ class AudioPlayer extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
       <style>
-        :host { display: block; --h: 285; }
-        .midia {
-          position: relative;
-          aspect-ratio: 1 / 1;
-          width: 100%;
-          background:
-            radial-gradient(circle at 20% 15%, rgba(255,255,255,.28), transparent 45%),
-            linear-gradient(135deg, hsl(var(--h) 88% 66%), hsl(calc(var(--h) + 45) 78% 46%));
-          color: #fff;
+        :host { display: block; --h: 320; }
+        .faixa {
           display: flex;
-          flex-direction: column;
           align-items: center;
-          justify-content: center;
-          gap: 22px;
-          padding: 28px 24px 96px;
+          gap: 20px;
+          padding: 18px;
+          border-radius: 18px;
+          background:
+            radial-gradient(circle at 0% 50%, hsl(var(--h) 100% 60% / .22), transparent 55%),
+            linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+          border: 1px solid hsl(var(--h) 100% 70% / .25);
           box-sizing: border-box;
           user-select: none;
-          overflow: hidden;
-          font-family: inherit;
+          color: #fff;
         }
-        :host([compacto]) .midia { aspect-ratio: auto; min-height: 230px; border-radius: 12px; padding-bottom: 92px; }
+        /* ---------- disco ---------- */
+        .disco {
+          position: relative;
+          width: 118px; height: 118px;
+          flex-shrink: 0;
+          border-radius: 50%;
+          background: repeating-radial-gradient(circle at center, #0c0c10 0 2px, #1c1b24 2px 3.5px);
+          box-shadow: 0 0 0 2px #000, 0 10px 26px rgba(0,0,0,.55), 0 0 26px hsl(var(--h) 100% 60% / .35);
+          animation: girar 1.9s linear infinite;
+          animation-play-state: paused;
+        }
+        .disco.girando { animation-play-state: running; }
+        .disco::after {
+          content: "";
+          position: absolute; inset: 0;
+          border-radius: 50%;
+          background: conic-gradient(from 20deg, transparent 0 30deg, rgba(255,255,255,.16) 50deg, transparent 75deg,
+                                     transparent 200deg, rgba(255,255,255,.10) 225deg, transparent 250deg);
+          pointer-events: none;
+        }
+        .rotulo {
+          position: absolute;
+          inset: 29%;
+          border-radius: 50%;
+          overflow: hidden;
+          background: hsl(var(--h) 100% 60%);
+          box-shadow: 0 0 0 3px hsl(var(--h) 100% 60%);
+        }
+        .rotulo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .furo {
+          position: absolute;
+          left: 50%; top: 50%;
+          width: 9px; height: 9px;
+          margin: -4.5px 0 0 -4.5px;
+          border-radius: 50%;
+          background: #120726;
+          box-shadow: 0 0 0 2px rgba(255,255,255,.5);
+        }
+        @keyframes girar { to { transform: rotate(360deg); } }
+
+        /* ---------- informações ---------- */
+        .info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
         .titulo {
-          font-size: clamp(18px, 4.4vw, 26px);
-          font-weight: 700;
+          font-family: "Righteous", "Rubik", system-ui, sans-serif;
+          font-size: 19px;
           line-height: 1.25;
-          text-align: center;
-          text-shadow: 0 2px 12px rgba(0,0,0,.18);
-          max-width: 90%;
+          color: #fff;
+          text-shadow: 0 0 12px hsl(var(--h) 100% 60% / .7);
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
           word-break: break-word;
         }
-        .titulo[hidden] { display: none; }
+        canvas { display: block; width: 100%; height: 42px; cursor: pointer; }
+        .linha { display: flex; align-items: center; gap: 12px; }
         .play {
-          width: 84px; height: 84px;
+          width: 46px; height: 46px;
           border-radius: 50%;
-          border: 2px solid rgba(255,255,255,.7);
-          background: rgba(255,255,255,.2);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
-          color: #fff;
+          border: 0;
           cursor: pointer;
+          color: #120726;
+          background: linear-gradient(135deg, hsl(var(--h) 100% 72%), hsl(calc(var(--h) + 35) 100% 58%));
+          box-shadow: 0 0 18px hsl(var(--h) 100% 60% / .65);
           display: grid;
           place-items: center;
-          transition: transform .15s ease, background .15s ease;
           flex-shrink: 0;
+          transition: transform .15s ease;
         }
-        .play:hover { transform: scale(1.06); background: rgba(255,255,255,.3); }
-        .play:active { transform: scale(.96); }
-        .play svg { width: 34px; height: 34px; fill: currentColor; }
+        .play:hover { transform: scale(1.08); }
+        .play:active { transform: scale(.94); }
+        .play svg { width: 22px; height: 22px; fill: currentColor; }
         .play .icone-pause { display: none; }
         .play.tocando .icone-play { display: none; }
         .play.tocando .icone-pause { display: block; }
-        .rodape {
-          position: absolute;
-          left: 20px; right: 20px; bottom: 16px;
-        }
-        canvas { display: block; width: 100%; height: 48px; cursor: pointer; }
         .tempos {
-          display: flex; justify-content: space-between;
-          font-size: 12px; font-weight: 600; opacity: .92; margin-top: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255,255,255,.75);
           font-variant-numeric: tabular-nums;
+          letter-spacing: .5px;
+        }
+        .tempos b { color: hsl(var(--h) 100% 75%); font-weight: 600; }
+        .vu { margin-left: auto; display: flex; gap: 3px; align-items: flex-end; height: 18px; opacity: 0; transition: opacity .2s; }
+        .vu.ligado { opacity: 1; }
+        .vu i { width: 4px; border-radius: 2px; background: hsl(var(--h) 100% 65%); animation: vu .8s ease-in-out infinite; }
+        .vu i:nth-child(2) { animation-delay: .15s; }
+        .vu i:nth-child(3) { animation-delay: .3s; }
+        .vu i:nth-child(4) { animation-delay: .45s; }
+        @keyframes vu { 0%,100% { height: 4px; } 50% { height: 18px; } }
+
+        @media (max-width: 480px) {
+          .faixa { gap: 14px; padding: 14px; }
+          .disco { width: 86px; height: 86px; }
+          .titulo { font-size: 16px; }
         }
       </style>
-      <div class="midia">
+      <div class="faixa">
         <audio preload="metadata"></audio>
-        <div class="titulo" hidden></div>
-        <button class="play" type="button" aria-label="Tocar">
-          <svg class="icone-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
-          <svg class="icone-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"/></svg>
-        </button>
-        <div class="rodape">
+        <div class="disco"><div class="rotulo"><img alt=""></div><div class="furo"></div></div>
+        <div class="info">
+          <div class="titulo"></div>
           <canvas></canvas>
-          <div class="tempos"><span class="atual">0:00</span><span class="total">0:00</span></div>
+          <div class="linha">
+            <button class="play" type="button" aria-label="Tocar">
+              <svg class="icone-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+              <svg class="icone-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"/></svg>
+            </button>
+            <span class="tempos"><b class="atual">0:00</b> / <span class="total">0:00</span></span>
+            <span class="vu"><i></i><i></i><i></i><i></i></span>
+          </div>
         </div>
       </div>`;
 
-    this.audio = this.shadowRoot.querySelector("audio");
-    this.tituloEl = this.shadowRoot.querySelector(".titulo");
-    this.botao = this.shadowRoot.querySelector(".play");
-    this.canvas = this.shadowRoot.querySelector("canvas");
-    this.atualEl = this.shadowRoot.querySelector(".atual");
-    this.totalEl = this.shadowRoot.querySelector(".total");
+    const r = this.shadowRoot;
+    this.audio = r.querySelector("audio");
+    this.tituloEl = r.querySelector(".titulo");
+    this.botao = r.querySelector(".play");
+    this.canvas = r.querySelector("canvas");
+    this.atualEl = r.querySelector(".atual");
+    this.totalEl = r.querySelector(".total");
+    this.discoEl = r.querySelector(".disco");
+    this.capaEl = r.querySelector(".rotulo img");
+    this.vuEl = r.querySelector(".vu");
+    this.capaEl.onerror = () => { this.capaEl.style.visibility = "hidden"; };
     this.#ligarEventos();
   }
 
@@ -118,10 +173,14 @@ class AudioPlayer extends HTMLElement {
       this.#gerarPicos(novo || "");
       this.#desenhar();
     } else if (nome === "title") {
-      this.tituloEl.textContent = novo || "";
-      this.tituloEl.hidden = !novo;
+      this.tituloEl.textContent = novo || "Áudio";
     } else if (nome === "hue") {
-      this.style.setProperty("--h", Number(novo) || 285);
+      this.#hue = Number(novo) || 320;
+      this.style.setProperty("--h", this.#hue);
+      this.#desenhar();
+    } else if (nome === "capa") {
+      this.capaEl.style.visibility = "";
+      if (novo) this.capaEl.src = novo; else this.capaEl.removeAttribute("src");
     }
   }
 
@@ -144,31 +203,30 @@ class AudioPlayer extends HTMLElement {
 
   // Forma de onda "fixa" (sempre igual para o mesmo áudio)
   #gerarPicos(texto) {
-    let semente = texto.length;
+    let semente = texto.length || 7;
     for (let i = 0; i < texto.length; i += Math.max(1, Math.floor(texto.length / 200))) {
       semente = (semente * 31 + texto.charCodeAt(i)) % 2147483647;
     }
     const aleatorio = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
-    this.#picos = Array.from({ length: 64 }, (_, i) => {
-      const onda = 0.55 + 0.45 * Math.sin(i / 3.2);
-      return 0.18 + 0.82 * Math.min(1, onda * (0.45 + aleatorio() * 0.75));
+    this.#picos = Array.from({ length: 48 }, (_, i) => {
+      const onda = 0.55 + 0.45 * Math.sin(i / 2.7);
+      return 0.2 + 0.8 * Math.min(1, onda * (0.45 + aleatorio() * 0.75));
     });
   }
 
   #ajustarCanvas() {
     const escala = window.devicePixelRatio || 1;
     const largura = this.canvas.clientWidth;
-    const altura = this.canvas.clientHeight;
     if (!largura) return;
     this.canvas.width = largura * escala;
-    this.canvas.height = altura * escala;
+    this.canvas.height = this.canvas.clientHeight * escala;
     this.#desenhar();
   }
 
   #desenhar() {
     const c = this.canvas;
-    const ctx = c.getContext("2d");
     if (!c.width || !this.#picos.length) return;
+    const ctx = c.getContext("2d");
 
     let energia = 0;
     if (this.#tocando && this.#analisador) {
@@ -180,8 +238,9 @@ class AudioPlayer extends HTMLElement {
 
     const n = this.#picos.length;
     const passo = c.width / n;
-    const larguraBarra = Math.max(2, passo * 0.55);
+    const larguraBarra = Math.max(2, passo * 0.5);
     const progresso = this.#duracao ? this.audio.currentTime / this.#duracao : 0;
+    const neon = `hsl(${this.#hue} 100% 66%)`;
 
     ctx.clearRect(0, 0, c.width, c.height);
     for (let i = 0; i < n; i++) {
@@ -190,10 +249,13 @@ class AudioPlayer extends HTMLElement {
         const idx = Math.floor((i / n) * this.#dados.length * 0.6);
         altura = Math.min(1, altura * (0.55 + energia * 0.9) + (this.#dados[idx] / 255) * 0.35);
       }
-      const h = Math.max(larguraBarra, altura * c.height);
+      const h = Math.max(larguraBarra, altura * c.height * 0.86);
       const x = i * passo + (passo - larguraBarra) / 2;
       const y = (c.height - h) / 2;
-      ctx.fillStyle = i / n <= progresso ? "rgba(255,255,255,1)" : "rgba(255,255,255,.45)";
+      const tocado = i / n <= progresso;
+      ctx.fillStyle = tocado ? neon : "rgba(255,255,255,.22)";
+      ctx.shadowColor = tocado ? neon : "transparent";
+      ctx.shadowBlur = tocado ? 8 : 0;
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, larguraBarra, h, larguraBarra / 2);
       else ctx.rect(x, y, larguraBarra, h);
@@ -248,6 +310,7 @@ class AudioPlayer extends HTMLElement {
 
   #ligarEventos() {
     this.botao.addEventListener("click", () => this.alternar());
+    this.discoEl.addEventListener("click", () => this.alternar());
 
     this.canvas.addEventListener("click", (ev) => {
       if (!this.#duracao) return;
@@ -281,12 +344,16 @@ class AudioPlayer extends HTMLElement {
     this.audio.addEventListener("play", () => {
       this.#tocando = true;
       this.botao.classList.add("tocando");
+      this.discoEl.classList.add("girando");
+      this.vuEl.classList.add("ligado");
       this.botao.setAttribute("aria-label", "Pausar");
       this.#animar();
     });
     this.audio.addEventListener("pause", () => {
       this.#tocando = false;
       this.botao.classList.remove("tocando");
+      this.discoEl.classList.remove("girando");
+      this.vuEl.classList.remove("ligado");
       this.botao.setAttribute("aria-label", "Tocar");
       this.#desenhar();
     });

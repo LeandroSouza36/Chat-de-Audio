@@ -38,21 +38,20 @@ include('partes/head.php');
 <body>
 <?php include('partes/menu.php'); ?>
 
-<main class="principal">
-    <div class="pagina-estreita">
-        <h1 class="titulo-pagina">Notificações</h1>
+<main class="centro">
+        <h1 class="titulo-pagina titulo-neon">Notificações</h1>
 
         <?php if (count($solicitacoes) === 0 && count($atividades) === 0): ?>
-            <div class="vazio">
-                <div class="vazio-icone"><i class="bi bi-heart"></i></div>
+            <div class="cartao vazio">
+                <div class="vazio-icone"><i class="bi bi-bell"></i></div>
                 <h2>Atividade nos seus áudios</h2>
                 <p>Quando alguém der estrela nos seus áudios ou pedir sua amizade, você verá aqui.</p>
             </div>
         <?php endif; ?>
 
         <?php if (count($solicitacoes) > 0): ?>
-            <h2 class="subtitulo">Solicitações de amizade</h2>
-            <div class="lista">
+            <h2 class="secao-titulo"><i class="bi bi-person-plus-fill"></i> Querem dançar com você</h2>
+            <div class="cartao lista">
                 <?php foreach ($solicitacoes as $s): $link = 'perfil.php?user=' . rawurlencode($s['usuario']); ?>
                     <div class="item-lista">
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($s['arquivo'], 'avatar avatar-44'); ?></a>
@@ -63,11 +62,11 @@ include('partes/head.php');
                         <div class="item-botoes">
                             <form action="notificacoesAdicionar.php" method="POST" class="form-inline">
                                 <input name="adicionar" type="hidden" value="<?php echo e($s['usuario']); ?>">
-                                <button type="submit" class="botao botao-azul botao-pequeno">Confirmar</button>
+                                <button type="submit" class="botao botao-neon botao-pequeno">Confirmar</button>
                             </form>
                             <form action="notificacoesExcluir.php" method="POST" class="form-inline">
                                 <input name="excluir" type="hidden" value="<?php echo e($s['usuario']); ?>">
-                                <button type="submit" class="botao botao-cinza botao-pequeno">Excluir</button>
+                                <button type="submit" class="botao botao-contorno botao-pequeno">Excluir</button>
                             </form>
                         </div>
                     </div>
@@ -76,8 +75,8 @@ include('partes/head.php');
         <?php endif; ?>
 
         <?php if (count($atividades) > 0): ?>
-            <h2 class="subtitulo">Atividade</h2>
-            <div class="lista">
+            <h2 class="secao-titulo"><i class="bi bi-stars"></i> Estrelas recebidas</h2>
+            <div class="cartao lista">
                 <?php foreach ($atividades as $a): $link = 'perfil.php?user=' . rawurlencode($a['usuario']); ?>
                     <div class="item-lista">
                         <a href="<?php echo e($link); ?>"><?php echo imgAvatar($a['arquivo'], 'avatar avatar-44'); ?></a>
@@ -93,7 +92,6 @@ include('partes/head.php');
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
 </main>
 
 <?php include('partes/rodape.php'); ?>

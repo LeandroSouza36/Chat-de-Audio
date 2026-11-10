@@ -33,9 +33,10 @@ function tempoAtras($data) {
     return date('d/m/Y', strtotime($data));
 }
 
-// Cor do post (tons de rosa, roxo e azul), sempre a mesma para o mesmo áudio
+// Cor neon do post (rosa, roxo, ciano, amarelo, laranja...), sempre a mesma para o mesmo áudio
 function corDoPost($id) {
-    return 255 + (((int)$id * 37) % 70);
+    $neon = array(320, 275, 185, 48, 18, 295, 200, 340);
+    return $neon[((int)$id) % count($neon)];
 }
 
 // Volta para a página anterior (ou para a página padrão)
@@ -88,17 +89,17 @@ function statusAmizade($conn, $eu, $outro) {
 function botaoAmizade($status, $outro, $classeExtra = '') {
     $outro = e($outro);
     if ($status === 'amigo') {
-        return '<span class="botao botao-cinza ' . $classeExtra . '"><i class="bi bi-check2"></i> Amigos</span>';
+        return '<span class="botao botao-apagado ' . $classeExtra . '"><i class="bi bi-check2"></i> Amigos</span>';
     }
     if ($status === 'solicitado') {
-        return '<span class="botao botao-cinza ' . $classeExtra . '">Solicitado</span>';
+        return '<span class="botao botao-apagado ' . $classeExtra . '">Solicitado</span>';
     }
     if ($status === 'aguardando') {
         return '<form method="POST" action="notificacoesAdicionar.php" class="form-inline">'
              . '<input type="hidden" name="adicionar" value="' . $outro . '">'
-             . '<button type="submit" class="botao botao-azul ' . $classeExtra . '">Aceitar</button></form>';
+             . '<button type="submit" class="botao botao-neon ' . $classeExtra . '">Aceitar</button></form>';
     }
     return '<form method="POST" action="AdicionarAmigosConfirmar.php" class="form-inline">'
          . '<input type="hidden" name="adicionarAmigo" value="' . $outro . '">'
-         . '<button type="submit" class="botao botao-azul ' . $classeExtra . '">Adicionar</button></form>';
+         . '<button type="submit" class="botao botao-neon ' . $classeExtra . '">Adicionar</button></form>';
 }
