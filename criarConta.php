@@ -8,11 +8,28 @@ if(isset($_POST['usuario']) && isset($_POST['senha'])){
     $usuario = trim($_POST["usuario"]);
     $senha = md5(trim($_POST["senha"]));
 
-    $novo_nome = "";
+    $novo_nome = "padrao.svg"; // foto padrão se o usuário não enviar uma
 
-    if(isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0){
+    if($usuario === "" || trim($_POST["senha"]) === ""){
+        $msg = "Preencha usuário e senha.";
+    } else {
 
-        $extensao = strtolower(pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION));
+    // Verifica se o nome de usuário já existe
+    $stmtExiste = $conn->prepare("SELECT usuario_id FROM usuario WHERE usuario = ?");
+    $stmtExiste->bind_param("s", $usuario);
+    $stmtExiste->execute();
+    $jaExiste = $stmtExiste->get_result()->num_rows > 0;
+
+    if($jaExiste){
+        $msg = "Esse nome de usuário já existe. Escolha outro.";
+    } else {
+
+    $extensoesPermitidas = array("jpg", "jpeg", "png", "gif", "webp", "jfif");
+    $extensaoEnviada = isset($_FILES['arquivo']) ? strtolower(pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION)) : "";
+
+    if(isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0 && in_array($extensaoEnviada, $extensoesPermitidas)){
+
+        $extensao = $extensaoEnviada;
         $novo_nome = md5(time()) . "." . $extensao;
         $diretorio = "img/usuario/";
 
@@ -23,14 +40,17 @@ if(isset($_POST['usuario']) && isset($_POST['senha'])){
         move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio.$novo_nome);
     }
 
-    $sql_code = "INSERT INTO usuario (usuario, senha, arquivo, data) 
-                 VALUES('$usuario', '$senha','$novo_nome', NOW())";
+    $stmt = $conn->prepare("INSERT INTO usuario (usuario, senha, arquivo, data) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("sss", $usuario, $senha, $novo_nome);
 
-    if($conn->query($sql_code)){
-        $msg = "Arquivo Enviado com Sucesso!";
+    if($stmt->execute()){
+        $msg = "Conta criada com sucesso! <a href='index.php'>Fazer login</a>";
     } else {
         $msg = "Erro: " . $conn->error;
     }
+
+    } // fim do else (usuário não existe)
+    } // fim do else (campos preenchidos)
 }
 ?>
 

@@ -1,20 +1,22 @@
 <?php
 session_start();
 include('verifica_login.php');
-?>
-<?php
-  include_once("audioConexao.php");
-  $adicionarAmigo = $_POST["adicionarAmigo"];
-  $usuario = $_SESSION['usuario'];
+include_once("audioConexao.php");
 
-  $result_audioStory = "INSERT INTO amigos  (usuario, amigo, status) VALUES ('$usuario','$adicionarAmigo', 'solicitado')";
-  $resultado_audioStory = mysqli_query($conn, $result_audioStory);
+$adicionarAmigo = isset($_POST["adicionarAmigo"]) ? $_POST["adicionarAmigo"] : "";
+$usuario = $_SESSION['usuario'];
 
-  $result_audioStory2 = "INSERT INTO amigos  (usuario, amigo, status) VALUES ('$adicionarAmigo','$usuario', 'aguardando')";
-  $resultado_audioStory2 = mysqli_query($conn, $result_audioStory2);
+if ($adicionarAmigo !== "" && $adicionarAmigo !== $usuario) {
+    // Eu solicitei a amizade
+    $stmt = $conn->prepare("INSERT INTO amigos (usuario, amigo, status) VALUES (?, ?, 'solicitado')");
+    $stmt->bind_param("ss", $usuario, $adicionarAmigo);
+    $stmt->execute();
 
+    // O amigo está aguardando a minha confirmação aparecer para ele
+    $stmt2 = $conn->prepare("INSERT INTO amigos (usuario, amigo, status) VALUES (?, ?, 'aguardando')");
+    $stmt2->bind_param("ss", $adicionarAmigo, $usuario);
+    $stmt2->execute();
+}
 
-  echo "AMIGO ADICIONADO";
-
-  header('Location: AdicionarAmigos.php');
-  exit();
+header('Location: AdicionarAmigos.php');
+exit();
