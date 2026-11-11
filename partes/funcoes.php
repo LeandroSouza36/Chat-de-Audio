@@ -1,5 +1,8 @@
 <?php
 // Funções usadas em várias páginas
+require_once __DIR__ . '/arquivos.php';
+require_once __DIR__ . '/limites.php';
+require_once __DIR__ . '/bloqueios.php';
 
 // Escapa texto para mostrar no HTML com segurança
 function e($texto) {
@@ -69,8 +72,7 @@ function estrelasDoUsuario($conn, $usuario) {
 
 // Dados do usuário (foto etc.)
 function dadosUsuario($conn, $usuario) {
-    prepararBanco($conn);
-    $stmt = $conn->prepare("SELECT usuario, arquivo, data, bio FROM usuario WHERE usuario = ?");
+    $stmt = $conn->prepare("SELECT usuario, email, arquivo, data, bio FROM usuario WHERE usuario = ?");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
     return $stmt->get_result()->fetch_assoc();
@@ -97,11 +99,11 @@ function botaoAmizade($status, $outro, $classeExtra = '') {
     }
     if ($status === 'aguardando') {
         return '<form method="POST" action="notificacoesAdicionar.php" class="form-inline">'
-             . '<input type="hidden" name="adicionar" value="' . $outro . '">'
+             . campoCsrf() . '<input type="hidden" name="adicionar" value="' . $outro . '">'
              . '<button type="submit" class="botao botao-neon ' . $classeExtra . '">Aceitar</button></form>';
     }
     return '<form method="POST" action="AdicionarAmigosConfirmar.php" class="form-inline">'
-         . '<input type="hidden" name="adicionarAmigo" value="' . $outro . '">'
+         . campoCsrf() . '<input type="hidden" name="adicionarAmigo" value="' . $outro . '">'
          . '<button type="submit" class="botao botao-neon ' . $classeExtra . '">Adicionar</button></form>';
 }
 
@@ -118,41 +120,27 @@ function ecosDoUsuario($conn, $usuario) {
     return $ids;
 }
 
-// Cria as tabelas novas (ecos, comentários) em bancos criados antes desses recursos existirem
-function prepararBanco($conn) {
-    static $feito = false;
-    if ($feito || !$conn) return;
-    $feito = true;
-    $col = $conn->query("SHOW COLUMNS FROM usuario LIKE 'bio'");
-    if ($col && $col->num_rows == 0) {
-        $conn->query("ALTER TABLE usuario ADD COLUMN bio VARCHAR(160) NOT NULL DEFAULT ''");
-    }
-    $existe = $conn->query("SHOW TABLES LIKE 'comentarios'");
-    if ($existe && $existe->num_rows == 0) {
-        $conn->query("
-            CREATE TABLE IF NOT EXISTS `comentarios` (
-              `id` INT NOT NULL AUTO_INCREMENT,
-              `audio_id` INT NOT NULL,
-              `usuario` VARCHAR(220) NOT NULL,
-              `audio` LONGBLOB NOT NULL,
-              `data` DATETIME DEFAULT CURRENT_TIMESTAMP,
-              PRIMARY KEY (`id`),
-              KEY `por_audio` (`audio_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ");
-    }
-    $existe = $conn->query("SHOW TABLES LIKE 'ecos'");
-    if ($existe && $existe->num_rows == 0) {
-        $conn->query("
-            CREATE TABLE IF NOT EXISTS `ecos` (
-              `id` INT NOT NULL AUTO_INCREMENT,
-              `audio_id` INT NOT NULL,
-              `usuario` VARCHAR(220) NOT NULL,
-              `data` DATETIME DEFAULT CURRENT_TIMESTAMP,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `unico_eco` (`audio_id`, `usuario`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ");
+// O usuário logado é moderador? (lista em config.php)
+function ehModerador() {
+    return !empty($_SESSION['usuario']) && in_array($_SESSION['usuario'], (array)config('moderadores', array()), true);
+}
+
+// Responde em JSON e encerra
+function responderJson($dados) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($dados);
+    exit();
+}
+
+// Apaga stories com mais de 24 horas (e os arquivos de áudio deles)
+function limparStoriesVencidos($conn) {
+    $r = $conn->query("SELECT id, audio FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
+    if (!$r) return;
+    foreach ($r->fetch_all(MYSQLI_ASSOC) as $s) {
+        apagarArquivoEnviado($s['audio']);
+        $id = (int)$s['id'];
+        $d = $conn->prepare("DELETE FROM chataudiostory WHERE id = ?");
+        $d->bind_param("i", $id);
+        $d->execute();
     }
 }
-if (isset($conn)) prepararBanco($conn);

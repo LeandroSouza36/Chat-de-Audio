@@ -1,0 +1,14 @@
+# Senhas e configurações locais
+config.php
+
+# Arquivos enviados pelos usuários (fotos e áudios) não vão para o GitHub
+img/usuario/*
+!img/usuario/padrao.svg
+!img/usuario/.htaccess
+uploads/audios/*
+!uploads/audios/.gitkeep
+
+# Sistema
+.DS_Store
+Thumbs.db
+__MACOSX/

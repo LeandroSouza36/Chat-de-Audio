@@ -1,3 +1,19 @@
+// Proteção CSRF: toda chamada que altera dados manda o código secreto da sessão
+(function () {
+  const meta = document.querySelector('meta[name="csrf"]');
+  const token = meta ? meta.content : "";
+  const fetchOriginal = window.fetch.bind(window);
+  window.fetch = function (url, opcoes) {
+    opcoes = opcoes || {};
+    const metodo = (opcoes.method || "GET").toUpperCase();
+    if (metodo !== "GET") {
+      opcoes.headers = Object.assign({}, opcoes.headers || {}, { "X-CSRF-Token": token, "X-Requested-With": "fetch" });
+      opcoes.credentials = "same-origin";
+    }
+    return fetchOriginal(url, opcoes);
+  };
+})();
+
 // Interações das páginas: estrelas, compartilhar, janela de post e gravação de áudio.
 (function () {
   "use strict";
@@ -180,7 +196,6 @@
   const tempoGravacao = composer.querySelector("[data-tempo]");
   const areaPrevia = composer.querySelector("[data-previa]");
   const campoLegenda = composer.querySelector("[data-legenda]");
-  const formEnvio = document.getElementById("formEnvioAudio");
 
   let gravador = null;
   let fluxo = null;
@@ -188,6 +203,7 @@
   let inicio = 0;
   let timerGravacao = 0;
   let audioGravado = "";
+  let blobGravado = null;
   let modoStory = false; // true quando a gravação começou pelo botão de story
   const btnPublicar = composer.querySelector("[data-publicar]");
   const btnPublicarStory = composer.querySelector("[data-publicar-story]");
@@ -225,6 +241,7 @@
     gravador.onstop = () => {
       fluxo.getTracks().forEach((t) => t.stop());
       const blob = new Blob(pedacos, { type: gravador.mimeType || "audio/webm" });
+      blobGravado = blob;
       const leitor = new FileReader();
       leitor.onloadend = () => {
         audioGravado = leitor.result;
@@ -262,23 +279,41 @@
 
   function descartar() {
     audioGravado = "";
+    blobGravado = null;
     modoStory = false;
     areaPrevia.innerHTML = "";
     campoLegenda.value = "";
     mostrar("inicial");
   }
 
-  // modo: "feed" (post normal) ou "story" (some em 24h)
-  function publicar(modo) {
-    if (!audioGravado) return;
+  // modo: "feed" (post normal) ou "story" (some em 24h). O áudio vai como arquivo.
+  async function publicar(modo) {
+    if (!blobGravado) return;
     const botao = modo === "story" ? btnPublicarStory : btnPublicar;
-    formEnvio.action = modo === "story" ? "audioEnvioStory.php" : "audioEnvio.php";
-    formEnvio.querySelector('[name="audio"]').value = audioGravado;
-    formEnvio.querySelector('[name="textoAssunto"]').value = campoLegenda.value.trim();
+    const textoOriginal = botao.innerHTML;
     btnPublicar.disabled = true;
     btnPublicarStory.disabled = true;
     botao.textContent = "Publicando...";
-    formEnvio.submit();
+    const corpo = new FormData();
+    corpo.append("audio", blobGravado, "audio." + extensaoDe(blobGravado.type));
+    corpo.append("textoAssunto", campoLegenda.value.trim());
+    try {
+      const resp = await fetch(modo === "story" ? "audioEnvioStory.php" : "audioEnvio.php", { method: "POST", body: corpo });
+      const r = await resp.json();
+      if (!r.ok) throw new Error(r.erro || "Não foi possível publicar.");
+      location.href = modo === "story" ? "painel.php?story=ok" : "painel.php";
+    } catch (e) {
+      aviso(e.message || "Não foi possível publicar. Tente de novo.");
+      btnPublicar.disabled = false;
+      btnPublicarStory.disabled = false;
+      botao.innerHTML = textoOriginal;
+    }
+  }
+
+  function extensaoDe(tipo) {
+    if (tipo.includes("ogg")) return "ogg";
+    if (tipo.includes("mp4") || tipo.includes("aac")) return "m4a";
+    return "webm";
   }
 
   composer.querySelectorAll("[data-iniciar]").forEach((b) => b.addEventListener("click", iniciarGravacao));
@@ -398,6 +433,8 @@
     nome.textContent = r.usuario;
     nome.href = "perfil.php?user=" + encodeURIComponent(r.usuario);
     btnExcluir.hidden = !r.dono;
+    const btnDen = $("[data-sv-denunciar]");
+    if (btnDen) btnDen.hidden = r.dono;
     caixa.style.setProperty("--h", corDoUsuario(r.usuario));
 
     barras.innerHTML = r.stories.map(() => '<span class="story-barra"><i></i></span>').join("");
@@ -496,6 +533,15 @@
   $("[data-sv-anterior]").addEventListener("click", anterior);
   viewer.querySelectorAll("[data-sv-fechar]").forEach((b) => b.addEventListener("click", fechar));
 
+  const btnDenunciarStory = $("[data-sv-denunciar]");
+  if (btnDenunciarStory) {
+    btnDenunciarStory.addEventListener("click", () => {
+      audio.pause();
+      const s = dados.stories[idx];
+      if (window.abrirDenuncia) window.abrirDenuncia("story", s.id);
+    });
+  }
+
   btnExcluir.addEventListener("click", async () => {
     const s = dados.stories[idx];
     if (!confirm("Excluir este story?")) return;
@@ -570,6 +616,7 @@
             <a class="nome-usuario" href="perfil.php?user=${encodeURIComponent(k.usuario)}">${esc(k.usuario)}</a>
             <span class="texto-2">· ${esc(k.tempo)}</span>
             ${k.podeExcluir ? `<button type="button" class="botao-icone comentario-excluir" data-excluir-comentario="${k.id}" title="Excluir comentário"><i class="bi bi-trash3"></i></button>` : ""}
+            ${k.podeDenunciar ? `<button type="button" class="botao-icone comentario-excluir comentario-denunciar" data-denunciar="comentario" data-alvo="${k.id}" title="Denunciar comentário"><i class="bi bi-flag"></i></button>` : ""}
           </div>
           <audio-player mini src="${esc(k.audio)}" capa="${esc(k.avatar)}" hue="${corDe(k.usuario)}"></audio-player>
         </div>
@@ -643,13 +690,14 @@
     const pedacos = [];
     const inicio = Date.now();
     const tempoEl = painel.querySelector("[data-cg-tempo]");
-    gravacao = { painel, gravador, fluxo, timer: 0, dataUrl: "" };
+    gravacao = { painel, gravador, fluxo, timer: 0, dataUrl: "", blob: null };
 
     gravador.ondataavailable = (e) => e.data.size && pedacos.push(e.data);
     gravador.onstop = () => {
       clearInterval(gravacao.timer);
       fluxo.getTracks().forEach((t) => t.stop());
       const blob = new Blob(pedacos, { type: gravador.mimeType || "audio/webm" });
+      gravacao.blob = blob;
       const leitor = new FileReader();
       leitor.onloadend = () => {
         gravacao.dataUrl = leitor.result;
@@ -689,13 +737,14 @@
   }
 
   async function enviar(painel) {
-    if (!gravacao || !gravacao.dataUrl) return;
+    if (!gravacao || !gravacao.blob) return;
     const botao = painel.querySelector("[data-cg-enviar]");
     botao.disabled = true;
     botao.textContent = "Enviando...";
     const corpo = new FormData();
     corpo.append("id", painel.dataset.audioId);
-    corpo.append("audio", gravacao.dataUrl);
+    const tipo = gravacao.blob.type || "";
+    corpo.append("audio", gravacao.blob, "comentario." + (tipo.includes("ogg") ? "ogg" : tipo.includes("mp4") ? "m4a" : "webm"));
     try {
       const r = await (await fetch("comentarioEnviar.php", { method: "POST", body: corpo })).json();
       if (!r.ok) throw new Error(r.erro);
@@ -749,5 +798,59 @@
     else if (alvo.closest("[data-cg-descartar]")) descartar(painel);
     else if (alvo.closest("[data-cg-enviar]")) enviar(painel);
     else if (alvo.closest("[data-excluir-comentario]")) excluir(alvo.closest("[data-excluir-comentario]"));
+  });
+})();
+
+// ==========================================================
+// DENÚNCIAS
+// ==========================================================
+(function () {
+  "use strict";
+  const modal = document.getElementById("modalDenuncia");
+  if (!modal) return;
+  const form = document.getElementById("formDenuncia");
+  let alvo = null;
+
+  function abrir(tipo, id) {
+    alvo = { tipo, id };
+    form.reset();
+    modal.hidden = false;
+  }
+  function fechar() {
+    modal.hidden = true;
+    alvo = null;
+  }
+  window.abrirDenuncia = abrir;
+
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-denunciar]");
+    if (b) {
+      ev.preventDefault();
+      abrir(b.dataset.denunciar, b.dataset.alvo);
+      return;
+    }
+    if (ev.target.closest("[data-fechar-denuncia]")) fechar();
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && !modal.hidden) fechar();
+  });
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    if (!alvo) return;
+    const corpo = new FormData(form);
+    corpo.append("tipo", alvo.tipo);
+    corpo.append("alvo", alvo.id);
+    const botao = form.querySelector('[type="submit"]');
+    botao.disabled = true;
+    try {
+      const r = await (await fetch("denunciar.php", { method: "POST", body: corpo })).json();
+      if (!r.ok) throw new Error(r.erro);
+      fechar();
+      window.aviso && window.aviso("Denúncia enviada. Obrigado por ajudar a manter a pista segura!");
+    } catch (e) {
+      window.aviso && window.aviso((e && e.message) || "Não foi possível enviar a denúncia.");
+    }
+    botao.disabled = false;
   });
 })();

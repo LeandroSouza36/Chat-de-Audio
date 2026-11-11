@@ -1,53 +1,60 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include("audioConexao.php");
+include_once("partes/funcoes.php");
 
-$msg = false;
+if (!empty($_SESSION['usuario'])) {
+    header('Location: painel.php');
+    exit();
+}
 
-if (isset($_POST['usuario']) && isset($_POST['senha'])) {
+$msg = '';
 
-    $usuario = trim($_POST["usuario"]);
-    $senhaDigitada = trim($_POST["senha"]);
-    $senha = md5($senhaDigitada);
-    $novo_nome = "padrao.svg"; // foto padrão se o usuário não enviar uma
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    exigirPostComCsrf();
 
-    if ($usuario === "" || $senhaDigitada === "") {
-        $msg = "Preencha usuário e senha.";
-    } elseif (!preg_match('/^[A-Za-z0-9_.]{3,30}$/', $usuario)) {
+    $usuario = trim(isset($_POST["usuario"]) ? (string)$_POST["usuario"] : '');
+    $email = trim(isset($_POST["email"]) ? (string)$_POST["email"] : '');
+    $senha = isset($_POST["senha"]) ? (string)$_POST["senha"] : '';
+    $aceitou = !empty($_POST['aceito']);
+
+    if (!preg_match('/^[A-Za-z0-9_.]{3,30}$/', $usuario)) {
         $msg = "O nome de usuário deve ter de 3 a 30 caracteres: letras, números, ponto ou _ (sem espaços).";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
+        $msg = "Digite um e-mail válido. Ele serve para recuperar a sua senha.";
+    } elseif (strlen($senha) < 6) {
+        $msg = "A senha precisa ter pelo menos 6 caracteres.";
+    } elseif (!$aceitou) {
+        $msg = "Para criar a conta, aceite os Termos de uso e a Política de privacidade.";
+    } elseif (!permitirAcao($conn, 'cadastro', ipCliente())) {
+        $msg = "Muitas contas criadas a partir desta conexão. Tente de novo mais tarde.";
     } else {
-        // Verifica se o nome de usuário já existe
-        $stmtExiste = $conn->prepare("SELECT usuario_id FROM usuario WHERE usuario = ?");
-        $stmtExiste->bind_param("s", $usuario);
-        $stmtExiste->execute();
+        $stmt = $conn->prepare("SELECT usuario, email FROM usuario WHERE usuario = ? OR email = ?");
+        $stmt->bind_param("ss", $usuario, $email);
+        $stmt->execute();
+        $existe = $stmt->get_result()->fetch_assoc();
 
-        if ($stmtExiste->get_result()->num_rows > 0) {
-            $msg = "Esse nome de usuário já existe. Escolha outro.";
+        if ($existe) {
+            $msg = strcasecmp((string)$existe['email'], $email) === 0
+                ? "Já existe uma conta com esse e-mail. Use \"Esqueci minha senha\" se não lembrar dela."
+                : "Esse nome de usuário já existe. Escolha outro.";
         } else {
-            $extensoesPermitidas = array("jpg", "jpeg", "png", "gif", "webp", "jfif");
-
-            if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
-                $extensao = strtolower(pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION));
-                if (in_array($extensao, $extensoesPermitidas)) {
-                    $diretorio = "img/usuario/";
-                    if (!is_dir($diretorio)) {
-                        mkdir($diretorio, 0755, true);
-                    }
-                    $nomeArquivo = md5(time() . $usuario) . "." . $extensao;
-                    if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio . $nomeArquivo)) {
-                        $novo_nome = $nomeArquivo;
-                    }
+            $erroFoto = '';
+            $foto = salvarFotoEnviada(isset($_FILES['arquivo']) ? $_FILES['arquivo'] : null, $erroFoto);
+            if ($erroFoto !== '') {
+                $msg = $erroFoto;
+            } else {
+                $arquivo = $foto ? $foto : 'padrao.svg';
+                $hash = password_hash($senha, PASSWORD_DEFAULT);
+                $stmt = $conn->prepare("INSERT INTO usuario (usuario, email, senha, arquivo, data) VALUES (?, ?, ?, ?, NOW())");
+                $stmt->bind_param("ssss", $usuario, $email, $hash, $arquivo);
+                if ($stmt->execute()) {
+                    header('Location: index.php?cadastro=ok');
+                    exit();
                 }
+                if ($foto) apagarArquivoEnviado('img/usuario/' . $foto);
+                $msg = "Não foi possível criar a conta. Tente de novo.";
             }
-
-            $stmt = $conn->prepare("INSERT INTO usuario (usuario, senha, arquivo, data) VALUES (?, ?, ?, NOW())");
-            $stmt->bind_param("sss", $usuario, $senha, $novo_nome);
-
-            if ($stmt->execute()) {
-                header('Location: index.php?cadastro=ok');
-                exit();
-            }
-            $msg = "Erro: " . $conn->error;
         }
     }
 }
@@ -68,16 +75,24 @@ include('partes/head.php');
         <?php endif; ?>
 
         <form action="criarConta.php" method="POST" enctype="multipart/form-data">
+            <?php echo campoCsrf(); ?>
             <label class="foto-escolher">
                 <img class="avatar" id="previaFoto" src="img/usuario/padrao.svg" alt="">
-                <span>Escolher foto de perfil<small>Opcional · JPG, PNG, GIF ou WEBP</small></span>
-                <input type="file" name="arquivo" accept="image/*" id="campoFoto">
+                <span>Escolher foto de perfil<small>Opcional · JPG, PNG, GIF ou WEBP até 5 MB</small></span>
+                <input type="file" name="arquivo" accept="image/jpeg,image/png,image/gif,image/webp" id="campoFoto">
             </label>
             <label class="rotulo-campo" for="usuario">Usuário</label>
-            <input id="usuario" name="usuario" type="text" class="campo" placeholder="ex.: maria_silva" required
+            <input id="usuario" name="usuario" type="text" class="campo" placeholder="ex.: maria_silva" required maxlength="30"
                    value="<?php echo isset($_POST['usuario']) ? e($_POST['usuario']) : ''; ?>" autocomplete="username">
+            <label class="rotulo-campo" for="email">E-mail</label>
+            <input id="email" name="email" type="email" class="campo" placeholder="voce@email.com" required maxlength="190"
+                   value="<?php echo isset($_POST['email']) ? e($_POST['email']) : ''; ?>" autocomplete="email">
             <label class="rotulo-campo" for="senha">Senha</label>
-            <input id="senha" name="senha" type="password" class="campo" placeholder="••••••" required autocomplete="new-password">
+            <input id="senha" name="senha" type="password" class="campo" placeholder="mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+            <label class="aceite">
+                <input type="checkbox" name="aceito" value="1" required <?php echo !empty($_POST['aceito']) ? 'checked' : ''; ?>>
+                <span>Li e aceito os <a href="termos.php" target="_blank" class="link-neon">Termos de uso</a> e a <a href="privacidade.php" target="_blank" class="link-neon">Política de privacidade</a>.</span>
+            </label>
             <button type="submit" class="botao botao-neon"><i class="bi bi-stars"></i> Cadastrar</button>
         </form>
 

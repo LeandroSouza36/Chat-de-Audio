@@ -1,0 +1,24 @@
+# ==========================================================
+# Retroway — regras de segurança do Apache
+# ==========================================================
+
+# Não listar o conteúdo das pastas
+Options -Indexes
+
+# Arquivos que nunca podem ser abertos pelo navegador
+<FilesMatch "^(config\.php|config\.exemplo\.php|instalar\.php|bd\.sql|.*\.md|LICENSE|.*\.txt|\.git.*|\.ht.*)$">
+    Require all denied
+</FilesMatch>
+
+# Pastas internas
+RedirectMatch 404 ^/(.*/)?(partes|\.git)(/.*)?$
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Força HTTPS fora do computador local (o microfone só funciona com HTTPS)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(:[0-9]+)?$
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>

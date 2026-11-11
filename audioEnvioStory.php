@@ -1,20 +1,27 @@
 <?php
 // Publica um story (áudio que some depois de 24 horas)
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
+include_once("partes/funcoes.php");
+exigirPostComCsrf();
 
 $usuario = $_SESSION['usuario'];
-$audio = isset($_POST["audio"]) ? $_POST["audio"] : "";
 
-if ($audio !== "") {
-    $stmt = $conn->prepare("INSERT INTO chataudiostory (audio, usuario, data) VALUES (?, ?, NOW())");
-    $stmt->bind_param("ss", $audio, $usuario);
-    $stmt->execute();
+if (!permitirAcao($conn, 'story', $usuario)) {
+    responderJson(array('ok' => false, 'erro' => 'Você publicou muitos stories. Espere um pouco.'));
 }
 
-// Stories duram 24h: apaga os antigos
-$conn->query("DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
+$erro = '';
+$caminho = salvarAudioEnviado(isset($_FILES['audio']) ? $_FILES['audio'] : null, LIMITE_AUDIO_POST, $erro);
+if (!$caminho) responderJson(array('ok' => false, 'erro' => $erro));
 
-header('Location: painel.php?story=ok');
-exit();
+$stmt = $conn->prepare("INSERT INTO chataudiostory (audio, usuario, data) VALUES (?, ?, NOW())");
+$stmt->bind_param("ss", $caminho, $usuario);
+if (!$stmt->execute()) {
+    apagarArquivoEnviado($caminho);
+    responderJson(array('ok' => false, 'erro' => 'Não foi possível publicar o story.'));
+}
+
+limparStoriesVencidos($conn);
+responderJson(array('ok' => true));

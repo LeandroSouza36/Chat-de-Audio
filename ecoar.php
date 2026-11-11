@@ -2,10 +2,11 @@
 // Ecoa (ou desfaz o eco) de um áudio: ele passa a aparecer no perfil de quem ecoou,
 // com a frase "fulano ecoou o áudio de x".
 // Chamado pelo JavaScript (responde em JSON) ou por formulário (volta para a página).
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
+exigirPostComCsrf();
 
 $id = isset($_POST["eco"]) ? (int)$_POST["eco"] : 0;
 $eu = $_SESSION['usuario'];
@@ -22,6 +23,8 @@ $audio = $stmt->get_result()->fetch_assoc();
 
 if (!$audio) {
     $erro = 'Esse áudio não existe mais.';
+} elseif (haBloqueio($conn, $eu, $audio['usuario'])) {
+    $erro = 'Você não pode ecoar este áudio.';
 } elseif ($audio['usuario'] === $eu) {
     $erro = 'Você não pode ecoar o seu próprio áudio.';
 } else {

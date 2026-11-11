@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");

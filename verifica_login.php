@@ -1,8 +1,13 @@
 <?php
+// Bloqueia páginas para quem não entrou na conta
+require_once __DIR__ . '/partes/inicio.php';
 if (empty($_SESSION['usuario'])) {
-    // descobre o caminho até a raiz do projeto (para funcionar também dentro de "partes/")
-    $raiz = (basename(dirname($_SERVER['PHP_SELF'])) === 'partes') ? '../' : '';
-    header('Location: ' . $raiz . 'index.php');
+    if (querJson()) {
+        http_response_code(401);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(array('ok' => false, 'erro' => 'Você precisa entrar na sua conta.'));
+    } else {
+        header('Location: index.php');
+    }
     exit();
 }
-?>

@@ -1,12 +1,13 @@
 <?php
-session_start();
+// Recusa um pedido de amizade (ou desfaz uma amizade): apaga os dois registros entre os usuários
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
+exigirPostComCsrf();
 
-// Recusa uma solicitação de amizade: apaga os dois registros entre os usuários
 $usuario = $_SESSION['usuario'];
-$amigoExcluir = isset($_POST["excluir"]) ? $_POST["excluir"] : "";
+$amigoExcluir = isset($_POST["excluir"]) ? (string)$_POST["excluir"] : "";
 
 if ($amigoExcluir !== "") {
     $stmt = $conn->prepare("DELETE FROM amigos WHERE (usuario = ? AND amigo = ?) OR (usuario = ? AND amigo = ?)");
