@@ -1028,36 +1028,55 @@ textarea.campo { resize: vertical; min-height: 84px; line-height: 1.45; }
 }
 
 /* ==========================================================
-   DISCO MINIMALISTA (paradas, notificações, stories, login)
+   DISCO = FOTO DE PERFIL (paradas, stories) e minimalista (notificações, login)
    ========================================================== */
-.mini-disco,
 .mini-post {
   background: radial-gradient(circle, #fff 0 2.5px, hsl(var(--h) 80% 62%) 3px 31%, #231d31 32%);
   box-shadow: none;
 }
-.mini-disco-capa { display: none; }
-.mini-post::after { display: none; }
-.mini-post i { display: none; }
-.vitrine-discos .mini-disco { box-shadow: none; }
-.vitrine-discos .mini-disco span { display: none; }
+.mini-post::after, .mini-post i { display: none; }
 
+/* Paradas: a foto da pessoa vira o disco */
+.mini-disco { background: #231d31; box-shadow: 0 2px 6px rgba(28, 21, 48, .15); overflow: hidden; }
+.mini-disco-capa { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: none; }
+.mini-disco::after {
+  content: "";
+  position: relative;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 18%, hsl(var(--h) 80% 62%) 20%);
+  box-shadow: 0 0 0 2px #fff;
+}
+/* discos decorativos do login (sem foto) */
+.vitrine-discos .mini-disco { box-shadow: none; background: radial-gradient(circle, #fff 0 2.5px, hsl(var(--h) 80% 62%) 3px 31%, #231d31 32%); }
+.vitrine-discos .mini-disco::after, .vitrine-discos .mini-disco span { display: none; }
+
+/* Stories: a foto da pessoa vira o disco */
 .story-disco {
-  width: min(190px, 52vw);
-  background: radial-gradient(circle, hsl(var(--h) 80% 62%) 0 31%, #231d31 32%);
+  width: min(200px, 54vw);
+  background: #231d31;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .35);
+  overflow: hidden;
+}
+.story-disco img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
   box-shadow: none;
 }
-.story-disco::after { background: none; inset: 17%; border: 1px solid rgba(255, 255, 255, .09); }
-.story-disco img { display: none; }
-.story-furo { width: 8px; height: 8px; margin: -4px 0 0 -4px; }
-.story-disco::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 36%;
-  width: 5px;
-  height: 5px;
-  margin-left: -2.5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .9);
+.story-disco::after { display: none; }
+.story-disco::before { display: none; }
+.story-furo {
+  width: 28%;
+  height: 28%;
+  margin: -14% 0 0 -14%;
+  background: radial-gradient(circle, #fff 0 14%, hsl(var(--h) 80% 62%) 16%);
+  box-shadow: 0 0 0 3px #fff;
   z-index: 1;
 }
+
