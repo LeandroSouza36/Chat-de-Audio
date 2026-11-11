@@ -36,14 +36,15 @@ class AudioPlayer extends HTMLElement {
           user-select: none;
           color: #1c1530;
         }
-        /* ---------- disco (minimalista) ---------- */
+        /* ---------- disco: a foto de perfil é o disco ---------- */
         .disco {
           position: relative;
           width: 76px; height: 76px;
           flex-shrink: 0;
           border-radius: 50%;
           cursor: pointer;
-          background: #231d31;
+          background: #231d31 center / cover no-repeat;
+          box-shadow: 0 2px 8px rgba(28, 21, 48, .15);
           animation: girar 2.4s linear infinite;
           animation-play-state: paused;
         }
@@ -51,33 +52,24 @@ class AudioPlayer extends HTMLElement {
         .disco::after {
           content: "";
           position: absolute;
-          inset: 17%;
+          inset: 0;
           border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, .09);
+          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
           pointer-events: none;
         }
         .rotulo {
           position: absolute;
-          inset: 33%;
+          inset: 36%;
           border-radius: 50%;
           background: hsl(var(--h) 80% 62%);
+          box-shadow: 0 0 0 2px #fff;
         }
         .rotulo img { display: none; }
-        /* pontinho que mostra o disco girando */
-        .rotulo::after {
-          content: "";
-          position: absolute;
-          left: 50%; top: 14%;
-          width: 3px; height: 3px;
-          margin-left: -1.5px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, .9);
-        }
         .furo {
           position: absolute;
           left: 50%; top: 50%;
-          width: 6px; height: 6px;
-          margin: -3px 0 0 -3px;
+          width: 5px; height: 5px;
+          margin: -2.5px 0 0 -2.5px;
           border-radius: 50%;
           background: #fff;
         }
@@ -133,10 +125,9 @@ class AudioPlayer extends HTMLElement {
 
         /* versão compacta (comentários) */
         :host([mini]) .faixa { gap: 10px; padding: 8px 12px 8px 8px; border-radius: 12px; }
-        :host([mini]) .disco { width: 38px; height: 38px; }
-        :host([mini]) .disco::after { display: none; }
-        :host([mini]) .rotulo::after { display: none; }
-        :host([mini]) .furo { width: 4px; height: 4px; margin: -2px 0 0 -2px; }
+        :host([mini]) .disco { width: 38px; height: 38px; box-shadow: none; }
+        :host([mini]) .rotulo { inset: 34%; box-shadow: 0 0 0 1.5px #fff; }
+        :host([mini]) .furo { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; }
         :host([mini]) .titulo { display: none; }
         :host([mini]) .info { flex-direction: row; align-items: center; gap: 10px; }
         :host([mini]) canvas { height: 26px; flex: 1; min-width: 60px; order: 2; }
@@ -196,8 +187,12 @@ class AudioPlayer extends HTMLElement {
       this.style.setProperty("--h", this.#hue);
       this.#desenhar();
     } else if (nome === "capa") {
-      this.capaEl.style.visibility = "";
-      if (novo) this.capaEl.src = novo; else this.capaEl.removeAttribute("src");
+      this.discoEl.style.backgroundImage = "";
+      if (novo) {
+        const teste = new Image();
+        teste.onload = () => { this.discoEl.style.backgroundImage = `url("${novo.replace(/"/g, '%22')}")`; };
+        teste.src = novo;
+      }
     }
   }
 

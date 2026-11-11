@@ -231,6 +231,8 @@
         areaPrevia.innerHTML = "";
         const player = document.createElement("audio-player");
         player.setAttribute("compacto", "");
+        const fotoTopo = document.querySelector(".topo-perfil img");
+        if (fotoTopo) player.setAttribute("capa", fotoTopo.getAttribute("src"));
         player.setAttribute("hue", String(250 + Math.floor(Math.random() * 90)));
         player.setAttribute("src", audioGravado);
         areaPrevia.appendChild(player);
@@ -569,7 +571,7 @@
             <span class="texto-2">· ${esc(k.tempo)}</span>
             ${k.podeExcluir ? `<button type="button" class="botao-icone comentario-excluir" data-excluir-comentario="${k.id}" title="Excluir comentário"><i class="bi bi-trash3"></i></button>` : ""}
           </div>
-          <audio-player mini src="${esc(k.audio)}" hue="${corDe(k.usuario)}"></audio-player>
+          <audio-player mini src="${esc(k.audio)}" capa="${esc(k.avatar)}" hue="${corDe(k.usuario)}"></audio-player>
         </div>
       </div>`;
   }
@@ -656,6 +658,7 @@
         const player = document.createElement("audio-player");
         player.setAttribute("mini", "");
         player.setAttribute("hue", "275");
+        player.setAttribute("capa", meuAvatar());
         player.setAttribute("src", leitor.result);
         area.appendChild(player);
         mostrarEstado(painel, "previa");
