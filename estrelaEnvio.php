@@ -1,16 +1,26 @@
 <?php
 // Dá ou tira a estrela de um áudio.
 // Chamado pelo JavaScript (responde em JSON) ou por formulário (volta para a página).
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
+exigirPostComCsrf();
 
 $id = isset($_POST["estrela"]) ? (int)$_POST["estrela"] : 0;
 $usuario = $_SESSION['usuario'];
 $curtiu = false;
 $total = 0;
 $ok = false;
+
+// não pode dar estrela em áudio de quem bloqueou você (ou que você bloqueou)
+if ($id > 0) {
+    $dono = $conn->prepare("SELECT usuario FROM chataudio WHERE id = ?");
+    $dono->bind_param("i", $id);
+    $dono->execute();
+    $linhaDono = $dono->get_result()->fetch_assoc();
+    if (!$linhaDono || haBloqueio($conn, $usuario, $linhaDono['usuario'])) $id = 0;
+}
 
 if ($id > 0) {
     $verificar = $conn->prepare("SELECT id FROM estrelas WHERE audio_id = ? AND usuario = ?");

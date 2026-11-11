@@ -10,10 +10,17 @@ $menuDados = dadosUsuario($conn, $menuUsuario);
 $menuAvatar = $menuDados ? $menuDados['arquivo'] : '';
 
 // Quantidade de solicitações de amizade pendentes
-$stmtNotif = $conn->prepare("SELECT COUNT(*) AS total FROM amigos WHERE amigo = ? AND status = 'solicitado'");
-$stmtNotif->bind_param("s", $menuUsuario);
+$stmtNotif = $conn->prepare("SELECT COUNT(*) AS total FROM amigos WHERE amigo = ? AND status = 'solicitado'" . filtroBloqueio('usuario'));
+$stmtNotif->bind_param("sss", $menuUsuario, $menuUsuario, $menuUsuario);
 $stmtNotif->execute();
 $numeroNotificacoes = (int)$stmtNotif->get_result()->fetch_assoc()['total'];
+
+// Denúncias abertas (só para moderadores)
+$numeroDenuncias = 0;
+if (ehModerador()) {
+    $rDen = $conn->query("SELECT COUNT(*) AS total FROM denuncias WHERE status = 'aberta'");
+    if ($rDen) $numeroDenuncias = (int)$rDen->fetch_assoc()['total'];
+}
 
 // Página atual, para destacar o item do menu
 $paginaAtual = basename($_SERVER['PHP_SELF']);
@@ -53,7 +60,10 @@ $badge = $numeroNotificacoes > 0 ? '<span class="badge-notif">' . $numeroNotific
                 <?php echo imgAvatar($menuAvatar, 'avatar avatar-36'); ?>
                 <span><?php echo e($menuUsuario); ?></span>
             </a>
-            <a href="logout.php" class="topo-icone" title="Sair"><i class="bi bi-box-arrow-right"></i></a>
+            <form method="POST" action="logout.php" class="form-inline">
+                <?php echo campoCsrf(); ?>
+                <button type="submit" class="topo-icone botao-sem-fundo" title="Sair"><i class="bi bi-box-arrow-right"></i></button>
+            </form>
         </div>
     </div>
 </header>
@@ -69,6 +79,9 @@ $badge = $numeroNotificacoes > 0 ? '<span class="badge-notif">' . $numeroNotific
         <?php echo itemMenu('AdicionarAmigos.php', $paginaAtual, 'bi-search', 'Procurar pessoas', false); ?>
         <?php echo itemMenu('notificacoes.php', $paginaAtual, 'bi-bell', 'Notificações', true, $badge); ?>
         <?php echo itemMenu('perfil.php', $paginaAtual, 'bi-person', 'Meu perfil'); ?>
+        <?php if (ehModerador()): ?>
+            <?php echo itemMenu('moderacao.php', $paginaAtual, 'bi-shield-check', 'Moderação', false, $numeroDenuncias > 0 ? '<span class="badge-notif">' . $numeroDenuncias . '</span>' : ''); ?>
+        <?php endif; ?>
 
         <a href="painel.php#gravar" class="botao botao-neon botao-largo menu-gravar" data-gravar>
             <i class="bi bi-mic-fill"></i> Gravar áudio

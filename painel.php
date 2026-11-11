@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
@@ -9,25 +9,37 @@ $meusDados = dadosUsuario($conn, $eu);
 $minhasEstrelas = estrelasDoUsuario($conn, $eu);
 $meusEcos = ecosDoUsuario($conn, $eu);
 
-// Feed: todos os áudios, do mais novo para o mais antigo
-$conAudio = $conn->query("
+// Feed: áudios do mais novo para o mais antigo, 15 por página, sem quem está bloqueado
+define('POR_PAGINA', 15);
+$antes = isset($_GET['antes']) ? (int)$_GET['antes'] : 0;
+$sqlFeed = "
     SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
-           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
+           (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos,
+           (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
     FROM chataudio c
     INNER JOIN usuario u ON c.usuario = u.usuario
-    ORDER BY c.data DESC, c.id DESC
-") or die($conn->error);
+    WHERE " . ($antes > 0 ? "c.id < ?" : "c.id > ?") . filtroBloqueio('c.usuario') . "
+    ORDER BY c.id DESC
+    LIMIT " . (POR_PAGINA + 1);
+$stmtFeed = $conn->prepare($sqlFeed);
+$stmtFeed->bind_param("iss", $antes, $eu, $eu);
+$stmtFeed->execute();
+$feed = $stmtFeed->get_result()->fetch_all(MYSQLI_ASSOC);
+$temMais = count($feed) > POR_PAGINA;
+if ($temMais) array_pop($feed);
+$proximoAntes = count($feed) ? (int)$feed[count($feed) - 1]['id'] : 0;
 
-// Stories: apaga os vencidos e busca quem tem story nas últimas 24h (os meus primeiro)
-$conn->query("DELETE FROM chataudiostory WHERE data < NOW() - INTERVAL 24 HOUR");
+// Stories: apaga os vencidos e busca quem tem story nas últimas 24h
+limparStoriesVencidos($conn);
 $stmtStories = $conn->prepare("
     SELECT s.usuario, u.arquivo, MAX(s.id) AS ultimoId, MAX(s.data) AS ultimo
     FROM chataudiostory s
     INNER JOIN usuario u ON u.usuario = s.usuario
-    WHERE s.data >= NOW() - INTERVAL 24 HOUR
+    WHERE s.data >= NOW() - INTERVAL 24 HOUR" . filtroBloqueio('s.usuario') . "
     GROUP BY s.usuario, u.arquivo
     ORDER BY ultimo DESC
 ");
+$stmtStories->bind_param("ss", $eu, $eu);
 $stmtStories->execute();
 $meuStory = null;
 $storiesOutros = array();
@@ -46,26 +58,30 @@ $stmtNum->bind_param("sss", $eu, $eu, $eu);
 $stmtNum->execute();
 $meusNumeros = $stmtNum->get_result()->fetch_assoc();
 
-// Sugestões: pessoas que ainda não têm relação de amizade comigo
+// Sugestões: pessoas que ainda não têm relação de amizade comigo (e sem bloqueio)
 $stmtSug = $conn->prepare("
     SELECT u.usuario, u.arquivo
     FROM usuario u
     WHERE u.usuario <> ?
-      AND u.usuario NOT IN (SELECT amigo FROM amigos WHERE usuario = ?)
+      AND u.usuario NOT IN (SELECT amigo FROM amigos WHERE usuario = ?)" . filtroBloqueio('u.usuario') . "
     ORDER BY u.data DESC
     LIMIT 4
 ");
-$stmtSug->bind_param("ss", $eu, $eu);
+$stmtSug->bind_param("ssss", $eu, $eu, $eu, $eu);
 $stmtSug->execute();
 $sugestoes = $stmtSug->get_result();
 
 // Top 3 das paradas (mais estrelados)
-$top = $conn->query("
+$stmtTop = $conn->prepare("
     SELECT c.id, c.usuario, c.assunto, c.estrela
     FROM chataudio c
+    WHERE 1 = 1" . filtroBloqueio('c.usuario') . "
     ORDER BY c.estrela DESC, c.data DESC
     LIMIT 3
 ");
+$stmtTop->bind_param("ss", $eu, $eu);
+$stmtTop->execute();
+$top = $stmtTop->get_result();
 
 $tituloPagina = 'Início';
 $comDireita = true;
@@ -136,13 +152,8 @@ include('partes/head.php');
         </div>
     </section>
 
-    <form id="formEnvioAudio" method="POST" action="audioEnvio.php" hidden>
-        <input type="hidden" name="audio">
-        <input type="hidden" name="textoAssunto">
-    </form>
-
     <!-- FEED -->
-    <?php if ($conAudio->num_rows === 0): ?>
+    <?php if (count($feed) === 0 && $antes === 0): ?>
         <div class="cartao vazio">
             <div class="vazio-icone"><i class="bi bi-vinyl"></i></div>
             <h2>A pista está vazia</h2>
@@ -150,9 +161,15 @@ include('partes/head.php');
         </div>
     <?php endif; ?>
 
-    <?php while ($dado = $conAudio->fetch_assoc()): ?>
+    <?php foreach ($feed as $dado): ?>
         <?php include('partes/painelAudio.php'); ?>
-    <?php endwhile; ?>
+    <?php endforeach; ?>
+
+    <?php if ($temMais): ?>
+        <a class="cartao carregar-mais" href="painel.php?antes=<?php echo $proximoAntes; ?>">Ver áudios mais antigos <i class="bi bi-chevron-right"></i></a>
+    <?php elseif ($antes > 0): ?>
+        <p class="fim-feed texto-2">Você chegou ao fim. <a href="painel.php" class="link-neon">Voltar ao início</a></p>
+    <?php endif; ?>
 </main>
 
 <!-- COLUNA DA DIREITA -->
@@ -194,6 +211,7 @@ include('partes/head.php');
                     <small>Sugestão para você</small>
                 </div>
                 <form method="POST" action="AdicionarAmigosConfirmar.php" class="form-inline">
+                    <?php echo campoCsrf(); ?>
                     <input type="hidden" name="adicionarAmigo" value="<?php echo e($sug['usuario']); ?>">
                     <button type="submit" class="botao-link">Adicionar</button>
                 </form>
@@ -202,7 +220,7 @@ include('partes/head.php');
     </div>
     <?php endif; ?>
 
-    <div class="rodape-texto">© <?php echo date('Y'); ?> Retroway · feito com ♫</div>
+    <div class="rodape-texto">© <?php echo date('Y'); ?> Retroway · <a href="termos.php">Termos</a> · <a href="privacidade.php">Privacidade</a></div>
 </aside>
 
 <?php include('partes/storyViewer.php'); ?>

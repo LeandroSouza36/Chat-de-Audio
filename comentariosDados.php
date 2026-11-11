@@ -1,6 +1,6 @@
 <?php
 // Lista (em JSON) os comentários em áudio de um post
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
@@ -8,21 +8,21 @@ include_once("partes/funcoes.php");
 $eu = $_SESSION['usuario'];
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// Dono do post (pode apagar qualquer comentário do próprio post)
 $stmtDono = $conn->prepare("SELECT usuario FROM chataudio WHERE id = ?");
 $stmtDono->bind_param("i", $id);
 $stmtDono->execute();
 $post = $stmtDono->get_result()->fetch_assoc();
-$donoPost = $post ? $post['usuario'] : '';
+if (!$post || haBloqueio($conn, $eu, $post['usuario'])) responderJson(array('ok' => false, 'comentarios' => array()));
+$donoPost = $post['usuario'];
 
 $stmt = $conn->prepare("
     SELECT k.id, k.usuario, k.audio, k.data, u.arquivo
     FROM comentarios k
     LEFT JOIN usuario u ON u.usuario = k.usuario
-    WHERE k.audio_id = ?
+    WHERE k.audio_id = ?" . filtroBloqueio('k.usuario') . "
     ORDER BY k.data ASC, k.id ASC
 ");
-$stmt->bind_param("i", $id);
+$stmt->bind_param("iss", $id, $eu, $eu);
 $stmt->execute();
 $res = $stmt->get_result();
 
@@ -35,8 +35,7 @@ while ($k = $res->fetch_assoc()) {
         'tempo' => tempoAtras($k['data']),
         'audio' => $k['audio'],
         'podeExcluir' => ($k['usuario'] === $eu || $donoPost === $eu),
+        'podeDenunciar' => ($k['usuario'] !== $eu),
     );
 }
-
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode(array('ok' => (bool)$post, 'comentarios' => $lista));
+responderJson(array('ok' => true, 'comentarios' => $lista));

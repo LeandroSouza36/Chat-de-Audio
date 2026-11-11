@@ -1,12 +1,16 @@
 <?php
 // Devolve (em JSON) os stories das últimas 24h de um usuário, para o player de stories
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
 
 $eu = $_SESSION['usuario'];
-$usuario = isset($_GET['user']) ? $_GET['user'] : '';
+$usuario = isset($_GET['user']) ? (string)$_GET['user'] : '';
+
+if ($usuario === '' || haBloqueio($conn, $eu, $usuario)) {
+    responderJson(array('usuario' => $usuario, 'avatar' => caminhoAvatar(''), 'dono' => false, 'stories' => array()));
+}
 
 $stmt = $conn->prepare("
     SELECT s.id, s.audio, s.data, u.arquivo
@@ -33,8 +37,7 @@ while ($linha = $res->fetch_assoc()) {
     );
 }
 
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode(array(
+responderJson(array(
     'usuario' => $usuario,
     'avatar' => caminhoAvatar($arquivo),
     'dono' => ($usuario === $eu),

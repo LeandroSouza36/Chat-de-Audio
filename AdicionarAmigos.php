@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
@@ -9,26 +9,26 @@ $busca = isset($_GET['q']) ? trim($_GET['q']) : '';
 
 // Pesquisa por nome, ou sugestões quando a busca está vazia
 if ($busca !== '') {
-    $termo = '%' . $busca . '%';
+    $termo = '%' . addcslashes($busca, '%_\\') . '%';
     $stmt = $conn->prepare("
         SELECT u.usuario, u.arquivo, a.status
         FROM usuario u
         LEFT JOIN amigos a ON a.usuario = ? AND a.amigo = u.usuario
-        WHERE u.usuario <> ? AND u.usuario LIKE ?
+        WHERE u.usuario <> ? AND u.usuario LIKE ?" . filtroBloqueio('u.usuario') . "
         ORDER BY (u.usuario = ?) DESC, u.usuario
         LIMIT 50
     ");
-    $stmt->bind_param("ssss", $eu, $eu, $termo, $busca);
+    $stmt->bind_param("ssssss", $eu, $eu, $termo, $eu, $eu, $busca);
 } else {
     $stmt = $conn->prepare("
         SELECT u.usuario, u.arquivo, a.status
         FROM usuario u
         LEFT JOIN amigos a ON a.usuario = ? AND a.amigo = u.usuario
-        WHERE u.usuario <> ?
+        WHERE u.usuario <> ?" . filtroBloqueio('u.usuario') . "
         ORDER BY (a.status IS NULL) DESC, u.data DESC
         LIMIT 30
     ");
-    $stmt->bind_param("ss", $eu, $eu);
+    $stmt->bind_param("ssss", $eu, $eu, $eu, $eu);
 }
 $stmt->execute();
 $pessoas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

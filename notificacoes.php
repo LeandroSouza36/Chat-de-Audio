@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
@@ -11,10 +11,10 @@ $stmt = $conn->prepare("
     SELECT a.usuario, u.arquivo
     FROM amigos a
     LEFT JOIN usuario u ON u.usuario = a.usuario
-    WHERE a.amigo = ? AND a.status = 'solicitado'
+    WHERE a.amigo = ? AND a.status = 'solicitado'" . filtroBloqueio('a.usuario') . "
     ORDER BY a.id DESC
 ");
-$stmt->bind_param("s", $eu);
+$stmt->bind_param("sss", $eu, $eu, $eu);
 $stmt->execute();
 $solicitacoes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -39,10 +39,11 @@ $stmt2 = $conn->prepare("
         LEFT JOIN usuario u ON u.usuario = k.usuario
         WHERE c.usuario = ? AND k.usuario <> ?
     ) t
+    WHERE 1 = 1" . filtroBloqueio('t.usuario') . "
     ORDER BY hora DESC
     LIMIT 40
 ");
-$stmt2->bind_param("ssssss", $eu, $eu, $eu, $eu, $eu, $eu);
+$stmt2->bind_param("ssssssss", $eu, $eu, $eu, $eu, $eu, $eu, $eu, $eu);
 $stmt2->execute();
 $atividades = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -75,10 +76,12 @@ include('partes/head.php');
                         </div>
                         <div class="item-botoes">
                             <form action="notificacoesAdicionar.php" method="POST" class="form-inline">
+                                <?php echo campoCsrf(); ?>
                                 <input name="adicionar" type="hidden" value="<?php echo e($s['usuario']); ?>">
                                 <button type="submit" class="botao botao-neon botao-pequeno">Confirmar</button>
                             </form>
                             <form action="notificacoesExcluir.php" method="POST" class="form-inline">
+                                <?php echo campoCsrf(); ?>
                                 <input name="excluir" type="hidden" value="<?php echo e($s['usuario']); ?>">
                                 <button type="submit" class="botao botao-contorno botao-pequeno">Excluir</button>
                             </form>

@@ -35,12 +35,17 @@ $postTitulo = trim((string)$dado['assunto']) !== '' ? $dado['assunto'] : 'Áudio
             <a href="<?php echo e($postLink); ?>" class="nome-usuario"><?php echo e($dado['usuario']); ?></a>
             <span class="texto-2">@<?php echo e($dado['usuario']); ?> · <time title="<?php echo e(date('d/m/Y H:i', strtotime($dado['data']))); ?>"><?php echo e(tempoAtras($dado['data'])); ?></time></span>
         </div>
-        <?php if ($postDono): ?>
-        <form method="POST" action="partes/excluirAudio.php" class="post-excluir"
+        <?php if ($postDono || ehModerador()): ?>
+        <form method="POST" action="excluirAudio.php" class="post-excluir"
               onsubmit="return confirm('Deseja realmente excluir este áudio?');">
+            <?php echo campoCsrf(); ?>
             <input type="hidden" name="id" value="<?php echo $postId; ?>">
             <button type="submit" class="botao-icone" title="Excluir áudio"><i class="bi bi-trash3"></i></button>
         </form>
+        <?php endif; ?>
+        <?php if (!$postDono): ?>
+        <button type="button" class="botao-icone botao-denunciar<?php echo ehModerador() ? '' : ' post-excluir'; ?>" title="Denunciar áudio"
+                data-denunciar="audio" data-alvo="<?php echo $postId; ?>"><i class="bi bi-flag"></i></button>
         <?php endif; ?>
     </header>
 

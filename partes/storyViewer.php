@@ -11,6 +11,7 @@
                 <span data-sv-tempo></span>
             </div>
             <button type="button" class="story-btn" data-sv-excluir title="Excluir este story" hidden><i class="bi bi-trash3"></i></button>
+            <button type="button" class="story-btn" data-sv-denunciar title="Denunciar este story" hidden><i class="bi bi-flag"></i></button>
             <button type="button" class="story-btn" data-sv-fechar title="Fechar"><i class="bi bi-x-lg"></i></button>
         </header>
 

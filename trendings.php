@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/partes/inicio.php';
 include('verifica_login.php');
 include_once("audioConexao.php");
 include_once("partes/funcoes.php");
@@ -9,7 +9,7 @@ $minhasEstrelas = estrelasDoUsuario($conn, $eu);
 $meusEcos = ecosDoUsuario($conn, $eu);
 
 // Paradas do dia: áudios com mais estrelas nas últimas 24 horas
-$emAlta = $conn->query("
+$stmtAlta = $conn->prepare("
     SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo, h.estrelasHoje,
            (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
     FROM (
@@ -20,23 +20,31 @@ $emAlta = $conn->query("
     ) h
     INNER JOIN chataudio c ON c.id = h.audio_id
     INNER JOIN usuario u ON u.usuario = c.usuario
+    WHERE 1 = 1" . filtroBloqueio('c.usuario') . "
     ORDER BY c.estrela DESC, h.estrelasHoje DESC, c.data DESC
     LIMIT 20
-")->fetch_all(MYSQLI_ASSOC);
+");
+$stmtAlta->bind_param("ss", $eu, $eu);
+$stmtAlta->execute();
+$emAlta = $stmtAlta->get_result()->fetch_all(MYSQLI_ASSOC);
 
 // Se ninguém deu estrela hoje, mostra os mais estrelados de todos os tempos
 $subtitulo = 'Os sucessos que ganharam estrelas nas últimas 24 horas.';
 $posts = $emAlta;
 if (count($posts) === 0) {
     $subtitulo = 'Ninguém deu estrela hoje ainda — estes são os maiores sucessos de todos os tempos.';
-    $posts = $conn->query("
+    $stmtTodos = $conn->prepare("
         SELECT c.id, c.usuario, c.assunto, c.estrela, c.audio, c.data, u.arquivo,
                (SELECT COUNT(*) FROM ecos x WHERE x.audio_id = c.id) AS ecos, (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
         FROM chataudio c
         INNER JOIN usuario u ON u.usuario = c.usuario
+        WHERE 1 = 1" . filtroBloqueio('c.usuario') . "
         ORDER BY c.estrela DESC, c.data DESC
         LIMIT 20
-    ")->fetch_all(MYSQLI_ASSOC);
+    ");
+    $stmtTodos->bind_param("ss", $eu, $eu);
+    $stmtTodos->execute();
+    $posts = $stmtTodos->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
 $tituloPagina = 'Paradas do dia';
