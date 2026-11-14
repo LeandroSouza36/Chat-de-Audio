@@ -9,7 +9,7 @@ $meusDados = dadosUsuario($conn, $eu);
 $minhasEstrelas = estrelasDoUsuario($conn, $eu);
 $meusEcos = ecosDoUsuario($conn, $eu);
 
-// Feed: áudios do mais novo para o mais antigo, 15 por página, sem quem está bloqueado
+// Feed: meus áudios e os dos meus amigos, do mais novo para o mais antigo, 15 por página, sem quem está bloqueado
 define('POR_PAGINA', 15);
 $antes = isset($_GET['antes']) ? (int)$_GET['antes'] : 0;
 $sqlFeed = "
@@ -18,28 +18,28 @@ $sqlFeed = "
            (SELECT COUNT(*) FROM comentarios k WHERE k.audio_id = c.id) AS comentarios
     FROM chataudio c
     INNER JOIN usuario u ON c.usuario = u.usuario
-    WHERE " . ($antes > 0 ? "c.id < ?" : "c.id > ?") . filtroBloqueio('c.usuario') . "
+    WHERE " . ($antes > 0 ? "c.id < ?" : "c.id > ?") . filtroAmigos('c.usuario') . filtroBloqueio('c.usuario') . "
     ORDER BY c.id DESC
     LIMIT " . (POR_PAGINA + 1);
 $stmtFeed = $conn->prepare($sqlFeed);
-$stmtFeed->bind_param("iss", $antes, $eu, $eu);
+$stmtFeed->bind_param("issss", $antes, $eu, $eu, $eu, $eu);
 $stmtFeed->execute();
 $feed = $stmtFeed->get_result()->fetch_all(MYSQLI_ASSOC);
 $temMais = count($feed) > POR_PAGINA;
 if ($temMais) array_pop($feed);
 $proximoAntes = count($feed) ? (int)$feed[count($feed) - 1]['id'] : 0;
 
-// Stories: apaga os vencidos e busca quem tem story nas últimas 24h
+// Stories: apaga os vencidos e busca quem tem story nas últimas 24h (só eu e meus amigos)
 limparStoriesVencidos($conn);
 $stmtStories = $conn->prepare("
     SELECT s.usuario, u.arquivo, MAX(s.id) AS ultimoId, MAX(s.data) AS ultimo
     FROM chataudiostory s
     INNER JOIN usuario u ON u.usuario = s.usuario
-    WHERE s.data >= NOW() - INTERVAL 24 HOUR" . filtroBloqueio('s.usuario') . "
+    WHERE s.data >= NOW() - INTERVAL 24 HOUR" . filtroAmigos('s.usuario') . filtroBloqueio('s.usuario') . "
     GROUP BY s.usuario, u.arquivo
     ORDER BY ultimo DESC
 ");
-$stmtStories->bind_param("ss", $eu, $eu);
+$stmtStories->bind_param("ssss", $eu, $eu, $eu, $eu);
 $stmtStories->execute();
 $meuStory = null;
 $storiesOutros = array();
@@ -116,7 +116,7 @@ include('partes/head.php');
                 </button>
             <?php endforeach; ?>
             <?php if (count($storiesOutros) === 0): ?>
-                <p class="agora-vazio texto-2">Ninguém postou story hoje. Que tal ser o primeiro? Ele some sozinho depois de 24 horas.</p>
+                <p class="agora-vazio texto-2">Nenhum amigo postou story hoje. Que tal ser o primeiro? Ele some sozinho depois de 24 horas.</p>
             <?php endif; ?>
         </div>
     </section>
@@ -157,7 +157,7 @@ include('partes/head.php');
         <div class="cartao vazio">
             <div class="vazio-icone"><i class="bi bi-vinyl"></i></div>
             <h2>A pista está vazia</h2>
-            <p>Grave o primeiro áudio e abra a festa!</p>
+            <p>Aqui aparecem os seus áudios e os dos seus amigos. Grave o primeiro ou <a class="link-neon" href="AdicionarAmigos.php">adicione amigos</a>!</p>
         </div>
     <?php endif; ?>
 
