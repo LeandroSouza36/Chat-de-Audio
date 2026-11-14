@@ -88,6 +88,12 @@ function statusAmizade($conn, $eu, $outro) {
     return $linha ? $linha['status'] : '';
 }
 
+// Filtro SQL: só o próprio usuário e os amigos dele (amizade aceita).
+// Usa 2 parâmetros "s" (o usuário logado duas vezes).
+function filtroAmigos($coluna) {
+    return " AND ($coluna = ? OR $coluna IN (SELECT amigo FROM amigos WHERE usuario = ? AND status = 'amigo'))";
+}
+
 // Botão de amizade de acordo com a situação
 function botaoAmizade($status, $outro, $classeExtra = '') {
     $outro = e($outro);

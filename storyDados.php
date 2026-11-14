@@ -8,7 +8,9 @@ include_once("partes/funcoes.php");
 $eu = $_SESSION['usuario'];
 $usuario = isset($_GET['user']) ? (string)$_GET['user'] : '';
 
-if ($usuario === '' || haBloqueio($conn, $eu, $usuario)) {
+// Só dá para ouvir os próprios stories ou os de amigos (e sem bloqueio)
+if ($usuario === '' || haBloqueio($conn, $eu, $usuario)
+    || ($usuario !== $eu && statusAmizade($conn, $eu, $usuario) !== 'amigo')) {
     responderJson(array('usuario' => $usuario, 'avatar' => caminhoAvatar(''), 'dono' => false, 'stories' => array()));
 }
 
