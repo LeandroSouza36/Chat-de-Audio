@@ -1,0 +1,82 @@
+name: App Android (APK)
+
+on:
+  push:
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+
+      - name: Preparar chave de assinatura
+        env:
+          KEYSTORE_B64: ${{ secrets.RETROWAY_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/retroway.keystore"
+            echo "RETROWAY_KEYSTORE_PATH=$RUNNER_TEMP/retroway.keystore" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Sem chave oficial: o APK sai assinado com a chave de TESTE."
+          fi
+
+      - name: Compilar APK e AAB
+        working-directory: android
+        env:
+          RETROWAY_KEYSTORE_PASSWORD: ${{ secrets.RETROWAY_KEYSTORE_PASSWORD }}
+          RETROWAY_KEY_ALIAS: ${{ secrets.RETROWAY_KEY_ALIAS }}
+          RETROWAY_KEY_PASSWORD: ${{ secrets.RETROWAY_KEY_PASSWORD }}
+        run: gradle --no-daemon assembleRelease bundleRelease
+
+      - name: Organizar arquivos
+        run: |
+          mkdir -p saida
+          cp android/app/build/outputs/apk/release/app-release.apk saida/Retroway.apk
+          cp android/app/build/outputs/bundle/release/app-release.aab saida/Retroway.aab
+
+      - name: Conferir o APK
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          echo "== Tamanho =="; ls -lh saida/
+          echo "== Pacote, versão e permissões =="
+          "$BT/aapt2" dump badging saida/Retroway.apk | grep -E "^package|sdkVersion|uses-permission|application-label:|launchable-activity"
+          echo "== Assinatura =="
+          "$BT/apksigner" verify --print-certs saida/Retroway.apk | head -3
+          "$BT/zipalign" -c -p 4 saida/Retroway.apk && echo "zipalign OK"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Retroway-${{ github.run_number }}
+          path: saida/
+
+      - name: Publicar versão (download pelo celular)
+        if: github.ref == 'refs/heads/Painel-de-Login'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: app-v1.0.${{ github.run_number }}
+          name: Retroway para Android v1.0.${{ github.run_number }}
+          make_latest: true
+          body: |
+            Baixe o **Retroway.apk** abaixo no celular Android e abra o arquivo para instalar.
+            Se o Android perguntar, permita "instalar apps desta fonte".
+
+            O arquivo Retroway.aab é o formato usado para enviar à Play Store.
+          files: |
+            saida/Retroway.apk
+            saida/Retroway.aab
