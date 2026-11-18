@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Retroway</string>
+    <string name="offline_titulo">Sem conexão</string>
+    <string name="offline_texto">Não foi possível abrir o Retroway. Confira sua internet e tente de novo.</string>
+    <string name="offline_botao">Tentar de novo</string>
+    <string name="mic_negado">Para gravar áudios, permita o uso do microfone nas configurações do app.</string>
+    <string name="mic_configuracoes">Abrir configurações</string>
+    <string name="sair_aviso">Toque em voltar de novo para sair</string>
+    <string name="sem_app_link">Não há app para abrir este link.</string>
+</resources>

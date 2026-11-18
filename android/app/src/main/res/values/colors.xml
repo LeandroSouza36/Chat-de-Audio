@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fundo">#F6F5FA</color>
+    <color name="texto">#1C1530</color>
+    <color name="texto_2">#6F6884</color>
+    <color name="rosa">#FF3C9A</color>
+    <color name="roxo">#8A2BE2</color>
+    <color name="branco">#FFFFFF</color>
+</resources>
