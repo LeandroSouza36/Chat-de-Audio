@@ -50,6 +50,16 @@ jobs:
           cp android/app/build/outputs/apk/release/app-release.apk saida/Retroway.apk
           cp android/app/build/outputs/bundle/release/app-release.aab saida/Retroway.aab
 
+      - name: Conferir o APK
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          echo "== Tamanho =="; ls -lh saida/
+          echo "== Pacote, versão e permissões =="
+          "$BT/aapt2" dump badging saida/Retroway.apk | grep -E "^package|sdkVersion|uses-permission|application-label:|launchable-activity"
+          echo "== Assinatura =="
+          "$BT/apksigner" verify --print-certs saida/Retroway.apk | head -3
+          "$BT/zipalign" -c -p 4 saida/Retroway.apk && echo "zipalign OK"
+
       - uses: actions/upload-artifact@v4
         with:
           name: Retroway-${{ github.run_number }}
