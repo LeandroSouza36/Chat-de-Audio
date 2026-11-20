@@ -132,3 +132,13 @@ CREATE TABLE IF NOT EXISTS `sistema` (
   `valor` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`chave`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Visitas ao site (para a página de estatísticas). Não guarda IP: só um código
+-- embaralhado por dia, que permite contar visitantes únicos sem identificar ninguém.
+CREATE TABLE IF NOT EXISTS `visitas` (
+  `dia` DATE NOT NULL,
+  `chave` CHAR(64) NOT NULL,
+  `paginas` INT NOT NULL DEFAULT 1,
+  `logado` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`dia`, `chave`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

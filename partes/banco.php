@@ -3,7 +3,7 @@
 // Em desenvolvimento roda sozinho (audioConexao.php); em produção rode "php instalar.php".
 require_once __DIR__ . '/arquivos.php';
 
-define('VERSAO_BANCO', 4);
+define('VERSAO_BANCO', 5);
 
 function versaoBancoAtual($conn) {
     $r = @$conn->query("SELECT valor FROM sistema WHERE chave = 'versao_banco'");
@@ -41,6 +41,10 @@ function atualizarBanco($conn, $forcar = false) {
     }
     if (!colunaExiste($conn, 'usuario', 'email')) {
         $conn->query("ALTER TABLE usuario ADD COLUMN email VARCHAR(190) DEFAULT NULL AFTER usuario, ADD UNIQUE KEY email_unico (email)");
+    }
+    // último acesso de cada usuário (página de estatísticas)
+    if (!colunaExiste($conn, 'usuario', 'ultimo_acesso')) {
+        $conn->query("ALTER TABLE usuario ADD COLUMN ultimo_acesso DATETIME DEFAULT NULL");
     }
     // senha com espaço para o formato seguro (password_hash)
     $conn->query("ALTER TABLE usuario MODIFY senha VARCHAR(255) NOT NULL");

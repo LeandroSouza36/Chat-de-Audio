@@ -1121,3 +1121,48 @@ select.campo { appearance: auto; }
 .etiqueta.motivo { background: #fff0f3; color: #b4233f; }
 .moderacao-acoes { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; flex-wrap: wrap; }
 .link-dev { word-break: break-all; }
+
+/* ---------- Estatísticas (só moderadores) ---------- */
+.estat-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.estat-grade-pequena { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.estat-tile { display: flex; flex-direction: column; gap: 4px; padding: 16px; margin: 0; }
+.estat-rotulo { font-size: 13px; color: var(--texto-2); display: flex; align-items: center; gap: 6px; }
+.estat-num { font-size: 30px; font-weight: 700; line-height: 1.1; color: var(--texto); font-variant-numeric: tabular-nums; }
+.estat-extra { font-size: 12px; color: var(--texto-3); }
+.estat-link { color: inherit; text-decoration: none; }
+.estat-link:hover { border-color: var(--linha-forte); }
+.estat-cartao { padding: 18px 18px 14px; margin-bottom: 16px; }
+.estat-titulo { font-size: 17px; font-weight: 600; margin: 0; }
+.estat-sub { font-size: 13px; color: var(--texto-2); margin: 2px 0 14px; }
+.estat-secao { font-size: 18px; font-weight: 600; margin: 8px 0 12px; }
+.estat-duas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.estat-duas .estat-cartao { margin-bottom: 0; }
+.estat-contagem { font-size: 13px; font-weight: 600; color: var(--texto-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Gráfico de colunas: grade fina, colunas finas com ponta arredondada, dica ao passar o mouse/dedo */
+.grafico { position: relative; height: 170px; margin: 22px 0 0 34px; }
+.grafico-grade { position: absolute; left: 0; right: 0; border-top: 1px solid var(--linha); }
+.grafico-grade b { position: absolute; right: calc(100% + 8px); top: -8px; font-size: 11px; font-weight: 400; color: var(--texto-3); font-variant-numeric: tabular-nums; }
+.grafico-base { bottom: 0; border-top-color: var(--linha-forte); }
+.grafico-colunas { position: absolute; inset: 0; display: flex; align-items: stretch; gap: 2px; }
+.coluna { position: relative; flex: 1; display: flex; align-items: flex-end; justify-content: center; outline: none; cursor: default; }
+.coluna i { display: block; width: 100%; max-width: 24px; background: var(--roxo); border-radius: 4px 4px 0 0; }
+.coluna:hover i, .coluna:focus i { background: var(--roxo-texto); }
+.coluna:hover::before, .coluna:focus::before { content: ""; position: absolute; inset: 0; background: rgba(138, 43, 226, .06); border-radius: 4px; }
+.coluna em { position: absolute; left: 50%; transform: translate(-50%, -4px); margin-bottom: 0; font-style: normal; font-size: 12px; font-weight: 600; color: var(--texto); white-space: nowrap; pointer-events: none; }
+.coluna:hover em, .coluna:focus em { visibility: hidden; }
+.coluna::after { content: attr(data-dica); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--texto); color: #fff; font-size: 12px; padding: 5px 9px; border-radius: 8px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 2; }
+.coluna:nth-child(-n+4)::after { left: 0; transform: none; }
+.coluna:nth-last-child(-n+4)::after { left: auto; right: 0; transform: none; }
+.coluna:hover::after, .coluna:focus::after { opacity: 1; }
+.grafico-datas { display: flex; justify-content: space-between; margin: 6px 0 0 34px; font-size: 11px; color: var(--texto-3); }
+.grafico-tabela { margin-top: 12px; font-size: 13px; }
+.grafico-tabela summary { cursor: pointer; color: var(--roxo-texto); font-weight: 500; }
+.grafico-tabela table { width: 100%; border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.grafico-tabela th, .grafico-tabela td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--linha); }
+.grafico-tabela td:last-child, .grafico-tabela th:last-child { text-align: right; }
+
+@media (max-width: 720px) {
+  .estat-duas { grid-template-columns: 1fr; }
+  .estat-num { font-size: 26px; }
+}

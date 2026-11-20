@@ -81,6 +81,7 @@ $badge = $numeroNotificacoes > 0 ? '<span class="badge-notif">' . $numeroNotific
         <?php echo itemMenu('perfil.php', $paginaAtual, 'bi-person', 'Meu perfil'); ?>
         <?php if (ehModerador()): ?>
             <?php echo itemMenu('moderacao.php', $paginaAtual, 'bi-shield-check', 'Moderação', false, $numeroDenuncias > 0 ? '<span class="badge-notif">' . $numeroDenuncias . '</span>' : ''); ?>
+            <?php echo itemMenu('estatisticas.php', $paginaAtual, 'bi-bar-chart-line', 'Estatísticas', false); ?>
         <?php endif; ?>
 
         <a href="painel.php#gravar" class="botao botao-neon botao-largo menu-gravar" data-gravar>
