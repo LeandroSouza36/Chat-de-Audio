@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /uploads/
+Disallow: /img/usuario/
+Disallow: /android/
+
+Sitemap: https://retrowayy.fwh.is/sitemap.xml

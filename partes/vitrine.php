@@ -1,7 +1,7 @@
 <!-- Lado esquerdo das telas de login/cadastro -->
 <section class="vitrine">
     <div class="vitrine-marca">
-        <img src="img/retroway.png" alt="">
+        <img src="img/retroway.png" alt="Logo do Retroway">
         <span class="logo-neon vitrine-letreiro">Retroway</span>
     </div>
     <p class="vitrine-frase">A rede social que fala.</p>
