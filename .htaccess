@@ -6,7 +6,7 @@
 Options -Indexes
 
 # Arquivos que nunca podem ser abertos pelo navegador
-<FilesMatch "^(config\.php|config\.exemplo\.php|instalar\.php|bd\.sql|.*\.md|LICENSE|.*\.txt|\.git.*|\.ht.*)$">
+<FilesMatch "^(config\.php|config\.exemplo\.php|instalar\.php|bd\.sql|.*\.md|LICENSE|(?!robots\.txt$).*\.txt|\.git.*|\.ht.*)$">
     Require all denied
 </FilesMatch>
 
