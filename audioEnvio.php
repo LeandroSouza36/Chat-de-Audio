@@ -8,7 +8,7 @@ exigirPostComCsrf();
 
 $usuario = $_SESSION['usuario'];
 $assunto = trim(isset($_POST["textoAssunto"]) ? (string)$_POST["textoAssunto"] : '');
-$assunto = function_exists('mb_substr') ? mb_substr($assunto, 0, 220) : substr($assunto, 0, 220);
+$assunto = function_exists('mb_substr') ? mb_substr($assunto, 0, 15) : substr($assunto, 0, 15);
 
 if (!permitirAcao($conn, 'post', $usuario)) {
     responderJson(array('ok' => false, 'erro' => 'Você publicou muitos áudios seguidos. Espere alguns minutos.'));
