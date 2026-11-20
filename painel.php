@@ -143,7 +143,10 @@ include('partes/head.php');
 
         <div data-estado="previa" hidden>
             <div class="previa-audio" data-previa></div>
-            <input type="text" class="campo-legenda" data-legenda maxlength="220" placeholder="Dê um nome para o seu áudio (só aparece no feed)...">
+            <div class="legenda-caixa">
+                <input type="text" class="campo-legenda" data-legenda maxlength="15" placeholder="Nome do áudio (só aparece no feed)">
+                <span class="legenda-contador" data-legenda-contador>0/15</span>
+            </div>
             <div class="composer-acoes">
                 <button type="button" class="botao botao-link-cinza" data-descartar>Descartar</button>
                 <button type="button" class="botao botao-contorno" data-publicar-story><i class="bi bi-hourglass-split"></i> Story 24h</button>

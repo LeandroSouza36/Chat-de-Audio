@@ -391,6 +391,10 @@ img { display: block; }
   background: #fff;
   color: var(--texto);
 }
+.legenda-caixa { position: relative; }
+.legenda-caixa .campo-legenda { padding-right: 58px; }
+.legenda-contador { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--texto-3); pointer-events: none; }
+.legenda-contador.cheio { color: var(--roxo-texto); font-weight: 600; }
 .campo-legenda:focus { border-color: var(--roxo); }
 .campo-legenda::placeholder { color: var(--texto-3); }
 .composer-acoes { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }

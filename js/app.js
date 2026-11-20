@@ -283,6 +283,7 @@
     modoStory = false;
     areaPrevia.innerHTML = "";
     campoLegenda.value = "";
+    atualizarContador();
     mostrar("inicial");
   }
 
@@ -321,6 +322,15 @@
   composer.querySelector("[data-descartar]").addEventListener("click", descartar);
   btnPublicar.addEventListener("click", () => publicar("feed"));
   btnPublicarStory.addEventListener("click", () => publicar("story"));
+  // Contador do nome do áudio (máximo 15 caracteres)
+  const contadorLegenda = composer.querySelector("[data-legenda-contador]");
+  function atualizarContador() {
+    if (!contadorLegenda) return;
+    const total = campoLegenda.value.length;
+    contadorLegenda.textContent = total + "/15";
+    contadorLegenda.classList.toggle("cheio", total >= 15);
+  }
+  campoLegenda.addEventListener("input", atualizarContador);
   campoLegenda.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter") {
       ev.preventDefault();
