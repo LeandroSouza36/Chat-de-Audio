@@ -109,6 +109,10 @@ include('partes/head.php');
                 <?php if ($meuPerfil): ?>
                     <a href="editarPerfil.php" class="botao botao-contorno"><i class="bi bi-pencil"></i> Editar perfil</a>
                     <a href="painel.php#gravar" class="botao botao-neon" data-gravar><i class="bi bi-mic-fill"></i> Gravar áudio</a>
+                    <?php if (ehModerador()): ?>
+                        <a href="estatisticas.php" class="botao botao-contorno"><i class="bi bi-bar-chart-line"></i> Estatísticas</a>
+                        <a href="moderacao.php" class="botao botao-contorno"><i class="bi bi-shield-check"></i> Moderação</a>
+                    <?php endif; ?>
                 <?php elseif ($euBloqueei): ?>
                     <form method="POST" action="bloquear.php" class="form-inline">
                         <?php echo campoCsrf(); ?>

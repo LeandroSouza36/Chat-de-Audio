@@ -131,6 +131,56 @@ function ehModerador() {
     return !empty($_SESSION['usuario']) && in_array($_SESSION['usuario'], (array)config('moderadores', array()), true);
 }
 
+// ---------- Estatísticas: registra a visita da página ----------
+// Conta visitantes únicos por dia sem guardar IP (só um código embaralhado que muda todo dia)
+// e atualiza o "último acesso" de quem está logado (no máximo a cada 5 minutos).
+function registrarVisita() {
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' || querJson()) return;
+    $agente = (string)($_SERVER['HTTP_USER_AGENT'] ?? '');
+    if ($agente === '' || preg_match('/bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|curl|wget|python/i', $agente)) return;
+
+    try {
+        registrarVisitaAgora($agente);
+    } catch (Throwable $e) {
+        // estatística nunca pode derrubar a página
+    }
+}
+
+function registrarVisitaAgora($agente) {
+    global $conn;
+    $minhaConexao = null;
+    $c = (isset($conn) && $conn instanceof mysqli) ? $conn : null;
+    if (!$c) {
+        $minhaConexao = @mysqli_connect(config('db_servidor', 'localhost'), config('db_usuario', 'root'), config('db_senha', ''), config('db_nome', 'chataudiobd'));
+        if (!$minhaConexao) return;
+        mysqli_set_charset($minhaConexao, 'utf8mb4');
+        $c = $minhaConexao;
+    }
+
+    $dia = date('Y-m-d');
+    $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+    $sal = (string)config('segredo_estatisticas', 'retroway');
+    $chave = hash('sha256', $dia . '|' . $ip . '|' . $agente . '|' . $sal);
+    $logado = empty($_SESSION['usuario']) ? 0 : 1;
+    $stmt = @$c->prepare("INSERT INTO visitas (dia, chave, paginas, logado) VALUES (?, ?, 1, ?)
+                          ON DUPLICATE KEY UPDATE paginas = paginas + 1, logado = GREATEST(logado, VALUES(logado))");
+    if ($stmt) {
+        $stmt->bind_param("ssi", $dia, $chave, $logado);
+        @$stmt->execute();
+    }
+
+    if ($logado && (empty($_SESSION['ultimo_acesso_registrado']) || time() - $_SESSION['ultimo_acesso_registrado'] > 300)) {
+        $agora = date('Y-m-d H:i:s');
+        $stmt = @$c->prepare("UPDATE usuario SET ultimo_acesso = ? WHERE usuario = ?");
+        if ($stmt) {
+            $stmt->bind_param("ss", $agora, $_SESSION['usuario']);
+            @$stmt->execute();
+        }
+        $_SESSION['ultimo_acesso_registrado'] = time();
+    }
+    if ($minhaConexao) mysqli_close($minhaConexao);
+}
+
 // Responde em JSON e encerra
 function responderJson($dados) {
     header('Content-Type: application/json; charset=utf-8');

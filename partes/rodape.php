@@ -38,6 +38,6 @@
 <div class="aviso" id="aviso" hidden></div>
 
 <script src="audio-player.js?v=10"></script>
-<script src="js/app.js?v=10"></script>
+<script src="js/app.js?v=11"></script>
 </body>
 </html>

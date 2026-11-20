@@ -2,6 +2,7 @@
 // Cabeçalho HTML comum. Defina $tituloPagina antes de incluir.
 require_once __DIR__ . '/inicio.php';
 include_once(__DIR__ . '/funcoes.php');
+registrarVisita();
 if (!isset($tituloPagina)) $tituloPagina = 'Retroway';
 
 // ---------- SEO (Google) ----------
@@ -44,6 +45,6 @@ $seoUrl = $seoSite !== '' ? $seoSite . '/' . ($seoPagina === 'index.php' ? '' : 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/icones.css?v=10">
-    <link rel="stylesheet" href="css/app.css?v=10">
+    <link rel="stylesheet" href="css/icones.css?v=11">
+    <link rel="stylesheet" href="css/app.css?v=11">
 </head>
